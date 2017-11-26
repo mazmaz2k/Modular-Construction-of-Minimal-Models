@@ -10,6 +10,7 @@ public class main {
 		Vertex <Object> v=new Vertex<Object>(4);
 		g.addEdge(1, 2);
 		g.addEdge(1, 3);
+		g.addEdge(3, 2);
 		g.addVertex(v);
 		g.addEdge(v.id, 3);
 		g.addEdge(3, 4);
