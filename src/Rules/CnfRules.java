@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 
 import java.util.Scanner;
 
+
 public class CnfRules
 {
 	private static final String FILENAME = "C:\\Users\\adi tayri\\Desktop\\CnfFile.txt";
@@ -23,6 +24,7 @@ public class CnfRules
 			while (sc.hasNextLine()) 
 			{
 			    var = sc.nextInt();
+			    
 			   if(var!=0)
 				   DS.addToRulsArray(index, var);
 			   else
@@ -30,7 +32,8 @@ public class CnfRules
 			
 			}
 						
-			DS.printRulesArray();
+			//DS.printRulesArray();
+			DS.printHashTable();
 			
 			
 			

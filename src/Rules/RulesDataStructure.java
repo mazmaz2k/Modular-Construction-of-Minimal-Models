@@ -1,12 +1,15 @@
 package Rules;
 
+import java.util.Hashtable;
+import java.util.Set;
+
 import Rules.LinkedList.Node;
 
 public class RulesDataStructure extends Rule
 {
 
     public  Rule[] RulesArray ;
-  //  Hashtable<Integer, LinkedList> array ;
+    Hashtable<Integer, LinkedList> array ;
 
     public RulesDataStructure (int numOfRules)
     {
@@ -16,7 +19,7 @@ public class RulesDataStructure extends Rule
     		RulesArray[i]= new Rule();
 		}
     	
-    	//array = new Hashtable<Integer, LinkedList>();
+    	array = new Hashtable<Integer, LinkedList>();
     }
     
     public void addToRulsArray(int index , int var)
@@ -33,6 +36,8 @@ public class RulesDataStructure extends Rule
     	{
     		RulesArray[index].addToHead(var);
     	} 
+		addToHashTable(var,index);
+
     }
     
     public void printRulesArray()
@@ -66,6 +71,33 @@ public class RulesDataStructure extends Rule
 
 		}
     }
+    
+    public void addToHashTable(int var , int ruleIndex) 
+    {
+    	LinkedList ls;
+    	if(array.containsKey(var))//key exist
+    	{
+    		ls = array.get(var);
+    	}
+    	else//key does not exist
+    	{
+    		ls = new LinkedList();
+    	}
+    	ls.addAtTail(ruleIndex);
+		array.put(var,ls ); 	
+    }
+    
+    public void printHashTable() 
+    {
+    	 Set<Integer> keys = array.keySet();
+    	 for(int key: keys)
+    	 {
+    		 System.out.println("Value of " + key +" is: ");
+    		 array.get(key).printList();
+    	 }
+    }
+    
+    
 
 	
 
