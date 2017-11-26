@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class CnfRules
 {
-	private static final String FILENAME = "C:\\Users\\adi tayri\\Desktop\\CnfFile.txt";
+	private static final String FILENAME = "C:\\Users\\mazma\\Desktop\\Cnf.txt";
 	
 	public static void main(String[] args)
 	{
