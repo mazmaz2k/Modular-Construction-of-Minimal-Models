@@ -15,6 +15,7 @@ public class CnfRules
 		int index = 0;
 		int numOfRules;
 		RulesDataStructure DS ;
+		
 		try 
 		{
 			sc = new Scanner(new File(FILENAME));
@@ -31,6 +32,7 @@ public class CnfRules
 			}
 						
 			DS.printHashTable();
+			DS.placeValue(-1, false);
 			DS.placeValue(3, false);
 			DS.printHashTable();
 

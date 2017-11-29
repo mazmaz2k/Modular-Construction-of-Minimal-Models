@@ -4,16 +4,22 @@ public class main {
 
 	public static void main(String[] args) {
 		Graph <Object> g= new Graph<Object>(true);
-		g.addSingleVertex(1);
-		g.addSingleVertex(2);
-		g.addSingleVertex(3);
-		Vertex <Object> v=new Vertex<Object>(4);
-		g.addEdge(1, 2);
-		g.addEdge(1, 3);
-		g.addEdge(3, 2);
-		g.addVertex(v);
-		g.addEdge(v.id, 3);
-		g.addEdge(3, 4);
+
+		Vertex <Object> v4=new Vertex<Object>(4);
+		Vertex <Object> v1=new Vertex<Object>(1);
+		Vertex <Object> v2=new Vertex<Object>(2);
+		Vertex <Object> v3=new Vertex<Object>(3);
+		g.addVertex(v1);
+		g.addVertex(v2);
+		g.addVertex(v3);
+		g.addVertex(v4);
+		g.addEdge(v1.getId(), v2.getId());
+		g.addEdge(v2.getId(), v1.getId());
+		g.addEdge(v1.getId(), v3.getId());
+		g.addEdge(v3.getId(), v2.getId());
+		//System.out.println(v1.getEdges().toString() );
+		g.DFS(v1);
+		System.out.println();
 		System.out.println(g);
 		
 	}
