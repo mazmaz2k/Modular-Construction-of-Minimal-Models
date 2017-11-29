@@ -8,10 +8,10 @@ public class LinkedList
 	{
 		//Declare class variables
 		Node next;
-		Object var;
+		int var;
 	
 		
-		public Node(Object dat)
+		public Node(int dat)
 		{
 			var = dat;
 		}
@@ -27,7 +27,7 @@ public class LinkedList
 		this.numNodes=0;
 	}
 	
-	public void addAtHead(Object dat)
+	public void addAtHead(int dat)
 	{
 		Node temp = head;
 		head = new Node(dat);
@@ -35,7 +35,7 @@ public class LinkedList
 		this.numNodes++;
 	}
 	
-	public void addAtTail(Object dat)
+	public void addAtTail(int dat)
 	{
 		Node temp = head;
 		if(temp==null)
@@ -53,7 +53,7 @@ public class LinkedList
 		this.numNodes++;
 	}
 	
-	public void addAtIndex(int index, Object dat)
+	public void addAtIndex(int index, int dat)
 	{
 		Node temp = head;
 		Node holder;
@@ -69,6 +69,12 @@ public class LinkedList
 	
 	public void deleteAtIndex(int index)
 	{
+		if(index==0)
+		{
+			head=head.next;
+			this.numNodes--;
+			return;
+		}
 		Node temp = head;
 		for(int i=0; i< index - 1 && temp.next != null; i++)
 		{
@@ -87,6 +93,10 @@ public class LinkedList
 			temp = temp.next;
 		}
 	}
+	public void deleteList()
+	{
+		head=null;
+	}
 	
 	public int getSize()
 	{
@@ -102,13 +112,14 @@ public class LinkedList
 		ll.addAtTail(15);
 		ll.addAtTail(14);
 		ll.addAtHead(13);
+		ll.deleteAtIndex(0);
 
 		
 		
 		ll.printList();
 		
-	}
+	}*/
 	
-	*/
+	
 	
 }

@@ -1,5 +1,6 @@
 package Rules;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Set;
 
@@ -10,6 +11,8 @@ public class RulesDataStructure extends Rule
 
     public  Rule[] RulesArray ;
     Hashtable<Integer, LinkedList> array ;
+    
+    HashMap<Integer, Boolean> literalMap;// We will store the value of literals in this structure as we go along
 
     public RulesDataStructure (int numOfRules)
     {
@@ -20,6 +23,8 @@ public class RulesDataStructure extends Rule
 		}
     	
     	array = new Hashtable<Integer, LinkedList>();
+    	
+    	literalMap = new HashMap<Integer,Boolean>();
     }
     
     public void addToRulsArray(int index , int var)
@@ -37,6 +42,7 @@ public class RulesDataStructure extends Rule
     		RulesArray[index].addToHead(var);
     	} 
 		addToHashTable(var,index);
+		//need to check if the same variable appears more than once in the same clause
 
     }
     
@@ -96,6 +102,238 @@ public class RulesDataStructure extends Rule
     		 array.get(key).printList();
     	 }
     }
+    
+    public boolean existInBody(int var, int ruleNum)
+    {
+    	
+    	Node n;
+    	n = RulesArray[ruleNum].body.head;
+    	while(n!=null)
+    	{
+    		if(n.var == var)
+    			return true;
+    		n=n.next;
+    	}
+    	return false;
+    }
+    
+    public boolean existInHead(int var , int ruleNum)
+    {
+    	Node n;
+    	n = RulesArray[ruleNum].head.head;
+    	while(n!=null)
+    	{
+    		if(n.var == var)
+    			return true;
+    		n=n.next;
+    	}
+    	return false;
+    }
+    
+    public boolean conflictExist(int var ,boolean b)
+    {
+    	LinkedList l = array.get(var);
+    	if(exist(var))
+    	{
+    		Node n = l.head;
+    		while(n!=null)
+    		{
+    			int sizeOfBody, sizeOfHead;
+    			sizeOfBody = RulesArray[n.var].body.getSize();
+    			sizeOfHead = RulesArray[n.var].head.getSize();
+    			if( (existInBody(var,n.var )) && sizeOfBody==1 && b &&sizeOfHead==0)
+    			{
+    				return true;
+    			}
+    			else if((existInHead(var,n.var)) && sizeOfHead==1 && !b &&sizeOfBody==0)
+    			{
+    				return true;
+    			}
+    			else
+    			{
+    				return false;
+    			}
+    		}		
+    	}
+    	return false;   	
+    }
+    
+    
+    public boolean exist(int var)
+    {
+    	LinkedList l = array.get(var);
+    	if(l==null)
+    	{
+    		return false;
+    	}
+    	return true;
+    }
+    
+    public void placeValue(int var , boolean value)
+    {
+    	if(conflictExist(var, value))
+    	{
+    		System.out.println("CONFLICT");
+    		return ;
+    	}
+    	if(!exist(var))
+    	{
+    		System.out.println("VARIABLE NOT EXIST");
+    		return ;
+    	}
+    	LinkedList l = array.get(var);
+    	Node n = l.head;
+    	while(n!=null)
+    	{
+    		if(existInBody(var, n.var)&& !value)
+    		{
+    			deleteRule(n.var);
+    			System.out.println("DELETE RULE NUMBER " + n.var);
+    		}
+    		else if((existInBody(var, n.var)&& value))
+    		{
+    			deleteVarFromBody(var,n.var);
+    			System.out.println( "DELETE VARIABLE " + var + " IN RULE " + n.var);
+    		}
+    		else if(existInHead(var, n.var)&& value)
+    		{
+    			deleteRule(n.var);
+    			System.out.println("DELETE RULE NUMBER " + n.var);
+    		}
+    		else if (existInHead(var, n.var)&& !value)
+    		{
+    			deleteVarFromHead(var,n.var);
+    			System.out.println("DELETE VARIABLE "+var+" IN RULE " + n.var);
+    		}
+    		
+    		n=n.next;
+    		
+    	}
+    	return;
+    	
+    }
+    
+    
+    private void deleteRule(int ruleNum)
+    {
+    	updateHT(0,ruleNum);
+    	RulesArray[ruleNum].body.deleteList();
+    	RulesArray[ruleNum].head.deleteList();
+    }
+    
+    private void deleteVarFromBody(int var, int ruleNum)
+    {
+    	updateHT(var, ruleNum);
+    	LinkedList l = RulesArray[ruleNum].body;
+    	int index = 0;
+    	Node n = l.head;
+    	while(n!=null)
+    	{
+    		if(n.var==var)
+    		{
+    			l.deleteAtIndex(index);
+    			break;
+    		}
+    		index++;
+    		n=n.next;
+    	}
+    }
+    private void deleteVarFromHead(int var, int ruleNum)
+    {
+    	updateHT(var, ruleNum);
+    	LinkedList l = RulesArray[ruleNum].head;
+    	int index = 0;
+    	Node n = l.head;
+    	while(n!=null)
+    	{
+    		if(n.var==var)
+    		{
+    			l.deleteAtIndex(index);
+    			break;
+    		}
+    		index++;
+    		n=n.next;
+    	}
+    }
+    
+    private void updateHT(int var , int ruleNum)
+    {
+    	if(var==0)//from deleteRule method
+    	{
+    		
+    		Node bo = RulesArray[ruleNum].body.head;
+    		Node he = RulesArray[ruleNum].head.head;
+    		LinkedList list;
+    		int index;
+    		while(bo!=null)
+    		{
+    			index = 0;
+    			list = array.get(bo.var);
+    			Node n = list.head;
+    			while(n!=null)
+    			{
+    				if(n.var==ruleNum)
+    				{
+    					list.deleteAtIndex(index);
+    					break;
+    				}
+    				index++;
+    				n=n.next;
+    			}
+    			bo=bo.next;
+    		}
+    		while(he!=null)
+    		{
+    			index = 0;
+    			list = array.get(he.var);
+    			Node n = list.head;
+    			while(n!=null)
+    			{
+    				if(n.var==ruleNum)
+    				{
+    					list.deleteAtIndex(index);
+    					break;
+    				}
+    				index++;
+    				n=n.next;
+    			}
+    			he=he.next;
+    		}
+    		
+
+    		
+    		
+    	}
+    	else
+    	{
+    		LinkedList list = array.get(var);
+    		Node n = list.head;
+    		int index =0;
+    		while(n!=null)
+    		{
+    			if(n.var==ruleNum)
+    			{
+    				list.deleteAtIndex(index);
+    				break;
+    			}
+    			index++;
+    			n=n.next;
+    		}
+    	}
+    	
+    	
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
 
