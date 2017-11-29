@@ -30,8 +30,8 @@ public class CnfRules
 			
 			}
 						
-			DS.printRulesArray();
-			
+			//DS.printRulesArray();
+			DS.printHashTable();
 			
 			
 			
