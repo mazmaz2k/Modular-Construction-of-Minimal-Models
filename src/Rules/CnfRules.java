@@ -1,13 +1,13 @@
 package Rules;
 import java.io.File;
+//import Rules.LinkedList.Node;
 import java.io.FileNotFoundException;
-
 import java.util.Scanner;
 
 
 public class CnfRules
 {
-	private static final String FILENAME = "C:\\Users\\adi tayri\\Desktop\\CnfFile.txt";
+	private static final String FILENAME = "./CnfFile.txt" ;
 	
 	public static void main(String[] args)
 	{
@@ -32,13 +32,28 @@ public class CnfRules
 			
 			}
 						
-			DS.printHashTable();
-			DS.placeValue(3, false);
-			DS.printHashTable();
+			DS.printRulesArray();
+			DS.placeValue(2, false);
+			DS.printRulesArray();
 
-
+			/*for (int i = 0; i < numOfRules; i++) 
+			{
+				Node n1 =DS.RulesArray[0].body.head;
+				Node n2=DS.RulesArray[0].head.head;
+				while(n1!=null)
+				{
+					while(n2!=null)
+					{
+						//addedge(n1.var,n2.var)
+						n2=n2.next;
+					}
+					n1=n1.next;
+				}
+				
+			}
 			
 			
+			*/
 			
 			
 			

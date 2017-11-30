@@ -89,8 +89,8 @@ public class RulesDataStructure extends Rule
     	{
     		ls = new LinkedList();
     	}
-    	ls.addAtTail(ruleIndex);
-		array.put(var,ls ); 	
+    	ls.addAtTail(ruleIndex);//need to check if ls already contains the ruleNum
+		array.put(var,ls); 	
     }
     
     public void printHashTable() 
