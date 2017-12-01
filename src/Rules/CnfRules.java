@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class CnfRules
 {
-	private static final String FILENAME = "C:\\Users\\mazma\\Desktop\\Cnf.txt";
+	private static final String FILENAME = "./CnfFile.txt";
 	
 	public static void main(String[] args)
 	{
