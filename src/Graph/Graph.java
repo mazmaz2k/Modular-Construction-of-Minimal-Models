@@ -5,21 +5,22 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Graph<T>{
 
     private List<Edge<T>> allEdges;
-    private Map<Integer,Vertex<T>> allVertex;
-    boolean isDirected ;
+    private Map<Long,Vertex<T>> allVertex;
+    boolean isDirected = false;
     
     public Graph(boolean isDirected){
         allEdges = new ArrayList<Edge<T>>();
-        allVertex = new HashMap<Integer,Vertex<T>>();
+        allVertex = new HashMap<Long,Vertex<T>>();
         this.isDirected = isDirected;
     }
     
-    public void addEdge(int id1, int id2){
+    public void addEdge(long id1, long id2){
         addEdge(id1,id2,0);
     }
     
@@ -35,7 +36,7 @@ public class Graph<T>{
         }
     }
     
-    public Vertex<T> addSingleVertex(int id){
+    public Vertex<T> addSingleVertex(long id){
         if(allVertex.containsKey(id)){
             return allVertex.get(id);
         }
@@ -48,7 +49,7 @@ public class Graph<T>{
         return allVertex.get(id);
     }
     
-    public void addEdge(int id1,int id2, int weight){
+    public void addEdge(long id1,long id2, int weight){
         Vertex<T> vertex1 = null;
         if(allVertex.containsKey(id1)){
             vertex1 = allVertex.get(id1);
@@ -80,70 +81,55 @@ public class Graph<T>{
     public Collection<Vertex<T>> getAllVertex(){
         return allVertex.values();
     }
-//    public void setDataForVertex(long id, T data){
-//        if(allVertex.containsKey(id)){
-//            Vertex<T> vertex = allVertex.get(id);
-//            vertex.setData(data);
-//        }
-//    }
-
-//    @Override
-//    public String toString(){
-//        StringBuffer buffer = new StringBuffer();
-//        for(Edge<T> edge : getAllEdges()){
-//            buffer.append(edge.getVertex1() + " -> " + edge.getVertex2() + " weight " + edge.getWeight());
-//            buffer.append("\n");
-//        }
-//        return buffer.toString();
-//    }
+    public void setDataForVertex(long id, T data){
+        if(allVertex.containsKey(id)){
+            Vertex<T> vertex = allVertex.get(id);
+            vertex.setData(data);
+        }
+    }
 
     @Override
-    public String toString() {
-    	StringBuffer sb=new StringBuffer();
-    	for(Vertex<T> v : getAllVertex()) {
-    		sb.append("v num:"+v.id +" ");
-    		for(Edge<T> edge : getAllEdges()){
-    			if(v.equals(edge.getVertex1()))
-    				sb.append("->" +edge.getVertex2()+" ");
-    			
-    		}
-    		sb.append("\n");
-    	}
-   
-    	return sb.toString();
+    public String toString(){
+        StringBuffer buffer = new StringBuffer();
+        for(Edge<T> edge : getAllEdges()){
+            buffer.append(edge.getVertex1() + " " + edge.getVertex2() + " " + edge.getWeight());
+            buffer.append("\n");
+        }
+        return buffer.toString();
     }
-    
-    
-	// A function used by DFS
-	void DFSUtil(Vertex <Object> v,boolean visited[])
-	{
-		// Mark the current node as visited and print it
-		visited[v.getId()] = true;
-		System.out.print(v+" ");
 
-		// Recur for all the vertices adjacent to this vertex
-		//List<Vertex<T>> adjcentVertex = v.getAdjacentVertexes()	;	
-		Iterator<Vertex<Object>> i =  v.getAdjacentVertexes().listIterator();
-		
-		while (i.hasNext())
-		{
-			Vertex<Object> n = i.next();
-			if (!visited[n.getId()])
-				DFSUtil(n, visited);
-		}
-	}
+ 
     
-	// The function to do DFS traversal. It uses recursive DFSUtil()
-	void DFS(Vertex <Object> v)
-	{
-		// Mark all the vertices as not visited(set as
-		// false by default in java)
-		boolean visited[] = new boolean[allVertex.size()+1];
-
-		// Call the recursive helper function to print DFS traversal
-		DFSUtil(v, visited);
-		
-	}
+//	// A function used by DFS
+//	void DFSUtil(Vertex <Object> v,boolean visited[])
+//	{
+//		// Mark the current node as visited and print it
+//		visited[(int)v.getId()] = true;
+//		System.out.print(v+" ");
+//
+//		// Recur for all the vertices adjacent to this vertex
+//		//List<Vertex<T>> adjcentVertex = v.getAdjacentVertexes()	;	
+//		Iterator<Vertex<Object>> i =  v.getAdjacentVertexes().listIterator();
+//		
+//		while (i.hasNext())
+//		{
+//			Vertex<Object> n = i.next();
+//			if (!visited[(int) n.getId()])
+//				DFSUtil(n, visited);
+//		}
+//	}
+//    
+//	// The function to do DFS traversal. It uses recursive DFSUtil()
+//	void DFS(Vertex <Object> v)
+//	{
+//		// Mark all the vertices as not visited(set as
+//		// false by default in java)
+//		boolean visited[] = new boolean[allVertex.size()+1];
+//
+//		// Call the recursive helper function to print DFS traversal
+//		DFSUtil(v, visited);
+//		
+//	}
     
 }
 

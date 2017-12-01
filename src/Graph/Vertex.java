@@ -3,27 +3,27 @@ package Graph;
 import java.util.ArrayList;
 import java.util.List;
 
-class Vertex<T> {
-    int id;
-   // private T data;
+public class Vertex<T> {
+    long id;
+    private T data;
     private List<Edge<T>> edges = new ArrayList<>();
     private List<Vertex<T>> adjacentVertex = new ArrayList<>();
     
-    Vertex(int id){
+    Vertex(long id){
         this.id = id;
     }
     
-    public int getId(){
+    public long getId(){
         return id;
     }
     
-//    public void setData(T data){
-//        this.data = data;
-//    }
-//    
-//    public T getData(){
-//        return data;
-//    }
+    public void setData(T data){
+        this.data = data;
+    }
+    
+    public T getData(){
+        return data;
+    }
     
     public void addAdjacentVertex(Edge<T> e, Vertex<T> v){
         edges.add(e);

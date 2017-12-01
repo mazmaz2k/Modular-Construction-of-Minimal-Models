@@ -1,5 +1,7 @@
 package Graph;
 
+
+
 class Edge<T>{
     private boolean isDirected = false;
     private Vertex<T> vertex1;
@@ -75,6 +77,6 @@ class Edge<T>{
     public String toString() {
         return "Edge [isDirected=" + isDirected + ", vertex1=" + vertex1
                 + ", vertex2=" + vertex2 + ", weight=" + weight + "]";
-    } 
-
+    }
 }
+
