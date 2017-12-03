@@ -3,7 +3,7 @@ package Graph;
 import java.util.ArrayList;
 import java.util.List;
 
-class Vertex<T> {
+public class Vertex<T> {
     long id;
     private T data;
     private List<Edge<T>> edges = new ArrayList<>();

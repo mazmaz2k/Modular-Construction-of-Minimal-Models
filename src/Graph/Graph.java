@@ -3,14 +3,16 @@ package Graph;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Graph<T>{
 
     private List<Edge<T>> allEdges;
     private Map<Long,Vertex<T>> allVertex;
-    boolean isDirected ;
+    boolean isDirected = false;
     
     public Graph(boolean isDirected){
         allEdges = new ArrayList<Edge<T>>();
@@ -86,32 +88,47 @@ public class Graph<T>{
         }
     }
 
-//    @Override
-//    public String toString(){
-//        StringBuffer buffer = new StringBuffer();
-//        for(Edge<T> edge : getAllEdges()){
-//            buffer.append(edge.getVertex1() + " -> " + edge.getVertex2() + " weight " + edge.getWeight());
-//            buffer.append("\n");
-//        }
-//        return buffer.toString();
-//    }
-
     @Override
-    public String toString() {
-    	StringBuffer sb=new StringBuffer();
-    	for(Vertex<T> v : getAllVertex()) {
-    		sb.append("v num:"+v.id +" ");
-    		for(Edge<T> edge : getAllEdges()){
-    			if(v.equals(edge.getVertex1()))
-    				sb.append("->" +edge.getVertex2()+" ");
-    			
-    		}
-    		sb.append("\n");
-    	}
-   
-    	return sb.toString();
+    public String toString(){
+        StringBuffer buffer = new StringBuffer();
+        for(Edge<T> edge : getAllEdges()){
+            buffer.append(edge.getVertex1() + " " + edge.getVertex2() + " " + edge.getWeight());
+            buffer.append("\n");
+        }
+        return buffer.toString();
     }
+
+ 
+    
+//	// A function used by DFS
+//	void DFSUtil(Vertex <Object> v,boolean visited[])
+//	{
+//		// Mark the current node as visited and print it
+//		visited[(int)v.getId()] = true;
+//		System.out.print(v+" ");
+//
+//		// Recur for all the vertices adjacent to this vertex
+//		//List<Vertex<T>> adjcentVertex = v.getAdjacentVertexes()	;	
+//		Iterator<Vertex<Object>> i =  v.getAdjacentVertexes().listIterator();
+//		
+//		while (i.hasNext())
+//		{
+//			Vertex<Object> n = i.next();
+//			if (!visited[(int) n.getId()])
+//				DFSUtil(n, visited);
+//		}
+//	}
+//    
+//	// The function to do DFS traversal. It uses recursive DFSUtil()
+//	void DFS(Vertex <Object> v)
+//	{
+//		// Mark all the vertices as not visited(set as
+//		// false by default in java)
+//		boolean visited[] = new boolean[allVertex.size()+1];
+//
+//		// Call the recursive helper function to print DFS traversal
+//		DFSUtil(v, visited);
+//		
+//	}
+    
 }
-
-
-
