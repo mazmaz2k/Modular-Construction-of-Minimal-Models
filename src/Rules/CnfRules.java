@@ -1,9 +1,12 @@
 package Rules;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+
+import javax.naming.spi.DirStateFactory.Result;
 
 import Graph.Graph;
 import Graph.StronglyConnectedComponent;
@@ -15,6 +18,7 @@ import java.util.Scanner;
 public class CnfRules
 {
 	private static final String FILENAME = "./CnfFile.txt";
+	
 
 	public static Graph<Integer> initGraph(RulesDataStructure DS ,int numOfRules) {
 
@@ -48,24 +52,43 @@ public class CnfRules
 
 		//System.out.println(graph);
 		// Create a graph given in the above diagram
-		System.out.println("Following are strongly connected components "+
-				"in given graph ");
+//		System.out.println("Following are size of the strongly connected components in given graph ");
 		// graph.printSCCs();
 		StronglyConnectedComponent scc = new StronglyConnectedComponent();
 		List<Set<Vertex<Integer>>> result = scc.scc(graph);
-		result.forEach(set -> {
-			System.out.println(set.size()); 
+		int max=0;
+		for(Set<Vertex<Integer>> s: result) {
+		//	System.out.println(s.size());
+			if(max<s.size())
+				max=s.size();
+		}
+		System.out.println("Following are THE strongly connected componentsin given graph ");
+		for(Set<Vertex<Integer>> s: result) {
+			if(s.size()==max) {
+				s.forEach(v -> System.out.print(v.getId() + "-> "));
+				System.out.println();
+			}
+		}
+//		result.forEach(set -> {
+//			System.out.println(set.size()); 
+//		});
+		System.out.println();
 
-		});
+		System.out.println("Following are ALL strongly connected componentsin given graph ");
 		//print the result
+	
 		result.forEach(set -> {
-			set.forEach(v -> System.out.print(v.getId() + "-> "));
-			System.out.println();
+			
+				set.forEach(v -> System.out.print(v.getId() + "-> "));
+				System.out.println();
+			
 		});
 
 		return graph;	
 	} 
 
+	
+	
 	public static void main(String[] args)
 	{
 		Scanner sc;
