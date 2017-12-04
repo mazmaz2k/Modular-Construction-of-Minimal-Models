@@ -112,7 +112,7 @@ public class CnfRules
 
 			}
 
-			Graph<Integer> graph =new Graph<>(true); 
+			Graph<Integer> graph ;//=new Graph<>(true); 
 			//DS.printHashTable();
 			//DS.placeValue(-1, false);
 			//DS.placeValue(3, false);
