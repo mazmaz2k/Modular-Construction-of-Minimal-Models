@@ -16,8 +16,10 @@ public class CnfRules
 {
 	private static final String FILENAME = "./CnfFile.txt";
 
+
 	public static Graph<Integer> initGraph(RulesDataStructure DS ,int numOfRules) 
 	{
+
 
 		Graph<Integer> graph = new Graph<>(true);
 		Node n1 ,n2;
@@ -89,8 +91,41 @@ public class CnfRules
 					index++;
 
 			}
+			
+			
+			//TEST CHECK FOR UNITS METHOD
+		/*	DS.printRulesArray();
+			DS.checkForUnits();
+			DS.printRulesArray();
+			DS.printHashTable();
+			DS.printValueOfVariables();
+*/
+			
+			LinkedList s = new LinkedList();
+			s.addAtTail(3);
+			s.addAtTail(1);
+			//s.printList();
+			DS.Ts(s).printList();
+			//---------------------------
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 
-			Graph<Integer> graph;// =new Graph<>(true); 
+		/*	Graph<Integer> graph;// =new Graph<>(true); 
 			//DS.printHashTable();
 			//DS.placeValue(-1, false);
 			//DS.placeValue(3, false);
@@ -109,6 +144,8 @@ public class CnfRules
 			{
 				e.printStackTrace();
 			}
+			
+
 			finally {
 				console.close();
 				DS.printRulesArray();
@@ -116,7 +153,7 @@ public class CnfRules
 				graph=null;
 				graph=initGraph(DS,numOfRules);
 
-			}
+			}*/
 			//}
 
 
@@ -128,7 +165,6 @@ public class CnfRules
 
 
 	}
-
 
 
 }

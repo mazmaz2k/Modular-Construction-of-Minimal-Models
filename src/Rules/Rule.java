@@ -1,5 +1,6 @@
 package Rules;
 
+import Rules.LinkedList;
 
 //this class represent one rule
 public class Rule 
