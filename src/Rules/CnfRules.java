@@ -129,9 +129,13 @@ public class CnfRules
 			LinkedList s = new LinkedList();
 			s.addAtTail(3);
 			s.addAtTail(1);
+			s.addAtTail(2);
+			s.addAtTail(5);
+			s.addAtTail(6);
 			//s.printList();
 			DS.Ts(s).printList();
 			//---------------------------
+			
 			
 			
 			
