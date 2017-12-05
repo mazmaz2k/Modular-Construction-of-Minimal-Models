@@ -431,11 +431,64 @@ public class RulesDataStructure extends Rule
     		n2=n2.next;
     	}
     	
+    	Node n4 = l.head;
+    	n1=s.head;
+    	int index=0;
+    	boolean delete ;
+    	while(n4!=null)
+    	{
+    		delete = false;
+    		ruleNum=n4.var;
+    		Node nBody = RulesArray[ruleNum].body.head;
+    		Node nHead = RulesArray[ruleNum].head.head;
+    		while(nBody!=null)
+    		{
+    			if(!existInList(s, nBody.var))
+    			{
+    				delete=true;
+    			}
+    			nBody=nBody.next;
+    		}
+    		if(!delete)
+    		{
+    			while(nHead!=null)
+        		{
+    				if(!existInList(s, nHead.var))
+        			{
+        				delete=true;
+        			}
+        			nHead=nHead.next;
+        		}
+    		}
+    		if(delete)
+    		{
+    			l.deleteAtIndex(index);
+    		}
+    		else
+    		{
+    			index++;
+    		}
+    		n4=n4.next;
+    	}
+    	
     	
     	
     	return l;
     }
     
+    private boolean existInList(LinkedList l , int num)
+    {
+    	Node n = l.head;
+    	while(n!=null)
+    	{
+    		if(n.var==num)
+    		{
+    			return true;
+    		}
+    		n=n.next;
+    	}
+    	return false;
+    }
     
     
    
