@@ -13,10 +13,9 @@ import Rules.LinkedList.Node;
 public class RulesDataStructure extends Rule
 {
 
-    public  Rule[] RulesArray ;
-    Hashtable<Integer, LinkedList> array ;
-    
-    HashMap<Integer, Boolean> literalMap;// We will store the value of literals in this structure as we go along
+    public Rule[] RulesArray ;
+    Hashtable<Integer, LinkedList> varHT ;
+    Hashtable<Integer, Boolean> valueTable;// We will store the value of literals in this structure as we go along
 
     public RulesDataStructure (int numOfRules)
     {
@@ -26,9 +25,9 @@ public class RulesDataStructure extends Rule
     		RulesArray[i]= new Rule();
 		}
     	
-    	array = new Hashtable<Integer, LinkedList>();
+    	varHT = new Hashtable<Integer, LinkedList>();
     	
-    	literalMap = new HashMap<Integer,Boolean>();
+    	valueTable = new Hashtable<Integer,Boolean>();
     }
     
     public void addToRulsArray(int index , int var)
@@ -85,25 +84,45 @@ public class RulesDataStructure extends Rule
     public void addToHashTable(int var , int ruleIndex) 
     {
     	LinkedList ls;
-    	if(array.containsKey(var))//key exist
+    	if(varHT.containsKey(var))//key exist
     	{
-    		ls = array.get(var);
+    		ls = varHT.get(var);
+    		if(VariableExistInLinkedList(ruleIndex,ls))
+    		{
+    			return;
+    		}
+    		ls.addAtTail(ruleIndex);
+    		varHT.put(var,ls); 		
     	}
     	else//key does not exist
     	{
     		ls = new LinkedList();
+    		ls.addAtTail(ruleIndex);
+    		varHT.put(var,ls); 	
     	}
-    	ls.addAtTail(ruleIndex);
-		array.put(var,ls ); 	
+    	
+    }
+    public boolean VariableExistInLinkedList(int var,LinkedList l)
+    {
+    	Node n = l.head;
+    	while(n!=null)
+    	{
+    		if(n.var==var)
+    		{
+    			return true;
+    		}
+    		n=n.next;
+    	}
+    	return false;
     }
     
     public void printHashTable() 
     {
-    	 Set<Integer> keys = array.keySet();
+    	 Set<Integer> keys = varHT.keySet();
     	 for(int key: keys)
     	 {
     		 System.out.println("Value of " + key +" is: ");
-    		 array.get(key).printList();
+    		 varHT.get(key).printList();
     	 }
     }
     
@@ -136,8 +155,8 @@ public class RulesDataStructure extends Rule
     
     public boolean conflictExist(int var ,boolean b)
     {
-    	LinkedList l = array.get(var);
-    	if(exist(var))
+    	LinkedList l = varHT.get(var);
+    	if(variableExist(var))
     	{
     		Node n = l.head;
     		while(n!=null)
@@ -163,9 +182,9 @@ public class RulesDataStructure extends Rule
     }
     
     
-    public boolean exist(int var)
+    public boolean variableExist(int var)
     {
-    	LinkedList l = array.get(var);
+    	LinkedList l = varHT.get(var);
     	if(l==null)
     	{
     		return false;
@@ -173,19 +192,19 @@ public class RulesDataStructure extends Rule
     	return true;
     }
     
-    public void placeValue(int var , boolean value)
+    public void ChangeDataStrucureByPlacingValueInVar(int var , boolean value)
     {
     	if(conflictExist(var, value))
     	{
     		System.out.println("CONFLICT");
     		return ;
     	}
-    	if(!exist(var))
+    	if(!variableExist(var))
     	{
     		System.out.println("VARIABLE NOT EXIST");
     		return ;
     	}
-    	LinkedList l = array.get(var);
+    	LinkedList l = varHT.get(var);
     	Node n = l.head;
     	while(n!=null)
     	{
@@ -272,7 +291,7 @@ public class RulesDataStructure extends Rule
     		while(bo!=null)
     		{
     			index = 0;
-    			list = array.get(bo.var);
+    			list = varHT.get(bo.var);
     			Node n = list.head;
     			while(n!=null)
     			{
@@ -289,7 +308,7 @@ public class RulesDataStructure extends Rule
     		while(he!=null)
     		{
     			index = 0;
-    			list = array.get(he.var);
+    			list = varHT.get(he.var);
     			Node n = list.head;
     			while(n!=null)
     			{
@@ -310,7 +329,7 @@ public class RulesDataStructure extends Rule
     	}
     	else
     	{
-    		LinkedList list = array.get(var);
+    		LinkedList list = varHT.get(var);
     		Node n = list.head;
     		int index =0;
     		while(n!=null)
@@ -323,10 +342,103 @@ public class RulesDataStructure extends Rule
     			index++;
     			n=n.next;
     		}
+    	}   	
+    	
+    }
+    
+    
+    
+    public void checkForUnits()
+    {
+    	for (int i = 0; i < RulesArray.length; i++)
+    	{
+			if((RulesArray[i].body.getSize() + RulesArray[i].head.getSize())==1)
+			{
+				if(RulesArray[i].body.getSize() ==1)//body size is 1 and head size is 0s
+				{
+					valueTable.put(RulesArray[i].body.head.var, false);
+					ChangeDataStrucureByPlacingValueInVar(RulesArray[i].body.head.var, false);
+					
+				}
+				else//head size is 1 and body size is 0
+				{
+					valueTable.put(RulesArray[i].head.head.var, true);
+
+					ChangeDataStrucureByPlacingValueInVar(RulesArray[i].head.head.var, true);
+				}
+			}
+		}
+    	System.out.println("Ufter unit check");
+    }
+    public void printValueOfVariables()
+    {
+    	System.out.println("-------THE VALUE TABLE--------");
+    	Set<Integer> keys = valueTable.keySet();
+    	for(int key: keys)
+   	 	{
+    		System.out.print("Value of " + key +" is ");
+    		if(valueTable.get(key))
+    		{
+    			System.out.println("TRUE");
+    		}
+    		else
+    		{
+    			System.out.println("FALSE");
+    		}
+
+   	 	}
+    	System.out.println("------------------------------");
+    }
+    
+    public LinkedList Ts(LinkedList s) 
+    {
+    	int i ,j;
+    	LinkedList l = new LinkedList();
+    	Node n1 =s.head;
+    	int ruleNum;
+    	//System.out.println("size of s : " + s.getSize());
+    	LinkedList[] arrList = new LinkedList[s.getSize()];
+    	for ( i = 0; i < arrList.length; i++) 
+    	{
+			arrList[i]=varHT.get(n1.var);
+			n1=n1.next;
+		}
+    	//arrList[0].printList();
+    	Node n2=arrList[0].head;
+    	int times;
+    	while(n2!=null)
+    	{
+    		times=0;
+    		ruleNum=n2.var;
+    		times++;
+    		for (j = 1; j < arrList.length; j++)
+    		{
+				Node n3=arrList[j].head;
+				while(n3!=null)
+				{
+					if(ruleNum==n3.var)
+					{
+						times++;
+						break;
+					}
+					n3=n3.next;
+				}
+			}
+    		if(times==s.getSize())
+    		{
+    			l.addAtTail(ruleNum);
+    		}
+    		n2=n2.next;
     	}
     	
     	
+    	
+    	return l;
     }
+    
+    
+    
+   
     
     
     

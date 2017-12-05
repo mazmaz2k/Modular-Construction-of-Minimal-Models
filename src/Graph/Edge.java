@@ -79,4 +79,3 @@ class Edge<T>{
                 + ", vertex2=" + vertex2 + ", weight=" + weight + "]";
     }
 }
-

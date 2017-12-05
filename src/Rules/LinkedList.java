@@ -7,8 +7,8 @@ public class LinkedList
 	public class Node
 	{
 		//Declare class variables
-		Node next;
-		int var;
+		public Node next;
+		public int var;
 	
 		
 		public Node(int dat)

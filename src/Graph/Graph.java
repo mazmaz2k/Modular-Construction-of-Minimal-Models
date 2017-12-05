@@ -7,7 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
+import Rules.RulesDataStructure;
+import Rules.LinkedList.Node;
 public class Graph<T>{
 
     private List<Edge<T>> allEdges;
@@ -131,7 +134,73 @@ public class Graph<T>{
 //		
 //	}
     
+    
+    public static Graph<Integer> initGraph(RulesDataStructure DS ,int numOfRules) 
+	{
+
+
+		Graph<Integer> graph = new Graph<>(true);
+		Node n1 ,n2;
+		for (int i = 0; i < numOfRules; i++) 
+		{
+			n1 =DS.RulesArray[i].body.head;
+			n2=DS.RulesArray[i].head.head;
+			while(n1!=null)
+			{
+				while(n2!=null)
+				{
+					graph.addEdge(n1.var,n2.var);
+					n2=n2.next;
+				}
+				n1=n1.next;
+			}
+
+		}
+		System.out.println("This is the Graph:");
+		System.out.println(graph);
+		//        graph.addEdge(7, 1);
+		//        graph.addEdge(1, 2);
+		//        graph.addEdge(2, 7);
+		//        graph.addEdge(1, 3);
+		//        graph.addEdge(3, 4);
+		//        graph.addEdge(4, 5);
+		//        graph.addEdge(5, 3);
+		//        graph.addEdge(5, 6);
+
+		//System.out.println(graph);
+		// Create a graph given in the above diagram
+//		System.out.println("Following are size of the strongly connected components in given graph ");
+		// graph.printSCCs();
+		StronglyConnectedComponent scc = new StronglyConnectedComponent();
+		List<Set<Vertex<Integer>>> result = scc.scc(graph);
+		int max=0;
+		for(Set<Vertex<Integer>> s: result) {
+		//	System.out.println(s.size());
+			if(max<s.size())
+				max=s.size();
+		}
+		System.out.println("Following are THE strongly connected componentsin given graph ");
+		for(Set<Vertex<Integer>> s: result) {
+			if(s.size()==max) {
+				s.forEach(v -> System.out.print(v.getId() + "-> "));
+				System.out.println();
+			}
+		}
+//		result.forEach(set -> {
+//			System.out.println(set.size()); 
+//		});
+		System.out.println();
+
+		System.out.println("Following are ALL strongly connected componentsin given graph ");
+		//print the result
+	
+		result.forEach(set -> {
+			
+				set.forEach(v -> System.out.print(v.getId() + "-> "));
+				System.out.println();
+			
+		});
+
+		return graph;	
+	} 
 }
-
-
-
