@@ -406,6 +406,9 @@ public class RulesDataStructure extends DavisPutnamHelper
     	for ( i = 0; i < arrList.length; i++) //creae an array. each cell contains list of ruleNums that a var from s contains in the hash table 
     	{
 			arrList[i]=varHT.get(n1.var);
+			if(arrList[i]==null) {
+				return l;
+			}
 			n1=n1.next;
 		}
     	//arrList[0].printList();
