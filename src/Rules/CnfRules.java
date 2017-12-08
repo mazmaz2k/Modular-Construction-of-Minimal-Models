@@ -1,12 +1,9 @@
 package Rules;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-
-import javax.naming.spi.DirStateFactory.Result;
 
 import Graph.Graph;
 import Graph.StronglyConnectedComponent;
@@ -18,80 +15,60 @@ import java.util.Scanner;
 public class CnfRules
 {
 	private static final String FILENAME = "./CnfFile.txt";
-	
 
 
-//	public static Graph<Integer> initGraph(RulesDataStructure DS ,int numOfRules) 
-//	{
-//
-//
-//		Graph<Integer> graph = new Graph<>(true);
-//		Node n1 ,n2;
-//		for (int i = 0; i < numOfRules; i++) 
-//		{
-//			n1 =DS.RulesArray[i].body.head;
-//			n2=DS.RulesArray[i].head.head;
-//			while(n1!=null)
-//			{
-//				while(n2!=null)
-//				{
-//					graph.addEdge(n1.var,n2.var);
-//					n2=n2.next;
-//				}
-//				n1=n1.next;
-//			}
-//
-//		}
-//		System.out.println("This is the Graph:");
-//		System.out.println(graph);
-//		//        graph.addEdge(7, 1);
-//		//        graph.addEdge(1, 2);
-//		//        graph.addEdge(2, 7);
-//		//        graph.addEdge(1, 3);
-//		//        graph.addEdge(3, 4);
-//		//        graph.addEdge(4, 5);
-//		//        graph.addEdge(5, 3);
-//		//        graph.addEdge(5, 6);
-//
-//		//System.out.println(graph);
-//		// Create a graph given in the above diagram
-////		System.out.println("Following are size of the strongly connected components in given graph ");
-//		// graph.printSCCs();
-//		StronglyConnectedComponent scc = new StronglyConnectedComponent();
-//		List<Set<Vertex<Integer>>> result = scc.scc(graph);
-//		int max=0;
-//		for(Set<Vertex<Integer>> s: result) {
-//		//	System.out.println(s.size());
-//			if(max<s.size())
-//				max=s.size();
-//		}
-//		System.out.println("Following are THE strongly connected componentsin given graph ");
-//		for(Set<Vertex<Integer>> s: result) {
-//			if(s.size()==max) {
-//				s.forEach(v -> System.out.print(v.getId() + "-> "));
-//				System.out.println();
-//			}
-//		}
-////		result.forEach(set -> {
-////			System.out.println(set.size()); 
-////		});
-//		System.out.println();
-//
-//		System.out.println("Following are ALL strongly connected componentsin given graph ");
-//		//print the result
-//	
-//		result.forEach(set -> {
-//			
-//				set.forEach(v -> System.out.print(v.getId() + "-> "));
-//				System.out.println();
-//			
-//		});
-//
-//		return graph;	
-//	} 
+	/*public static Graph<Integer> initGraph(RulesDataStructure DS ,int numOfRules) 
+	{
 
-	
-	
+
+		Graph<Integer> graph = new Graph<>(true);
+		Node n1 ,n2;
+		for (int i = 0; i < numOfRules; i++) 
+		{
+			n1 =DS.RulesArray[i].body.head;
+			n2=DS.RulesArray[i].head.head;
+			while(n1!=null)
+			{
+				while(n2!=null)
+				{
+					graph.addEdge(n1.var,n2.var);
+					n2=n2.next;
+				}
+				n1=n1.next;
+			}
+
+		}
+		System.out.println("This is the Graph:");
+		System.out.println(graph);
+		//        graph.addEdge(7, 1);
+		//        graph.addEdge(1, 2);
+		//        graph.addEdge(2, 7);
+		//        graph.addEdge(1, 3);
+		//        graph.addEdge(3, 4);
+		//        graph.addEdge(4, 5);
+		//        graph.addEdge(5, 3);
+		//        graph.addEdge(5, 6);
+
+		//System.out.println(graph);
+		// Create a graph given in the above diagram
+		System.out.println("Following are strongly connected components "+
+				"in given graph ");
+		// graph.printSCCs();
+		StronglyConnectedComponent scc = new StronglyConnectedComponent();
+		List<Set<Vertex<Integer>>> result = scc.scc(graph);
+		result.forEach(set -> {
+			System.out.println(set.size()); 
+
+		});
+		//print the result
+		result.forEach(set -> {
+			set.forEach(v -> System.out.print(v.getId() + "-> "));
+			System.out.println();
+		});
+
+		return graph;	
+	} 
+*/
 	public static void main(String[] args)
 	{
 		Scanner sc;
@@ -114,26 +91,35 @@ public class CnfRules
 					index++;
 
 			}
-
-			Graph<Integer> graph ;//=new Graph<>(true); 
+			
 			
 			
 			//TEST CHECK FOR UNITS METHOD
-		/*	DS.printRulesArray();
-			DS.checkForUnits();
+			//DS.printRulesArray();
+		/*	DS.checkForUnits();
 			DS.printRulesArray();
 			DS.printHashTable();
 			DS.printValueOfVariables();
 */
 			
 			LinkedList s = new LinkedList();
-			s.addAtTail(3);
 			s.addAtTail(1);
 			s.addAtTail(2);
+			s.addAtTail(3);
+			s.addAtTail(4);
 			s.addAtTail(5);
-			s.addAtTail(6);
+			LinkedList Ts=DS.Ts(s);
+			Ts.printList();
+			DS.ModuMin(Ts);
+			
 			//s.printList();
-			DS.Ts(s).printList();
+			
+		//	LinkedList Ts=DS.Ts(s);//.printList();
+			//Ts.printList();
+			
+			//DS.ModuMin(Ts);
+			//DS.printValueOfVariables();
+			DS.printValueOfVariables();
 			//---------------------------
 			
 			
@@ -155,7 +141,6 @@ public class CnfRules
 			
 
 		/*	Graph<Integer> graph;// =new Graph<>(true); 
->>>>>>> c8a2206dc9047eabfb91cac5be1c423e1491a8f5
 			//DS.printHashTable();
 			//DS.placeValue(-1, false);
 			//DS.placeValue(3, false);

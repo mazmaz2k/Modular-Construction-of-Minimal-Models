@@ -22,6 +22,7 @@ public class LinkedList
 	
 
 	
+	
 	public LinkedList()
 	{
 		this.head = null;
@@ -97,6 +98,7 @@ public class LinkedList
 	public void deleteList()
 	{
 		head=null;
+		numNodes=0;
 	}
 	
 	public int getSize()
