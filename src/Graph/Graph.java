@@ -3,6 +3,7 @@ package Graph;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
@@ -134,7 +135,11 @@ public class Graph<T>{
 	//		
 	//	}
 
-
+	
+	
+	//Initialize graph from Rules data structure
+	//also return strongest connected component of the graph 
+	
 	public static Graph<Integer> initGraph(RulesDataStructure DS ,int numOfRules) 
 	{
 
@@ -203,6 +208,36 @@ public class Graph<T>{
 
 		return graph;	
 	} 
+	//input original graph and set of vertexes and return (create) a smaller graph from those set of vertexes 
+	
+	public static Graph<Integer> copyGraph(Set<Vertex<Integer>> setOfVertex,Graph<Integer> oldGraph) {
+		Graph<Integer> newGraph = new Graph<>(true);
+		
+		for(Vertex<Integer> v:setOfVertex) {
+			
+			for(Edge<Integer> e : oldGraph.getAllEdges()) {
+				
+				if( v.getId()==e.getVertex1().getId()) {
+					newGraph.addEdge(v.getId(), e.getVertex2().getId());
+					//System.out.println("v1: "+v.getId()+" v2: "+e.getVertex2().getId());
+				}
+
+			}
+		}
+		
+		System.out.println(newGraph.getAllEdges().toString());
+
+		return newGraph;
+	} 
+	
+	public Graph<Integer> uniqueGraph(Graph<Integer> oldGraph){
+		Graph<Integer> uniqueGraph = new Graph<>(true);
+		
+		
+		
+		
+		return uniqueGraph;
+	} 
 	public static void main(String args[]){
 		Graph<Integer> graph = new Graph<>(true);
 		graph.addEdge(0, 1);
@@ -210,8 +245,13 @@ public class Graph<T>{
 		graph.addEdge(2, 0);
 		graph.addEdge(1, 3);
 		graph.addEdge(3, 4);
+		graph.addEdge(4, 19);
+		graph.addEdge(19, 5);
 		graph.addEdge(4, 5);
-
+		graph.addEdge(9, 5);
+		graph.addEdge(5, 1);
+		graph.addEdge(0, 19);
+		graph.addEdge(5, 5);
 		graph.addEdge(5, 3);
 		graph.addEdge(5, 6);
 
@@ -219,8 +259,32 @@ public class Graph<T>{
 		List< Set<Vertex<Integer>>> result = scc.scc(graph);
 
 		//print the result
+		Set<Vertex<Integer>> vList= new HashSet<>();
+		int max=0;
+		for(Set<Vertex<Integer>> set: result ) {
+			if(set.size()>max) {
+				max=set.size();
+			}
+		}
+		
+		for(Set<Vertex<Integer>> set: result ) {
+			if(set.size()==max) {
+//				set.forEach(v->{
+//					vList.add(v.getId());
+//				});
+				vList.addAll(set);
+				break;
+			}
+			
+		}
+		Graph<Integer> graphStrongestConnectedComponnent =copyGraph(vList,graph);
+        System.out.println("\n Origunal graph : \n"+graph+"\n\n ");		
+
+		System.out.println("Strongest CC : " +vList);
+        System.out.println("\n graph Strongest Connected Componnent: \n"+graphStrongestConnectedComponnent+"\n\n ");		
 		result.forEach(set -> {
-			set.forEach(v -> System.out.print(v.getId() + " "));
+			
+			set.forEach(v -> System.out.print(v.getId() + "-> "));
 			System.out.println();
 		});
 		Graph<Integer> graphMaxFlow = new Graph<>(true);
@@ -230,10 +294,13 @@ public class Graph<T>{
 		graphMaxFlow.addEdge(1, 3, 1);
 		graphMaxFlow.addEdge(3, 4, 1);
 		graphMaxFlow.addEdge(4, 5, 1);
-		graphMaxFlow.addEdge(1, 6, 1);
+//		graphMaxFlow.addEdge(1, 6, 1);
 		graphMaxFlow.addEdge(5, 3, 1);
-		graphMaxFlow.addEdge(5, 6, 1);
+//		graphMaxFlow.addEdge(5, 6, 1);
 		graphMaxFlow.addEdge(0, 5, 1);
+		graphMaxFlow.addEdge(4, 6, 1);
+		
+		//create an Equivalent Array to represent the index for each vertex in graphWeightMatrix 2d array
 		int[] arrayIndexEquivalents=new int[graphMaxFlow.getAllVertex().size()]; //= {2,9,7,5,3,12,1,99};
 		int i=0;
 		//		graphMaxFlow.getAllVertex().toArray();
@@ -247,7 +314,9 @@ public class Graph<T>{
 			}
 
 		}
-		int graphWightMatrix[][]=new int[graphMaxFlow.getAllVertex().size()][graphMaxFlow.getAllVertex().size()];
+		
+		// 2d representation of strongest connected component Edge weights  
+		int graphWeightMatrix[][]=new int[graphMaxFlow.getAllVertex().size()][graphMaxFlow.getAllVertex().size()];
 		//		for (int j = 0; j < arrayIndexEquivalents.length-1; j++) {
 		//			for (int j2 = 0; j2 < arrayIndexEquivalents.length-1; j2++) {
 		//			}
@@ -256,7 +325,7 @@ public class Graph<T>{
 		for (Edge<Integer> e : graphMaxFlow.getAllEdges()) {
 			//		try {
 			//System.out.println(e.toString());
-			graphWightMatrix[findInArray(arrayIndexEquivalents,e.getVertex1().getId())][findInArray(arrayIndexEquivalents,e.getVertex2().getId())]=e.getWeight();
+			graphWeightMatrix[findInArray(arrayIndexEquivalents,e.getVertex1().getId())][findInArray(arrayIndexEquivalents,e.getVertex2().getId())]=e.getWeight();
 			//			}catch (Exception e1) {
 			//				System.err.println(e+"Error in array");
 			//			}
@@ -272,13 +341,13 @@ public class Graph<T>{
 			}
 		}
 		System.out.println("\n");
-		for (int j = 0; j < graphWightMatrix.length; j++) {
-			for (int j2 = 0; j2 < graphWightMatrix.length; j2++) {
-				if (j2<graphWightMatrix.length-1) {
-					System.out.print(graphWightMatrix[j][j2]+", ");
+		for (int j = 0; j < graphWeightMatrix.length; j++) {
+			for (int j2 = 0; j2 < graphWeightMatrix.length; j2++) {
+				if (j2<graphWeightMatrix.length-1) {
+					System.out.print(graphWeightMatrix[j][j2]+", ");
 
 				}else {
-					System.out.print(graphWightMatrix[j][j2]+" ");
+					System.out.print(graphWeightMatrix[j][j2]+" ");
 				}
 			}
 			System.out.println();
@@ -310,6 +379,7 @@ public class Graph<T>{
 		//			}
 		//			System.out.println();
 		//		}
+		
 		FordFulkerson maxFlowFinder = new FordFulkerson(arrayIndexEquivalents,arrayIndexEquivalents.length);
 		int vertexS = 0;
 		int vertexT = maxFlowFinder.vertexCount-1;	//T is the last thing in the list
@@ -323,7 +393,7 @@ public class Graph<T>{
 		//		}
 		//		
 
-		System.out.println("\nBasic Ford Fulkerson Max Flow: " + maxFlowFinder.maxFlow(graphWightMatrix, vertexS, vertexT));
+		System.out.println("\nBasic Ford Fulkerson Max Flow: " + maxFlowFinder.maxFlow(graphWeightMatrix, vertexS, vertexT));
 
 		//		graphMaxFlow.getAllVertex().forEach(s->{
 		//			arrayIndexEquivalents[i]=(int) s.getId();
@@ -349,6 +419,7 @@ public class Graph<T>{
 		//		}
 		//		System.out.println("\nMaximum capacity " + ff.maxFlow(capacity, 0, 6));
 	}	
+	// find an vertex index in array of vertexes return -1 if not there
 	public static int findInArray(int[] arr,long a) {
 		for (int i = 0; i < arr.length; i++) {
 			if(arr[i]==a) {
