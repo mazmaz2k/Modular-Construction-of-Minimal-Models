@@ -3,6 +3,7 @@ package Rules;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Set;
 
 //import Graph.LinkedList1;
@@ -31,7 +32,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     
     public void addToRulsArray(int index , int var)
     {
-    	if(var==0)//can't be because its checked
+    	if(var==0)//can't be because its checked when reading the file
     		return;
     	
     	else if(var<0)
@@ -124,7 +125,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     		 varHT.get(key).printList();
     	 }
     }
-    /*
+    
     private boolean existInBody(int var, int ruleNum)
     {
     	
@@ -151,7 +152,13 @@ public class RulesDataStructure extends DavisPutnamHelper
     	}
     	return false;
     }
-    
+    private boolean existInRule(int var , int ruleNum)
+    {
+    	if(existInBody(var, ruleNum)||existInHead(var, ruleNum))
+    		return true;
+    	return false;
+    }
+/*    
     public boolean conflictExist(int var ,boolean b)
     {
     	LinkedList l = varHT.get(var);
@@ -394,7 +401,72 @@ public class RulesDataStructure extends DavisPutnamHelper
     	System.out.println("------------------------------");
     }
     
-    public LinkedList Ts(LinkedList s) 
+    public LinkedList Ts (LinkedList s)
+    {
+    	LinkedList Ts = new LinkedList();
+    	
+    	Node Snode =s.head;
+    	DefaultHashMap<Integer, Boolean> map = new DefaultHashMap<Integer, Boolean>(false);
+    	boolean addToTs;
+    	for (int i = 0; i < s.getSize() ; i++)
+    	{
+    		LinkedList l = varHT.get(Snode.var);//NOT NULL
+    		Node n =l.head; //NOT NULL
+    		
+    		while(n!=null)
+    		{
+    			if(!map.get(n.var))//if we did not check this rule, lets check
+    			{
+    				map.put(n.var, true);
+    				addToTs = true;
+    				if(!allExistInList(n.var, s))
+    				{
+    					addToTs=false;
+    				}
+    				if(addToTs)
+    				{
+    					Ts.addAtTail(n.var);
+    				}
+    			}
+    			n=n.next;
+    		}
+    		
+    		
+    		Snode= Snode.next;
+		}
+    	
+    	
+    	
+    	
+    	
+    	return Ts;
+    }
+    private boolean allExistInList(int ruleNum , LinkedList l)//all vars in rule exist in List
+    {
+    	Rule r =RulesArray[ruleNum];
+    	Node nBody = r.body.head;
+    	Node nHead =r.head.head;
+    	while(nBody!=null)
+    	{
+    		if(!VariableExistInLinkedList(nBody.var, l))
+    		{
+    			return false;
+    		}
+    		nBody=nBody.next;
+    	}
+    	while(nHead!=null)
+    	{
+    		if(!VariableExistInLinkedList(nHead.var, l))
+    		{
+    			return false;
+    		}
+    		nHead=nHead.next;
+    	}
+    	return true;
+    	
+    }
+    
+  /*  public LinkedList Ts(LinkedList s) 
     {
     	int i ,j;
     	LinkedList l = new LinkedList();
@@ -406,7 +478,14 @@ public class RulesDataStructure extends DavisPutnamHelper
     	for ( i = 0; i < arrList.length; i++) //creae an array. each cell contains list of ruleNums that a var from s contains in the hash table 
     	{
 			arrList[i]=varHT.get(n1.var);
-			if(arrList[i]==null) {
+			if(arrList[i]==null)
+			{
+				n1 = s.head;//put false on every literal in s
+		    	while(n1!=null)
+		    	{
+		    		literalMap.put(String.valueOf(n1.var), false);
+		    		n1=n1.next;
+		    	}
 				return l;
 			}
 			n1=n1.next;
@@ -492,21 +571,21 @@ public class RulesDataStructure extends DavisPutnamHelper
     	}
     
     	return l;
-    }
+    }*/
     
     
     
-    public void ModuMin(LinkedList Ts)
+    public void FindMinimalModelForTs(LinkedList Ts)
     {
  	  ArrayList<Clause> clauses = new ArrayList<>();
- 	   Node n = Ts.head;
+ 	  Node nTs = Ts.head;
  	  for (int i = 0; i < Ts.getSize(); i++) 
  	  {	
- 		Node nBody =RulesArray[n.var].body.head;
-		Node nHead = RulesArray[n.var].head.head;
+ 		Node nBody =RulesArray[nTs.var].body.head;
+		Node nHead = RulesArray[nTs.var].head.head;
 		Clause clause = new Clause();
 		String literal;
-		while(nBody!=null)
+		while(nBody!=null)//first put the negative literals in order to calculate a minimal model (because of the way that DLL works)
 		{
 		  literal = "-";
 		  literal+= String.valueOf(nBody.var);
@@ -521,14 +600,11 @@ public class RulesDataStructure extends DavisPutnamHelper
 		  }
 		clauses.add(clause);
 
-		 n=n.next;	
+		 nTs=nTs.next;	
 		
  	  }
  	  DLL(clauses);
- 	  for(Clause c : clauses)
- 	  {
- 		  System.out.println(c.printClause());
- 	  }
+ 	 
     }
     public boolean DLL(ArrayList<Clause> Clauses)
 	{
@@ -593,11 +669,13 @@ public class RulesDataStructure extends DavisPutnamHelper
 		}
 		Clause clause1 = new Clause();
 		Clause clause2 = new Clause();
-		String l1 = pickLiteral(Clauses);
+		String l1 = pickLiteral(Clauses);//most of time pick a negative literal because the order of a clause (first body then head)
 		String l2 = "";
 		
-		if(l1.startsWith("-")) l2 = l1.substring(1);
-		else l2 = "-"+l1;
+		if(l1.startsWith("-"))
+			l2 = l1.substring(1);
+		else
+			l2 = "-"+l1;
 		clause1.addLiteral(l1);
 		clause2.addLiteral(l2);
 		copy1.add(clause1);
