@@ -108,10 +108,12 @@ public class CnfRules
 			s.addAtTail(3);
 			s.addAtTail(4);
 			s.addAtTail(5);
+			
 			LinkedList Ts=DS.Ts(s);
 			Ts.printList();
-			DS.ModuMin(Ts);
-			
+		//	DS.FindMinimalModelForTs(Ts);
+			//DS.printValueOfVariables();
+
 			//s.printList();
 			
 		//	LinkedList Ts=DS.Ts(s);//.printList();
@@ -119,7 +121,6 @@ public class CnfRules
 			
 			//DS.ModuMin(Ts);
 			//DS.printValueOfVariables();
-			DS.printValueOfVariables();
 			//---------------------------
 			
 			
