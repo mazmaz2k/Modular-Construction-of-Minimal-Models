@@ -2,18 +2,27 @@ package Graph;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class Vertex<T> {
     long id;
     private T data;
     private List<Edge<T>> edges = new ArrayList<>();
     private List<Vertex<T>> adjacentVertex = new ArrayList<>();
-    
+    private Set<Vertex<Integer>> CCList;
     Vertex(long id){
         this.id = id;
     }
     
-    public long getId(){
+
+    public Set<Vertex<Integer>> getCCList(){
+    	return this.CCList;
+    }
+    
+    public void setCCList(Set<Vertex<Integer>> CCList) {
+    	this.CCList=CCList;
+    }
+	public long getId(){
         return id;
     }
     
@@ -21,6 +30,7 @@ public class Vertex<T> {
         this.data = data;
     }
     
+  
     public T getData(){
         return data;
     }
