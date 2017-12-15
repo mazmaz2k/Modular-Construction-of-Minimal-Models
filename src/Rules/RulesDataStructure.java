@@ -31,7 +31,9 @@ public class RulesDataStructure extends DavisPutnamHelper
     	
     	literalMap = new HashMap<String,Boolean>();
     }
-    
+    public Rule[] getRulsArray() {
+    	return RulesArray;
+    }
     public void addToRulsArray(int index , int var)
     {
     	if(var==0)//can't be because its checked when reading the file
@@ -599,6 +601,21 @@ public class RulesDataStructure extends DavisPutnamHelper
     		}
     	}   	
     	
+    }
+    
+    public String StringMinimalModel()
+    {
+    	String str= "[ ";
+    	Set<String> keys = literalMap.keySet();
+    	for(String key: keys)
+   	 	{
+    		if(literalMap.get(key))
+    		{
+    			str+= "{"+key+"}" + " ";
+    		}
+   	 	}
+    	str+= " ]";
+    	return str;
     }
     
     
