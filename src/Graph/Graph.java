@@ -239,7 +239,7 @@ public class Graph<T>{
 			}
 		}
 		
-		System.out.println(newGraph.getAllEdges().toString());
+		//System.out.println(newGraph.getAllEdges().toString());
 
 		return newGraph;
 	} 
@@ -268,7 +268,11 @@ public class Graph<T>{
 		graph.addEdge(5, 5);
 		graph.addEdge(5, 3);
 		graph.addEdge(5, 6);
-
+		SuperGraph sg=new SuperGraph(graph);
+		System.out.println("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
+		//System.out.println(sg.getSuperGraph());
+		sg.printGraph();
+		System.out.println("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
 		StronglyConnectedComponent scc = new StronglyConnectedComponent();
 		List< Set<Vertex<Integer>>> result = scc.scc(graph);
 

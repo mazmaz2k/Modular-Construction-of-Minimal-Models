@@ -25,8 +25,8 @@ public class SuperGraph {
 		}
 		int x,y;
 		for(Edge<Integer> edge : graph.getAllEdges()) {
-			x=findIdInVertexCC(graph,(int) edge.getVertex1().getId());
-			y=findIdInVertexCC(graph,(int) edge.getVertex2().getId());
+			x=findIdInVertexCC(super_graph,(int) edge.getVertex1().getId());
+			y=findIdInVertexCC(super_graph,(int) edge.getVertex2().getId());
 //			if(findIdInVertexCC(graph,(int) edge.getVertex1().getId())!=findIdInVertexCC(graph,(int)edge.getVertex2().getId())&&findIdInVertexCC(graph,(int) edge.getVertex1().getId())!=-1) {
 //				super_graph.addEdge(id1, id2);
 //			}
@@ -52,6 +52,9 @@ public class SuperGraph {
 	
     /// find vertex of original graph in super graph, return id of where in superGraph it was found (id of superGraph vertex) -1 if not found  
 	public int findIdInVertexCC(Graph<Integer> graph,int id) {
+		if(graph==null)
+			return -1;
+		
 		for(Vertex<Integer> v : graph.getAllVertex()) {
 			for(Vertex<Integer> vertexInCC: v.getCCList() ) {
 				if(vertexInCC.getId()==id) {
@@ -73,5 +76,19 @@ public class SuperGraph {
 //	public Graph<Integer> getGraph() {
 //		return this.graph;
 //	}
+	
+	public void printGraph() {
+		System.out.println(super_graph);
+		System.out.println();
+		for(Vertex<Integer> v : super_graph.getAllVertex()) {
+			System.out.print("Vertex: "+v.getId());
+			System.out.print(": Vertex of cc ");
+			for(Vertex<Integer> vertexInCC: v.getCCList() ) {
+				System.out.print(vertexInCC.getId()+" ");
+				
+			}
+			System.out.println();
+		}	
+	}
 	
 }
