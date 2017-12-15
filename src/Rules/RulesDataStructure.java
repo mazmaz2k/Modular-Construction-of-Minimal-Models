@@ -17,8 +17,10 @@ public class RulesDataStructure extends DavisPutnamHelper
     public Rule[] RulesArray ;
     Hashtable<Integer, LinkedList> varHT ;
    static HashMap<String, Boolean> literalMap;// We will store the value of literals in this structure as we go along
+   int SIZE;
     public RulesDataStructure (int numOfRules)
     {
+    	SIZE=numOfRules;
     	RulesArray = new Rule[numOfRules];
     	for (int i = 0; i < RulesArray.length; i++)
     	{
@@ -56,27 +58,30 @@ public class RulesDataStructure extends DavisPutnamHelper
     	Node tempHead;
     	for (i = 0; i < RulesArray.length; i++)
     	{
-    		System.out.println("RULE NUMBER " + i);
-    		System.out.print("\t Body Of Rule : ");
-    		tempBody = RulesArray[i].body.head;
-    		tempHead =RulesArray[i].head.head;
-    		while(tempBody!=null)
+    		if(RulesArray[i]!=null)
     		{
-    			System.out.print(tempBody.var);
-    			if(tempBody.next!=null)
-    				System.out.print(" --> ");
-    			tempBody=tempBody.next;
+    			System.out.println("RULE NUMBER " + i);
+    			System.out.print("\t Body Of Rule : ");
+    			tempBody = RulesArray[i].body.head;
+    			tempHead =RulesArray[i].head.head;
+    			while(tempBody!=null)
+    			{
+    				System.out.print(tempBody.var);
+    				if(tempBody.next!=null)
+    					System.out.print(" --> ");
+    				tempBody=tempBody.next;
+    			}
+    			System.out.println("\n");
+    			System.out.print("\t Head Of Rule : ");
+    			while(tempHead!=null)
+    			{
+    				System.out.print(tempHead.var);
+    				if(tempHead.next!=null)
+    					System.out.print(" --> ");
+    				tempHead=tempHead.next;
+    			}
+    			System.out.println("\n");
     		}
-    		System.out.println("\n");
-    		System.out.print("\t Head Of Rule : ");
-    		while(tempHead!=null)
-    		{
-    			System.out.print(tempHead.var);
-    			if(tempHead.next!=null)
-    				System.out.print(" --> ");
-    			tempHead=tempHead.next;
-    		}
-    		System.out.println("\n");
 
 		}
     }
@@ -152,206 +157,12 @@ public class RulesDataStructure extends DavisPutnamHelper
     	}
     	return false;
     }
-    private boolean existInRule(int var , int ruleNum)
-    {
-    	if(existInBody(var, ruleNum)||existInHead(var, ruleNum))
-    		return true;
-    	return false;
-    }
+   
 /*    
-    public boolean conflictExist(int var ,boolean b)
-    {
-    	LinkedList l = varHT.get(var);
-    	if(variableExist(var))
-    	{
-    		Node n = l.head;
-    		while(n!=null)
-    		{
-    			int sizeOfBody, sizeOfHead;
-    			sizeOfBody = RulesArray[n.var].body.getSize();
-    			sizeOfHead = RulesArray[n.var].head.getSize();
-    			if( (existInBody(var,n.var )) && sizeOfBody==1 && b &&sizeOfHead==0)
-    			{
-    				return true;
-    			}
-    			else if((existInHead(var,n.var)) && sizeOfHead==1 && !b &&sizeOfBody==0)
-    			{
-    				return true;
-    			}
-    			else
-    			{
-    				return false;
-    			}
-    		}		
-    	}
-    	return false;   	
-    }
     
     
-    public boolean variableExist(int var)
-    {
-    	LinkedList l = varHT.get(var);
-    	if(l==null)
-    	{
-    		return false;
-    	}
-    	return true;
-    }
+   
     
-    public void ChangeDataStrucureByPlacingValueInVar(int var , boolean value)
-    {
-    	if(conflictExist(var, value))
-    	{
-    		System.out.println("CONFLICT");
-    		return ;
-    	}
-    	if(!variableExist(var))
-    	{
-    		System.out.println("VARIABLE NOT EXIST");
-    		return ;
-    	}
-    	LinkedList l = varHT.get(var);
-    	Node n = l.head;
-    	while(n!=null)
-    	{
-    		if(existInBody(var, n.var)&& !value)
-    		{
-    			deleteRule(n.var);
-    			System.out.println("DELETE RULE NUMBER " + n.var);
-    		}
-    		else if((existInBody(var, n.var)&& value))
-    		{
-    			deleteVarFromBody(var,n.var);
-    			System.out.println( "DELETE VARIABLE " + var + " IN RULE " + n.var);
-    		}
-    		else if(existInHead(var, n.var)&& value)
-    		{
-    			deleteRule(n.var);
-    			System.out.println("DELETE RULE NUMBER " + n.var);
-    		}
-    		else if (existInHead(var, n.var)&& !value)
-    		{
-    			deleteVarFromHead(var,n.var);
-    			System.out.println("DELETE VARIABLE "+var+" IN RULE " + n.var);
-    		}
-    		
-    		n=n.next;
-    		
-    	}
-    	return;
-    	
-    }
-    
-    
-    private void deleteRule(int ruleNum)
-    {
-    	updateHT(0,ruleNum);
-    	RulesArray[ruleNum].body.deleteList();
-    	RulesArray[ruleNum].head.deleteList();
-    	RulesArray[ruleNum]=null;
-    }
-    
-    private void deleteVarFromBody(int var, int ruleNum)
-    {
-    	updateHT(var, ruleNum);
-    	LinkedList l = RulesArray[ruleNum].body;
-    	int index = 0;
-    	Node n = l.head;
-    	while(n!=null)
-    	{
-    		if(n.var==var)
-    		{
-    			l.deleteAtIndex(index);
-    			break;
-    		}
-    		index++;
-    		n=n.next;
-    	}
-    }
-    private void deleteVarFromHead(int var, int ruleNum)
-    {
-    	updateHT(var, ruleNum);
-    	LinkedList l = RulesArray[ruleNum].head;
-    	int index = 0;
-    	Node n = l.head;
-    	while(n!=null)
-    	{
-    		if(n.var==var)
-    		{
-    			l.deleteAtIndex(index);
-    			break;
-    		}
-    		index++;
-    		n=n.next;
-    	}
-    }
-    */
-    private void updateHT(int var , int ruleNum)
-    {
-    	if(var==0)//from deleteRule method
-    	{
-    		
-    		Node bo = RulesArray[ruleNum].body.head;
-    		Node he = RulesArray[ruleNum].head.head;
-    		LinkedList list;
-    		int index;
-    		while(bo!=null)
-    		{
-    			index = 0;
-    			list = varHT.get(bo.var);
-    			Node n = list.head;
-    			while(n!=null)
-    			{
-    				if(n.var==ruleNum)
-    				{
-    					list.deleteAtIndex(index);
-    					break;
-    				}
-    				index++;
-    				n=n.next;
-    			}
-    			bo=bo.next;
-    		}
-    		while(he!=null)
-    		{
-    			index = 0;
-    			list = varHT.get(he.var);
-    			Node n = list.head;
-    			while(n!=null)
-    			{
-    				if(n.var==ruleNum)
-    				{
-    					list.deleteAtIndex(index);
-    					break;
-    				}
-    				index++;
-    				n=n.next;
-    			}
-    			he=he.next;
-    		}
-    		
-
-    		
-    		
-    	}
-    	else
-    	{
-    		LinkedList list = varHT.get(var);
-    		Node n = list.head;
-    		int index =0;
-    		while(n!=null)
-    		{
-    			if(n.var==ruleNum)
-    			{
-    				list.deleteAtIndex(index);
-    				break;
-    			}
-    			index++;
-    			n=n.next;
-    		}
-    	}   	
-    	
-    }
     
     
     
@@ -410,6 +221,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	boolean addToTs;
     	for (int i = 0; i < s.getSize() ; i++)
     	{
+    		literalMap.put(String.valueOf(Snode.var), false);//init all vars of s to false
     		LinkedList l = varHT.get(Snode.var);//NOT NULL
     		Node n =l.head; //NOT NULL
     		
@@ -466,114 +278,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	
     }
     
-  /*  public LinkedList Ts(LinkedList s) 
-    {
-    	int i ,j;
-    	LinkedList l = new LinkedList();
-    	Node n1 =s.head;
-    	int ruleNum;
-    	//System.out.println("size of s : " + s.getSize());
-    	LinkedList[] arrList = new LinkedList[s.getSize()];
-    
-    	for ( i = 0; i < arrList.length; i++) //creae an array. each cell contains list of ruleNums that a var from s contains in the hash table 
-    	{
-			arrList[i]=varHT.get(n1.var);
-			if(arrList[i]==null)
-			{
-				n1 = s.head;//put false on every literal in s
-		    	while(n1!=null)
-		    	{
-		    		literalMap.put(String.valueOf(n1.var), false);
-		    		n1=n1.next;
-		    	}
-				return l;
-			}
-			n1=n1.next;
-		}
-    	//arrList[0].printList();
-    	Node n2=arrList[0].head;
-    	int times;
-    	while(n2!=null)//insert to list the common rulenums
-    	{
-    		times=0;
-    		ruleNum=n2.var;
-    		times++;
-    		for (j = 1; j < arrList.length; j++)
-    		{
-				Node n3=arrList[j].head;
-				while(n3!=null)
-				{
-					if(ruleNum==n3.var)
-					{
-						times++;
-						break;
-					}
-					n3=n3.next;
-				}
-			}
-    		if(times==s.getSize())
-    		{
-    			l.addAtTail(ruleNum);
-    		}
-    		n2=n2.next;
-    	}
-    	
-    	Node n4 = l.head;
-    	n1=s.head;
-    	int index=0;
-    	boolean delete ;
-    	while(n4!=null)//delete rulesnum from the list that have variables which exist in a rule but not in s
-    	{
-    		delete = false;
-    		ruleNum=n4.var;
-    		Node nBody = RulesArray[ruleNum].body.head;
-    		Node nHead = RulesArray[ruleNum].head.head;
-    		while(nBody!=null)
-    		{
-    			if(!VariableExistInLinkedList( nBody.var,s))
-    			{
-    				delete=true;
-    			}
-    			nBody=nBody.next;
-    		}
-    		if(!delete)
-    		{
-    			while(nHead!=null)
-        		{
-    				if(!VariableExistInLinkedList (nHead.var,s))
-        			{
-        				delete=true;
-        			}
-        			nHead=nHead.next;
-        		}
-    		}
-    		if(delete)
-    		{
-    			l.deleteAtIndex(index);
-    		}
-    		else
-    		{
-    			index++;
-    		}
-    		n4=n4.next;
-    	}
-    	for (int k = 0; k < arrList.length; k++) 
-    	{
-			arrList[k].deleteList();
-		}
-    	
-    	//-- All variables in s are false at first 
-    	n1 = s.head;
-    	while(n1!=null)
-    	{
-    		literalMap.put(String.valueOf(n1.var), false);
-    		n1=n1.next;
-    	}
-    
-    	return l;
-    }*/
-    
-    
+  
     
     public void FindMinimalModelForTs(LinkedList Ts)
     {
@@ -603,6 +308,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 		 nTs=nTs.next;	
 		
  	  }
+ 	 
  	  DLL(clauses);
  	 
     }
@@ -692,6 +398,208 @@ public class RulesDataStructure extends DavisPutnamHelper
 			return DLL(copy2);
 		}
 	}
+    
+    public void updateRuleDS()
+    {
+    	Set<String> keys = literalMap.keySet();
+    	for(String key: keys)
+   	 	{
+    		ChangeDataStrucureByPlacingValueInVar(Integer.parseInt(key), literalMap.get(key));
+   	 	}
+    }
+    public void ChangeDataStrucureByPlacingValueInVar(int var , boolean value)
+    {
+    	if(conflictExist(var, value))
+    	{
+    		System.out.println("CONFLICT");
+    		return ;
+    	}
+    	if(!variableExist(var))
+    	{
+    		System.out.println("VARIABLE NOT EXIST");
+    		return ;
+    	}
+    	LinkedList l = varHT.get(var);
+    	Node n = l.head;
+    	while(n!=null)
+    	{
+    		if(existInBody(var, n.var)&& !value)
+    		{
+    			deleteRule(n.var);
+    			this.SIZE--;
+    			System.out.println("DELETE RULE NUMBER " + n.var);
+    		}
+    		else if((existInBody(var, n.var)&& value))
+    		{
+    			deleteVarFromBody(var,n.var);
+    			System.out.println( "DELETE VARIABLE " + var + " IN RULE " + n.var);
+    		}
+    		else if(existInHead(var, n.var)&& value)
+    		{
+    			deleteRule(n.var);
+    			this.SIZE--;
+    			System.out.println("DELETE RULE NUMBER " + n.var);
+    		}
+    		else if (existInHead(var, n.var)&& !value)
+    		{
+    			deleteVarFromHead(var,n.var);
+    			System.out.println("DELETE VARIABLE "+var+" IN RULE " + n.var);
+    		}
+    		
+    		n=n.next;
+    		
+    	}
+    	return;
+    	
+    }
+    
+    public boolean variableExist(int var)
+    {
+    	LinkedList l = varHT.get(var);
+    	if(l==null)
+    	{
+    		return false;
+    	}
+    	return true;
+    }
+    public boolean conflictExist(int var ,boolean b)
+    {
+    	LinkedList l = varHT.get(var);
+    	if(variableExist(var))
+    	{
+    		Node n = l.head;
+    		while(n!=null)
+    		{
+    			int sizeOfBody, sizeOfHead;
+    			sizeOfBody = RulesArray[n.var].body.getSize();
+    			sizeOfHead = RulesArray[n.var].head.getSize();
+    			if( (existInBody(var,n.var )) && sizeOfBody==1 && b &&sizeOfHead==0)
+    			{
+    				return true;
+    			}
+    			else if((existInHead(var,n.var)) && sizeOfHead==1 && !b &&sizeOfBody==0)
+    			{
+    				return true;
+    			}
+    			else
+    			{
+    				return false;
+    			}
+    		}		
+    	}
+    	return false;   	
+    }
+    
+    
+    private void deleteRule(int ruleNum)
+    {
+    	updateHT(0,ruleNum);
+    	RulesArray[ruleNum].body.deleteList();
+    	RulesArray[ruleNum].head.deleteList();
+    	RulesArray[ruleNum]=null;
+    }
+    
+    private void deleteVarFromBody(int var, int ruleNum)
+    {
+    	updateHT(var, ruleNum);
+    	LinkedList l = RulesArray[ruleNum].body;
+    	int index = 0;
+    	Node n = l.head;
+    	while(n!=null)
+    	{
+    		if(n.var==var)
+    		{
+    			l.deleteAtIndex(index);
+    			break;
+    		}
+    		index++;
+    		n=n.next;
+    	}
+    }
+    private void deleteVarFromHead(int var, int ruleNum)
+    {
+    	updateHT(var, ruleNum);
+    	LinkedList l = RulesArray[ruleNum].head;
+    	int index = 0;
+    	Node n = l.head;
+    	while(n!=null)
+    	{
+    		if(n.var==var)
+    		{
+    			l.deleteAtIndex(index);
+    			break;
+    		}
+    		index++;
+    		n=n.next;
+    	}
+    }
+    
+    private void updateHT(int var , int ruleNum)
+    {
+    	if(var==0)//from deleteRule method
+    	{
+    		
+    		Node bo = RulesArray[ruleNum].body.head;
+    		Node he = RulesArray[ruleNum].head.head;
+    		LinkedList list;
+    		int index;
+    		while(bo!=null)
+    		{
+    			index = 0;
+    			list = varHT.get(bo.var);
+    			Node n = list.head;
+    			while(n!=null)
+    			{
+    				if(n.var==ruleNum)
+    				{
+    					list.deleteAtIndex(index);
+    					break;
+    				}
+    				index++;
+    				n=n.next;
+    			}
+    			bo=bo.next;
+    		}
+    		while(he!=null)
+    		{
+    			index = 0;
+    			list = varHT.get(he.var);
+    			Node n = list.head;
+    			while(n!=null)
+    			{
+    				if(n.var==ruleNum)
+    				{
+    					list.deleteAtIndex(index);
+    					break;
+    				}
+    				index++;
+    				n=n.next;
+    			}
+    			he=he.next;
+    		}
+    		
+
+    		
+    		
+    	}
+    	else
+    	{
+    		LinkedList list = varHT.get(var);
+    		Node n = list.head;
+    		int index =0;
+    		while(n!=null)
+    		{
+    			if(n.var==ruleNum)
+    			{
+    				list.deleteAtIndex(index);
+    				break;
+    			}
+    			index++;
+    			n=n.next;
+    		}
+    	}   	
+    	
+    }
     
     
     ////////////////////////////////////////////////////////////////////////////////////

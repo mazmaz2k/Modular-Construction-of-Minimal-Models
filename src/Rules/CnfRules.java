@@ -16,59 +16,6 @@ public class CnfRules
 {
 	private static final String FILENAME = "./CnfFile.txt";
 
-
-	/*public static Graph<Integer> initGraph(RulesDataStructure DS ,int numOfRules) 
-	{
-
-
-		Graph<Integer> graph = new Graph<>(true);
-		Node n1 ,n2;
-		for (int i = 0; i < numOfRules; i++) 
-		{
-			n1 =DS.RulesArray[i].body.head;
-			n2=DS.RulesArray[i].head.head;
-			while(n1!=null)
-			{
-				while(n2!=null)
-				{
-					graph.addEdge(n1.var,n2.var);
-					n2=n2.next;
-				}
-				n1=n1.next;
-			}
-
-		}
-		System.out.println("This is the Graph:");
-		System.out.println(graph);
-		//        graph.addEdge(7, 1);
-		//        graph.addEdge(1, 2);
-		//        graph.addEdge(2, 7);
-		//        graph.addEdge(1, 3);
-		//        graph.addEdge(3, 4);
-		//        graph.addEdge(4, 5);
-		//        graph.addEdge(5, 3);
-		//        graph.addEdge(5, 6);
-
-		//System.out.println(graph);
-		// Create a graph given in the above diagram
-		System.out.println("Following are strongly connected components "+
-				"in given graph ");
-		// graph.printSCCs();
-		StronglyConnectedComponent scc = new StronglyConnectedComponent();
-		List<Set<Vertex<Integer>>> result = scc.scc(graph);
-		result.forEach(set -> {
-			System.out.println(set.size()); 
-
-		});
-		//print the result
-		result.forEach(set -> {
-			set.forEach(v -> System.out.print(v.getId() + "-> "));
-			System.out.println();
-		});
-
-		return graph;	
-	} 
-*/
 	public static void main(String[] args)
 	{
 		Scanner sc;
@@ -79,7 +26,7 @@ public class CnfRules
 
 		try 
 		{
-			sc = new Scanner(new File(FILENAME));
+			sc = new Scanner(new File(FILENAME));//read file
 			numOfRules = sc.nextInt();
 			DS = new RulesDataStructure(numOfRules);
 			while (sc.hasNextLine()) 
@@ -92,95 +39,39 @@ public class CnfRules
 
 			}
 			
-			
-			
-			//TEST CHECK FOR UNITS METHOD
-			//DS.printRulesArray();
-		/*	DS.checkForUnits();
-			DS.printRulesArray();
-			DS.printHashTable();
-			DS.printValueOfVariables();
-*/
-			
-			LinkedList s = new LinkedList();
-			s.addAtTail(1);
-			s.addAtTail(2);
-			s.addAtTail(3);
-			s.addAtTail(4);
-			s.addAtTail(5);
-			
-			LinkedList Ts=DS.Ts(s);
-			Ts.printList();
-		//	DS.FindMinimalModelForTs(Ts);
-			//DS.printValueOfVariables();
-
-			//s.printList();
-			
-		//	LinkedList Ts=DS.Ts(s);//.printList();
-			//Ts.printList();
-			
-			//DS.ModuMin(Ts);
-			//DS.printValueOfVariables();
-			//---------------------------
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-
-		/*	Graph<Integer> graph;// =new Graph<>(true); 
-			//DS.printHashTable();
-			//DS.placeValue(-1, false);
-			//DS.placeValue(3, false);
-			//DS.printHashTable();
-			graph=initGraph(DS,numOfRules);
-
-
-			System.out.println("PLEASE ENTER A VARIABLE");
-			Scanner console = new Scanner(System.in); 
-			//(console!=null & Integer.class.isInstance(console.nextInt())) {
-			try {
-				
-				DS.placeValue(console.nextInt(), false);
-			}
-			catch( Exception e)
-			{
-				e.printStackTrace();
-			}
-			
-
-			finally {
-				console.close();
-				DS.printRulesArray();
-				DS.printHashTable();
-				graph=null;
-				graph=initGraph(DS,numOfRules);
-
-			}*/
-			//}
-
-
-		}
-		catch (FileNotFoundException e) {
+			ModuMin(DS);
+		}catch (FileNotFoundException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
+	
 
 
 	}
+	
+	public static void ModuMin(RulesDataStructure DS )
+	{
+		LinkedList s = new LinkedList();
+		s.addAtTail(1);
+		s.addAtTail(2);
+		s.addAtTail(3);
+		s.addAtTail(4);
+		s.addAtTail(5);
+		
+		LinkedList Ts=DS.Ts(s);
+		Ts.printList();
+		DS.printRulesArray();
+		DS.FindMinimalModelForTs(Ts);
+		DS.printValueOfVariables();
+		DS.updateRuleDS();
+		DS.printRulesArray();
+		System.out.println("SIZE OF T: " +DS.SIZE);
+	}
+	
+	
 
 
 }
