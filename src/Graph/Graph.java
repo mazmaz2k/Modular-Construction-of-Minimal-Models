@@ -135,19 +135,19 @@ public class Graph<T>{
 	//		
 	//	}
 
-    /// find vertex of original graph in super graph, return id of where in superGraph it was found (id of superGraph vertex) -1 if not found  
-	public int findIdInVertexCC(Graph<Integer> graph,int id) {
-		for(Vertex<Integer> v : graph.getAllVertex()) {
-			for(Vertex<Integer> vertexInCC: v.getCCList() ) {
-				if(vertexInCC.getId()==id) {
-					return (int) v.getId();
-				}
-				
-			}
-			
-		}	
-		return -1;
-	}
+//    /// find vertex of original graph in super graph, return id of where in superGraph it was found (id of superGraph vertex) -1 if not found  
+//	public int findIdInVertexCC(Graph<Integer> graph,int id) {
+//		for(Vertex<Integer> v : graph.getAllVertex()) {
+//			for(Vertex<Integer> vertexInCC: v.getCCList() ) {
+//				if(vertexInCC.getId()==id) {
+//					return (int) v.getId();
+//				}
+//				
+//			}
+//			
+//		}	
+//		return -1;
+//	}
 	
 	//Initialize graph from Rules data structure
 	//also return strongest connected component of the graph 

@@ -69,6 +69,7 @@ public class FordFulkerson {
 
 			maxFlow += bottleneckFlow;		//add the smallest flow found in the augmentation path to the overall flow
 		}
+		// לעבור על וקטור הparent  ע"מ T ו S
 
 		return maxFlow;
 	}
@@ -97,49 +98,56 @@ public class FordFulkerson {
 		return visited[vertexT];	//return true/false if we found a path to T
 	}
 
+	//check malloc number !!!!!!!!!!!!!
+	public static void main (String[] args) {
+		//Graph is an adjacency Matrix. 0 means no edge between 2 vertices. Positive number means the capacity of the edge
+		//Directed graph so order of indexes matters. Row comes 1st, then column
+		//graphMatrix[0][0]=0 since S has no edges to itself
+		//graphMatrix[0][1]=10 since there's an edge from S to node 2
 
-//	public static void main (String[] args) {
-//		//Graph is an adjacency Matrix. 0 means no edge between 2 vertices. Positive number means the capacity of the edge
-//		//Directed graph so order of indexes matters. Row comes 1st, then column
-//		//graphMatrix[0][0]=0 since S has no edges to itself
-//		//graphMatrix[0][1]=10 since there's an edge from S to node 2
-//
-//		//Vertex  = index
-//		// 		s = 0
-//		// 		2 = 1
-//		// 		3 = 2
-//		// 		4 = 3
-//		// 		5 = 4
-//		// 		6 = 5
-//		// 		7 = 6
-//		// 		t = 7
-//		//String[] arrayIndexStringEquivalents = {"S", "2", "3", "4", "5", "6", "19","7", "T"};	//map human readable names to each vertex, not just array indexes
-////		int[] arrayIndexEquivalents= {2,9,7,5,3,2,1,18};
-////		int graphMatrix[][] =new int[][] {
-////									{0, 10, 5, 15, 0, 0, 0, 0},		//edges FROM S TO anything
-////									{0, 0, 4, 0, 9, 15, 0, 0},
-////									{0, 0, 0, 4, 0, 8, 0, 0},
-////									{0, 0, 0, 0, 0, 0, 30, 0},
-////									{0, 0, 0, 0, 0, 15, 0, 10},
-////									{0, 0, 0, 0, 0, 0, 15, 10},
-////									{1, 0, 16, 0, 0, 0, 30, 0},
-////									{0, 0, 0, 0, 0, 0, 0, 0}		//T's row (no edges leaving T)
-//								};
-//		
-//		FordFulkerson maxFlowFinder = new FordFulkerson(arrayIndexEquivalents,8);
-//		int vertexS = 0;
-//		int vertexT = maxFlowFinder.vertexCount-1;	//T is the last thing in the list
-//		for(int i=0;i<arrayIndexEquivalents.length;i++) {
-//			if(arrayIndexEquivalents[i]==9) {
-//				vertexS=i;
+//		Vertex  = index
+//		 		s = 0
+//		 		2 = 1
+//		 		3 = 2
+//		 		4 = 3
+//		 		5 = 4
+//		 		6 = 5
+//		 		7 = 6
+//		 		t = 7
+		String[] arrayIndexStringEquivalents = {"S", "2", "3", "4", "5", "6", "19","7", "T"};	//map human readable names to each vertex, not just array indexes
+		int[] arrayIndexEquivalents= {2,9,7,5,3,2,1,18};
+		int graphMatrix[][] =new int[][] {
+									{0, 10, 5, 15, 0, 0, 0, 0},		//edges FROM S TO anything
+									{0, 0, 4, 0, 9, 15, 0, 0},
+									{0, 0, 0, 4, 0, 8, 0, 0},
+									{0, 0, 0, 0, 0, 0, 30, 0},
+									{0, 0, 0, 0, 0, 15, 0, 10},
+									{0, 0, 0, 0, 0, 0, 15, 10},
+									{1, 0, 16, 0, 0, 0, 30, 0},
+									{0, 0, 0, 0, 0, 0, 0, 0}		//T's row (no edges leaving T)
+								};
+		int a[][]=new int[10000][10000];
+//		for (int i = 0; i < a.length; i++) {
+//			for (int j = 0; j < a.length; j++) {
+//				a[i][j]=j;
+//				System.out.print(a[i][j]+" ");
 //			}
-//			if(arrayIndexEquivalents[i]==7) {
-//				vertexT=i;
-//			}
+//			System.out.println();
 //		}
-//		
-//		
-//		System.out.println("\nBasic Ford Fulkerson Max Flow: " + maxFlowFinder.maxFlow(graphMatrix, vertexS, vertexT));
-//	}
+		FordFulkerson maxFlowFinder = new FordFulkerson(arrayIndexEquivalents,8);
+		int vertexS = 0;
+		int vertexT = maxFlowFinder.vertexCount-1;	//T is the last thing in the list
+		for(int i=0;i<arrayIndexEquivalents.length;i++) {
+			if(arrayIndexEquivalents[i]==9) {
+				vertexS=i;
+			}
+			if(arrayIndexEquivalents[i]==7) {
+				vertexT=i;
+			}
+		}
+		
+		
+		System.out.println("\nBasic Ford Fulkerson Max Flow: " + maxFlowFinder.maxFlow(graphMatrix, vertexS, vertexT));
+	}
 
 }
