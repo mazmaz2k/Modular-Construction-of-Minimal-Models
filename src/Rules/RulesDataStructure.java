@@ -160,7 +160,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	return false;
     }
    
-/*    
+  
     
     
    
@@ -168,32 +168,34 @@ public class RulesDataStructure extends DavisPutnamHelper
     
     
     
-   /* public boolean checkForUnits()
+   public void checkForUnits()
     {
-    	boolean found = false;
+    	
     	for (int i = 0; i < RulesArray.length; i++)
     	{
-			if((RulesArray[i].body.getSize() + RulesArray[i].head.getSize())==1)
-			{
-				found = true;
-				if(RulesArray[i].body.getSize() ==1)//body size is 1 and head size is 0s
-				{
-					valueTable.put(RulesArray[i].body.head.var, false);
-					ChangeDataStrucureByPlacingValueInVar(RulesArray[i].body.head.var, false);
-					
-				}
-				else//head size is 1 and body size is 0
-				{
-					valueTable.put(RulesArray[i].head.head.var, true);
+    		if(RulesArray[i]!=null)
+    		{
+    			if((RulesArray[i].body.getSize() + RulesArray[i].head.getSize())==1)
+    			{
 
-					ChangeDataStrucureByPlacingValueInVar(RulesArray[i].head.head.var, true);
-				}
-			}
+    				if(RulesArray[i].body.getSize() ==1)//body size is 1 and head size is 0s
+    				{
+    					literalMap.put(String.valueOf(RulesArray[i].body.head.var), false);
+    					ChangeDataStrucureByPlacingValueInVar(RulesArray[i].body.head.var, false);
+
+    				}
+    				else//head size is 1 and body size is 0
+    				{
+    					literalMap.put(String.valueOf(RulesArray[i].head.head.var), true);
+
+    					ChangeDataStrucureByPlacingValueInVar(RulesArray[i].head.head.var, true);
+    				}
+    			}
+    		}
 		}
     	System.out.println("Ufter unit check");
-		return found;
 
-    }*/
+    }
     public void printValueOfVariables()
     {
     	System.out.println("-------THE VALUE TABLE--------");
@@ -224,28 +226,29 @@ public class RulesDataStructure extends DavisPutnamHelper
     	for (int i = 0; i < s.getSize() ; i++)
     	{
     		literalMap.put(String.valueOf(Snode.var), false);//init all vars of s to false
-    		LinkedList l = varHT.get(Snode.var);//NOT NULL
-    		Node n =l.head; //NOT NULL
-    		
-    		while(n!=null)
+    		LinkedList l = varHT.get(Snode.var);
+    		if(l!=null)
     		{
-    			if(!map.get(n.var))//if we did not check this rule, lets check
+    			Node n =l.head; 
+    			while(n!=null)
     			{
-    				map.put(n.var, true);
-    				addToTs = true;
-    				if(!allExistInList(n.var, s))
+    				if(!map.get(n.var))//if we did not check this rule, lets check
     				{
-    					addToTs=false;
+    					map.put(n.var, true);
+    					addToTs = true;
+    					if(!allExistInList(n.var, s))
+    					{
+    						addToTs=false;
+    					}
+    					if(addToTs)
+    					{
+    						Ts.addAtTail(n.var);
+    					}
     				}
-    				if(addToTs)
-    				{
-    					Ts.addAtTail(n.var);
-    				}
+    				n=n.next;
     			}
-    			n=n.next;
+    		
     		}
-    		
-    		
     		Snode= Snode.next;
 		}
     	
@@ -614,7 +617,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     			str+= "{"+key+"}" + " ";
     		}
    	 	}
-    	str+= " ]";
+    	str+= "]";
     	return str;
     }
     

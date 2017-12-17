@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import Rules.RulesDataStructure;
+import Rules.LinkedList;
 import Rules.LinkedList.Node;
 public class Graph<T>{
 
@@ -153,6 +154,24 @@ public class Graph<T>{
 	//also return strongest connected component of the graph 
 	
 	
+	public static LinkedList sourceOfGraph(Graph<Integer>  graph)
+	{
+		StronglyConnectedComponent scc = new StronglyConnectedComponent();
+		List<Set<Vertex<Integer>>> result = scc.scc(graph);
+		LinkedList s = new LinkedList();
+		if(result.isEmpty())
+		{
+			return s;
+		}
+		for (Vertex<Integer> vertex : result.get(0)) 
+		{
+				s.addAtTail((int)vertex.getId());
+		}
+		
+		
+		return s;
+	}
+	
 	
 	public static Graph<Integer> initGraph(RulesDataStructure DS ,int numOfRules) 
 	{
@@ -162,16 +181,19 @@ public class Graph<T>{
 		Node n1 ,n2;
 		for (int i = 0; i < numOfRules; i++) 
 		{
-			n1 =DS.RulesArray[i].body.head;
-			n2=DS.RulesArray[i].head.head;
-			while(n1!=null)
+			if(DS.RulesArray[i]!=null)
 			{
-				while(n2!=null)
+				n1 =DS.RulesArray[i].body.head;
+				while(n1!=null)
 				{
-					graph.addEdge(n1.var,n2.var);
-					n2=n2.next;
+					n2=DS.RulesArray[i].head.head;
+					while(n2!=null)
+					{
+						graph.addEdge(n1.var,n2.var);
+						n2=n2.next;
+					}
+					n1=n1.next;
 				}
-				n1=n1.next;
 			}
 
 		}
@@ -185,14 +207,17 @@ public class Graph<T>{
 		//        graph.addEdge(4, 5);
 		//        graph.addEdge(5, 3);
 		//        graph.addEdge(5, 6);
-
+		/*StronglyConnectedComponent scc = new StronglyConnectedComponent();
+		List<Set<Vertex<Integer>>> result = scc.scc(graph);
+*/
 		//System.out.println(graph);
 		// Create a graph given in the above diagram
 		//		System.out.println("Following are size of the strongly connected components in given graph ");
 		// graph.printSCCs();
-		StronglyConnectedComponent scc = new StronglyConnectedComponent();
-		List<Set<Vertex<Integer>>> result = scc.scc(graph);
-		int max=0;
+	
+		
+		//find strongest connected component
+		/*int max=0; 
 		for(Set<Vertex<Integer>> s: result) {
 			//	System.out.println(s.size());
 			if(max<s.size())
@@ -208,17 +233,18 @@ public class Graph<T>{
 		//		result.forEach(set -> {
 		//			System.out.println(set.size()); 
 		//		});
-		System.out.println();
+		System.out.println();*/
 
-		System.out.println("Following are ALL strongly connected componentsin given graph ");
+	/*	System.out.println("Following are ALL strongly connected componentsin given graph ");
 		//print the result
+		
 
 		result.forEach(set -> {
 
 			set.forEach(v -> System.out.print(v.getId() + "-> "));
 			System.out.println();
 
-		});
+		});*/
 
 		return graph;	
 	} 
