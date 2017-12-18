@@ -53,6 +53,19 @@ public class RulesDataStructure extends DavisPutnamHelper
 
     }
     
+    public LinkedList checkFormat()
+    {
+    	LinkedList l = new LinkedList();
+    	for (int i = 0; i < RulesArray.length; i++) 
+    	{
+    		int SizeBody = RulesArray[i].body.getSize();
+    		int SizeHead = RulesArray[i].head.getSize();
+    		if(SizeBody>0 && SizeHead==0)
+    			l.addAtTail(i+2);
+		}
+    	return l;
+    }
+    
     public void printRulesArray()
     {
     	int i;

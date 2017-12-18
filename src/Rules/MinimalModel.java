@@ -8,19 +8,14 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
-
 import Graph.Graph;
-import Graph.StronglyConnectedComponent;
-import Graph.Vertex;
 
 public class MinimalModel extends Graph<Integer>{
 
@@ -98,7 +93,6 @@ public class MinimalModel extends Graph<Integer>{
 							DS.addToRulsArray(index, var);
 						else
 							index++;
-
 					}
 					lblNewLabel_1.setText("File was read successfully");
 					lblNewLabel_1.setForeground(Color.GREEN);
@@ -128,8 +122,19 @@ public class MinimalModel extends Graph<Integer>{
 				{
 					// btnFindMinimalModel.setEnabled(false);
 					lblNewLabel_2.setText("");
-					ModuMin(DS);
-					lblNewLabel.setText("The minimal model is: " + DS.StringMinimalModel());
+					LinkedList l=DS.checkFormat();
+					if(l.getSize()==0)
+					{
+						ModuMin(DS);
+						lblNewLabel.setText("The minimal model is: " + DS.StringMinimalModel());
+					}
+					else
+					{
+						System.out.println("Please correct lines: ");
+						l.printList();
+						System.out.println("Its not in the right format");
+						System.out.println("Can't be a clause where all litarals are negative");
+					}
 				}
 				else
 				{
@@ -214,8 +219,9 @@ public class MinimalModel extends Graph<Integer>{
 				//System.out.println("Ts list is: ");
 				//Ts.printList();
 				DS.FindMinimalModelForTs(Ts);
-				//DS.printValueOfVariables();
 				DS.updateRuleDS();
+				DS.printValueOfVariables();
+				
 				//DS.printRulesArray();
 				//
 			}
