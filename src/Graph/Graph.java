@@ -270,14 +270,28 @@ public class Graph<T>{
 		return newGraph;
 	} 
 	
-	public Graph<Integer> uniqueGraph(Graph<Integer> oldGraph){
-		Graph<Integer> uniqueGraph = new Graph<>(true);
+	//FIND ALL K-edge connected component Algorithm !!
+	//input graph(of strongest connected component/original graph) ,s vertex of connected component , N list of all vertexs in connected component
+	//return auxiliary graph
+	public void constaruction(Graph<Integer> graph ,Vertex<Integer> s, Collection<Vertex<Integer>> N){
+		
+		if(N.size()==1 && N.contains(s)) {
+			return;
+		}
+		Vertex<Integer> t;
+		for(Vertex<Integer> vertex: N) {
+			if(!vertex.equals(s)) {
+				t=vertex;
+			}
+		}
 		
 		
 		
 		
-		return uniqueGraph;
-	} 
+	}
+	
+	
+
 	public static void main(String args[]){
 		Graph<Integer> graph = new Graph<>(true);
 		graph.addEdge(0, 1);
@@ -424,9 +438,9 @@ public class Graph<T>{
 		//			System.out.println();
 		//		}
 		
-		FordFulkerson maxFlowFinder = new FordFulkerson(arrayIndexEquivalents,arrayIndexEquivalents.length);
-		int vertexS = 0;
-		int vertexT = maxFlowFinder.vertexCount-1;	//T is the last thing in the list
+		FordFulkerson maxFlowFinder = new FordFulkerson(graphMaxFlow);
+		int vertexS = 0;   //S is the first thing in the list
+		int vertexT = 6;	//T is the last thing in the list
 		//		for(int i=0;i<arrayIndexEquivalents.length;i++) {
 		//			if(arrayIndexEquivalents[i]==9) {
 		//				vertexS=i;
@@ -437,7 +451,7 @@ public class Graph<T>{
 		//		}
 		//		
 
-		System.out.println("\nBasic Ford Fulkerson Max Flow: " + maxFlowFinder.maxFlow(graphWeightMatrix, vertexS, vertexT));
+		System.out.println("\nBasic Ford Fulkerson Max Flow: " + maxFlowFinder.maxFlow( vertexS, vertexT));
 
 		//		graphMaxFlow.getAllVertex().forEach(s->{
 		//			arrayIndexEquivalents[i]=(int) s.getId();
