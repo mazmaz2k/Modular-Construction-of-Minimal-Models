@@ -206,26 +206,32 @@ public class MinimalModel extends Graph<Integer>{
 			{
 				
 				System.out.println("SIZE OF T: " +DS.SIZE);
-				//System.out.println("SIZE OF T: " +DS.SIZE);
 				DS.printRulesArray();
 				DS.checkForUnits();//remove empty sources
 				Graph<Integer> g = initGraph(DS, size);
-				//delete empty sources
 				LinkedList s = sourceOfGraph(g);
-				//need to check source size
-				//System.out.println("s list is: ");
-				//s.printList();
+				System.out.println("s list is: ");
+				if(s.getSize()==0)
+				{
+					System.out.println("Check somthing");
+					s= DS.remainingVars();
+				}
+				s.printList();
 				LinkedList Ts=DS.Ts(s);
 				//System.out.println("Ts list is: ");
 				//Ts.printList();
 				DS.FindMinimalModelForTs(Ts);
 				DS.updateRuleDS();
-				DS.printValueOfVariables();
+				
 				
 				//DS.printRulesArray();
 				//
 			}
+			DS.printValueOfVariables();
 			
 		
 	}
+	
+		
+	
 }

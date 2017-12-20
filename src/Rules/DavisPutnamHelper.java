@@ -96,8 +96,10 @@ public class DavisPutnamHelper
 	public static void cutClauses(String literal,ArrayList<Clause> Clauses)
 	{
 		String cutLiteral;
-		if(literal.startsWith("-")) cutLiteral = literal.substring(1);
-		else cutLiteral = "-"+literal;
+		if(literal.startsWith("-")) 
+			cutLiteral = literal.substring(1);
+		else
+			cutLiteral = "-"+literal;
 		for(Clause c: Clauses)
 		{
 			c.literals.remove(cutLiteral);

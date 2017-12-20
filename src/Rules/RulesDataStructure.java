@@ -31,9 +31,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	
     	literalMap = new HashMap<String,Boolean>();
     }
-    public Rule[] getRulsArray() {
-    	return RulesArray;
-    }
+   
     public void addToRulsArray(int index , int var)
     {
     	if(var==0)//can't be because its checked when reading the file
@@ -122,7 +120,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	}
     	
     }
-    public boolean VariableExistInLinkedList(int var,LinkedList l)
+    private boolean VariableExistInLinkedList(int var,LinkedList l)
     {
     	Node n = l.head;
     	while(n!=null)
@@ -298,7 +296,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     
   
     
-    public void FindMinimalModelForTs(LinkedList Ts)
+    public boolean FindMinimalModelForTs(LinkedList Ts)
     {
  	  ArrayList<Clause> clauses = new ArrayList<>();
  	  Node nTs = Ts.head;
@@ -327,10 +325,12 @@ public class RulesDataStructure extends DavisPutnamHelper
 		
  	  }
  	 
- 	  DLL(clauses);
+ 	  if(DLL(clauses))
+ 		  return true;
+ 	  return false;
  	 
     }
-    public boolean DLL(ArrayList<Clause> Clauses)
+    private boolean DLL(ArrayList<Clause> Clauses)
 	{
     	if(Clauses.size() == 0) 
 		{
@@ -621,6 +621,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     
     public String StringMinimalModel()
     {
+    	int index = 0;
     	String str= "[ ";
     	Set<String> keys = literalMap.keySet();
     	for(String key: keys)
@@ -628,12 +629,35 @@ public class RulesDataStructure extends DavisPutnamHelper
     		if(literalMap.get(key))
     		{
     			str+= "{"+key+"}" + " ";
+    			index++;
     		}
    	 	}
-    	str+= "]";
+    	str+= "]" + "\r\n" +" |MM| = "+ String.valueOf(index);
     	return str;
     }
     
+    public LinkedList remainingVars()
+    {
+    	LinkedList s = new LinkedList();
+    	for (int i = 0; i < RulesArray.length; i++) 
+    	{
+			if(RulesArray[i]!=null)
+			{
+				Node nB = RulesArray[i].body.head;
+				while(nB!=null)
+				{
+					s.addAtTail(nB.var);
+					nB=nB.next;				}
+				Node nH = RulesArray[i].head.head;
+				while(nH!=null)
+				{
+					s.addAtTail(nH.var);
+					nH=nH.next;	
+				}
+			}
+		}
+    		return s;
+    }
     
     ////////////////////////////////////////////////////////////////////////////////////
  /*  public void ModuMin(LinkedList Ts)
