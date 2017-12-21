@@ -1,5 +1,7 @@
 package Graph;
 
+import java.util.*;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -273,21 +275,36 @@ public class Graph<T>{
 	//FIND ALL K-edge connected component Algorithm !!
 	//input graph(of strongest connected component/original graph) ,s vertex of connected component , N list of all vertexs in connected component
 	//return auxiliary graph
-	public void constaruction(Graph<Integer> graph ,Vertex<Integer> s, Collection<Vertex<Integer>> N){
+	public static void constaruction(Graph<Integer> graph ,Vertex<Integer> s, Collection<Integer> N,Graph<Integer> auxiliaryGraph){
 		
-		if(N.size()==1 && N.contains(s)) {
+		if(N.size()<=100 && N.contains(s)) {
 			return;
 		}
-		Vertex<Integer> t;
-		for(Vertex<Integer> vertex: N) {
-			if(!vertex.equals(s)) {
+		int t=0;
+		for( Integer vertex: N) {
+			if(vertex!=s.getId()) {
 				t=vertex;
 			}
 		}
-		
-		
-		
-		
+
+		FordFulkerson f1=new FordFulkerson(graph);
+		FordFulkerson f2=new FordFulkerson(graph);
+
+		int x1= f1.maxFlow((int) s.getId(), t);
+		int x2= f2.maxFlow( t,(int) s.getId());
+		Collection<Integer> S =f1.getS();
+		Collection<Integer> T =f1.getT();
+		if(x1>x2) {
+			x1=x2;
+			S=f2.getS();
+			T=f2.getT();
+		}
+		//may need to add edge from t to s/
+		auxiliaryGraph.addEdge(s.getId(), t, x1);
+		constaruction(graph,s,S,auxiliaryGraph);
+		Vertex<Integer> tVertex=new Vertex<Integer>(t);
+		constaruction(graph,tVertex,T,auxiliaryGraph);
+
 	}
 	
 	
@@ -453,6 +470,21 @@ public class Graph<T>{
 
 		System.out.println("\nBasic Ford Fulkerson Max Flow: " + maxFlowFinder.maxFlow( vertexS, vertexT));
 
+		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+		
+		Graph<Integer> A = new Graph<>(true);
+		Vertex<Integer> s=new Vertex<Integer>(1);
+		Collection<Integer> N=new java.util.LinkedList();
+		for(Vertex<Integer> v:graphMaxFlow.getAllVertex()) 
+		{
+			N.add((int) v.getId());
+		}
+		//System.out.println(N);
+		constaruction(graphMaxFlow,s,N,A);
+		 System.out.println(A);
+		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+
+		
 		//		graphMaxFlow.getAllVertex().forEach(s->{
 		//			arrayIndexEquivalents[i]=(int) s.getId();
 		//			i++;

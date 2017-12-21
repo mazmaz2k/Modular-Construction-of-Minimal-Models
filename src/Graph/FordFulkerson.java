@@ -23,10 +23,14 @@ public class FordFulkerson {
 
 	public int[] vertexArray;//= {"S","2","3","4","5","6","T"};
 	public int[][] c;
-	private LinkedList<Integer> T,S;
+	private int maxFlow;
+	private Collection<Integer> T,S;
+	
+	
 	public FordFulkerson(Graph<Integer> graph) {
 		this.T=new LinkedList<Integer>();
 		this.S=new LinkedList<Integer>();
+		this.maxFlow=0;
 		vertexArray=new int[graph.getAllVertex().size()];
 		int i=0;
 		this.c=new int[graph.getAllVertex().size()][graph.getAllVertex().size()];
@@ -54,12 +58,12 @@ public class FordFulkerson {
 //			System.out.println(vertexArray[i]);
 //
 //		}
-		for (int j = 0; j < c.length; j++) {
-			for (int j2 = 0; j2 < c.length; j2++) {
-				System.out.print(c[j][j2]+" ");
-			}
-			System.out.println();
-		}
+//		for (int j = 0; j < c.length; j++) {
+//			for (int j2 = 0; j2 < c.length; j2++) {
+//				System.out.print(c[j][j2]+" ");
+//			}
+//			System.out.println();
+//		}
 	
 	
 	}
@@ -134,15 +138,22 @@ public class FordFulkerson {
 				T.add(vertexArray[i]);
 			}
 		}
+        
         System.out.println(parent);
         System.out.println("ddddddddddddd");
         System.out.println(T);
         System.out.println("ddddddddddddd");
         System.out.println(S);
-        printAugmentedPaths(augmentedPaths,maxFlow);
+       //
+//		printAugmentedPaths(augmentedPaths,maxFlow);
+        this.maxFlow=maxFlow;
         return maxFlow;
     }
 
+    public int getMaxFlow() {
+    	return this.maxFlow;
+    }
+    
     /**
      * Prints all the augmented path which contribute to max flow
      */
@@ -151,7 +162,7 @@ public class FordFulkerson {
         augmentedPaths.forEach(path -> {
             path.forEach(i -> System.out.print(vertexArray[i] + " "));
             System.out.println(" flow is: "+maxFlow);
-           // System.out.println();
+            System.out.println();
         });
     }
 
@@ -191,15 +202,15 @@ public class FordFulkerson {
     }
     
     public static void main(String args[]){
-       
-        int[][] capacity = {{0, 1, 0, 3, 0, 0, 0},
-                            {0, 0, 4, 0, 0, 0, 0},
-                            {3, 0, 0, 1, 2, 0, 0},
-                            {0, 0, 0, 0, 2, 6, 0},
-                            {0, 1, 0, 0, 0, 0, 1},
-                            {0, 0, 0, 0, 0, 0, 9},
-                            {0, 0, 0, 0, 0, 0, 0}};
-        
+//       
+//        int[][] capacity = {{0, 1, 0, 3, 0, 0, 0},
+//                            {0, 0, 4, 0, 0, 0, 0},
+//                            {3, 0, 0, 1, 2, 0, 0},
+//                            {0, 0, 0, 0, 2, 6, 0},
+//                            {0, 1, 0, 0, 0, 0, 1},
+//                            {0, 0, 0, 0, 0, 0, 9},
+//                            {0, 0, 0, 0, 0, 0, 0}};
+//        
         
         Graph<Integer> graphMaxFlow = new Graph<>(true);
 		graphMaxFlow.addEdge(0, 1, 1);
@@ -214,11 +225,14 @@ public class FordFulkerson {
 		graphMaxFlow.addEdge(0, 5, 1);
 		graphMaxFlow.addEdge(4, 6, 1);
 		 FordFulkerson ff = new FordFulkerson(graphMaxFlow);
+		
         System.out.println("\nMaximum capacity " + ff.maxFlow( 0, 6));
+        System.out.println("T: "+ff.getT());
+		 System.out.println("S: "+ ff.getS());
     }
 
 
-	public LinkedList<Integer> getS() {
+	public Collection<Integer> getS() {
 		return S;
 	}
 
@@ -228,7 +242,7 @@ public class FordFulkerson {
 //	}
 
 
-	public LinkedList<Integer> getT() {
+	public Collection<Integer> getT() {
 		return T;
 	}
 
