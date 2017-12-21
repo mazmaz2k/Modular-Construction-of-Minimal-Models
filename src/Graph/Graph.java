@@ -180,23 +180,42 @@ public class Graph<T>{
 
 
 		Graph<Integer> graph = new Graph<>(true);
-		Node n1 ,n2;
+		Node n1 ,n2,n3;
+		Vertex v1,v2;
+		boolean flag=true;
 		for (int i = 0; i < numOfRules; i++) 
 		{
 			if(DS.RulesArray[i]!=null)
 			{
 				n1 =DS.RulesArray[i].body.head;
+				//v1=new Vertex<Integer>(n1.var);
 				while(n1!=null)
 				{
+					graph.addSingleVertex(n1.var);
 					n2=DS.RulesArray[i].head.head;
 					while(n2!=null)
 					{
+						//v2=new Vertex<Integer>(n2.var);
+						graph.addSingleVertex(n2.var);
 						graph.addEdge(n1.var,n2.var);
 						n2=n2.next;
 					}
+					flag=false;
 					n1=n1.next;
+
 				}
+				n3=DS.RulesArray[i].head.head;
+
+				// we can run also on head only to enter vertexs that only in head array
+				while(n3!=null && flag)
+				{
+					//v2=new Vertex<Integer>(n2.var);
+					graph.addSingleVertex(n3.var);
+					n3=n3.next;
+				}
+				flag=true;
 			}
+			
 
 		}
 		System.out.println("This is the Graph:");
@@ -277,7 +296,7 @@ public class Graph<T>{
 	//return auxiliary graph
 	public static void constaruction(Graph<Integer> graph ,Vertex<Integer> s, Collection<Integer> N,Graph<Integer> auxiliaryGraph){
 		
-		if(N.size()<=100 && N.contains(s)) {
+		if(N.size()==1 && N.contains(s)) {
 			return;
 		}
 		int t=0;
@@ -480,8 +499,8 @@ public class Graph<T>{
 			N.add((int) v.getId());
 		}
 		//System.out.println(N);
-		constaruction(graphMaxFlow,s,N,A);
-		 System.out.println(A);
+	//	constaruction(graphMaxFlow,s,N,A);
+		// System.out.println(A);
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 
 		
