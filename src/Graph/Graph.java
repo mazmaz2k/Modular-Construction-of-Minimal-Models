@@ -138,24 +138,24 @@ public class Graph<T>{
 	//		
 	//	}
 
-//    /// find vertex of original graph in super graph, return id of where in superGraph it was found (id of superGraph vertex) -1 if not found  
-//	public int findIdInVertexCC(Graph<Integer> graph,int id) {
-//		for(Vertex<Integer> v : graph.getAllVertex()) {
-//			for(Vertex<Integer> vertexInCC: v.getCCList() ) {
-//				if(vertexInCC.getId()==id) {
-//					return (int) v.getId();
-//				}
-//				
-//			}
-//			
-//		}	
-//		return -1;
-//	}
-	
+	//    /// find vertex of original graph in super graph, return id of where in superGraph it was found (id of superGraph vertex) -1 if not found  
+	//	public int findIdInVertexCC(Graph<Integer> graph,int id) {
+	//		for(Vertex<Integer> v : graph.getAllVertex()) {
+	//			for(Vertex<Integer> vertexInCC: v.getCCList() ) {
+	//				if(vertexInCC.getId()==id) {
+	//					return (int) v.getId();
+	//				}
+	//				
+	//			}
+	//			
+	//		}	
+	//		return -1;
+	//	}
+
 	//Initialize graph from Rules data structure
 	//also return strongest connected component of the graph 
-	
-	
+
+
 	public static LinkedList sourceOfGraph(Graph<Integer>  graph)
 	{
 		StronglyConnectedComponent scc = new StronglyConnectedComponent();
@@ -167,55 +167,64 @@ public class Graph<T>{
 		}
 		for (Vertex<Integer> vertex : result.get(0)) 
 		{
-				s.addAtTail((int)vertex.getId());
+			s.addAtTail((int)vertex.getId());
 		}
-		
-		
+
+
 		return s;
 	}
-	
-	
+
+
 	public static Graph<Integer> initGraph(RulesDataStructure DS ,int numOfRules) 
 	{
 
 
 		Graph<Integer> graph = new Graph<>(true);
-		Node n1 ,n2,n3;
-		Vertex v1,v2;
-		boolean flag=true;
+		Node n1 ,n2;
+
 		for (int i = 0; i < numOfRules; i++) 
 		{
 			if(DS.RulesArray[i]!=null)
 			{
 				n1 =DS.RulesArray[i].body.head;
 				//v1=new Vertex<Integer>(n1.var);
+				if(n1==null) 
+				{
+					n2=DS.RulesArray[i].head.head;
+					while(n2!=null)
+					{
+						graph.addSingleVertex(n2.var);
+						n2=n2.next;
+					}
+				}
 				while(n1!=null)
 				{
 					graph.addSingleVertex(n1.var);
 					n2=DS.RulesArray[i].head.head;
+
 					while(n2!=null)
 					{
 						//v2=new Vertex<Integer>(n2.var);
-						graph.addSingleVertex(n2.var);
+						//graph.addSingleVertex(n2.var);
 						graph.addEdge(n1.var,n2.var);
 						n2=n2.next;
 					}
-					flag=false;
+					//flag=false;
 					n1=n1.next;
 
 				}
-				n3=DS.RulesArray[i].head.head;
+				//n3=DS.RulesArray[i].head.head;
 
 				// we can run also on head only to enter vertexs that only in head array
-				while(n3!=null && flag)
-				{
-					//v2=new Vertex<Integer>(n2.var);
-					graph.addSingleVertex(n3.var);
-					n3=n3.next;
-				}
-				flag=true;
+//				while(n3!=null && flag)
+//				{
+//					//v2=new Vertex<Integer>(n2.var);
+//					graph.addSingleVertex(n3.var);
+//					n3=n3.next;
+//				}
+//				flag=true;
 			}
-			
+
 
 		}
 		System.out.println("This is the Graph:");
@@ -230,13 +239,13 @@ public class Graph<T>{
 		//        graph.addEdge(5, 6);
 		/*StronglyConnectedComponent scc = new StronglyConnectedComponent();
 		List<Set<Vertex<Integer>>> result = scc.scc(graph);
-*/
+		 */
 		//System.out.println(graph);
 		// Create a graph given in the above diagram
 		//		System.out.println("Following are size of the strongly connected components in given graph ");
 		// graph.printSCCs();
-	
-		
+
+
 		//find strongest connected component
 		/*int max=0; 
 		for(Set<Vertex<Integer>> s: result) {
@@ -256,9 +265,9 @@ public class Graph<T>{
 		//		});
 		System.out.println();*/
 
-	/*	System.out.println("Following are ALL strongly connected componentsin given graph ");
+		/*	System.out.println("Following are ALL strongly connected componentsin given graph ");
 		//print the result
-		
+
 
 		result.forEach(set -> {
 
@@ -270,14 +279,14 @@ public class Graph<T>{
 		return graph;	
 	} 
 	//input original graph and set of vertexes and return (create) a smaller graph from those set of vertexes 
-	
+
 	public static Graph<Integer> copyGraph(Set<Vertex<Integer>> setOfVertex,Graph<Integer> oldGraph) {
 		Graph<Integer> newGraph = new Graph<>(true);
-		
+
 		for(Vertex<Integer> v:setOfVertex) {
-			
+
 			for(Edge<Integer> e : oldGraph.getAllEdges()) {
-				
+
 				if( v.getId()==e.getVertex1().getId()) {
 					newGraph.addEdge(v.getId(), e.getVertex2().getId());
 					//System.out.println("v1: "+v.getId()+" v2: "+e.getVertex2().getId());
@@ -285,48 +294,75 @@ public class Graph<T>{
 
 			}
 		}
-		
+
 		//System.out.println(newGraph.getAllEdges().toString());
 
 		return newGraph;
 	} 
-	
+
 	//FIND ALL K-edge connected component Algorithm !!
 	//input graph(of strongest connected component/original graph) ,s vertex of connected component , N list of all vertexs in connected component
 	//return auxiliary graph
 	public static void constaruction(Graph<Integer> graph ,Vertex<Integer> s, Collection<Integer> N,Graph<Integer> auxiliaryGraph){
-		
-		if(N.size()==1 && N.contains(s)) {
+		boolean flag=false;
+		for(int x:N) {
+			if(x==s.getId()) {
+				System.out.println("1111111111111111111111");
+				flag =true;
+			}
+		}
+		System.out.println(N.size()+"-------------------------------------");
+		if(N.size()<=1 && flag) {
+			System.out.println("sssdjkdsjkjdahjkdhdk");
 			return;
 		}
 		int t=0;
-		for( Integer vertex: N) {
+		for( int vertex: N) {
 			if(vertex!=s.getId()) {
+				
 				t=vertex;
 			}
 		}
-
+System.out.println("s is : "+s.getId()+" t is: "+t);
 		FordFulkerson f1=new FordFulkerson(graph);
 		FordFulkerson f2=new FordFulkerson(graph);
 
 		int x1= f1.maxFlow((int) s.getId(), t);
+		System.out.println("max flow x1: " +x1);
+
 		int x2= f2.maxFlow( t,(int) s.getId());
+		System.out.println("max flow x2: " +x2);
+		if(x1==0) {
+			System.out.println("X1 & x2 is 0 - no weight");
+			System.out.println(f1.getS());
+			System.out.println(f1.getT());
+			constaruction(graph,s,f1.getS(),auxiliaryGraph);
+			return;
+		}
 		Collection<Integer> S =f1.getS();
+		// remove metrix
+		//N S T Array
 		Collection<Integer> T =f1.getT();
 		if(x1>x2) {
 			x1=x2;
+			//f1.setS(f2.getS());
+			//f1.setT(f2.getT());
 			S=f2.getS();
 			T=f2.getT();
 		}
-		//may need to add edge from t to s/
+		
+		//		//may need to add edge from t to s also!!
+		//System.out.println("------------s is : "+s.getId()+" t is: "+ t);
 		auxiliaryGraph.addEdge(s.getId(), t, x1);
-		constaruction(graph,s,S,auxiliaryGraph);
+		//auxiliaryGraph.addEdge(t, s.getId(), x1);
+		//
+		constaruction(graph,s,/*f1.getS()*/S,auxiliaryGraph);
 		Vertex<Integer> tVertex=new Vertex<Integer>(t);
-		constaruction(graph,tVertex,T,auxiliaryGraph);
+		constaruction(graph,tVertex,/*f1.getT()*/ T,auxiliaryGraph);
 
 	}
-	
-	
+
+
 
 	public static void main(String args[]){
 		Graph<Integer> graph = new Graph<>(true);
@@ -360,24 +396,24 @@ public class Graph<T>{
 				max=set.size();
 			}
 		}
-		
+
 		for(Set<Vertex<Integer>> set: result ) {
 			if(set.size()==max) {
-//				set.forEach(v->{
-//					vList.add(v.getId());
-//				});
+				//				set.forEach(v->{
+				//					vList.add(v.getId());
+				//				});
 				vList.addAll(set);
 				break;
 			}
-			
+
 		}
 		Graph<Integer> graphStrongestConnectedComponnent =copyGraph(vList,graph);
-        System.out.println("\n Origunal graph : \n"+graph+"\n\n ");		
+		System.out.println("\n Origunal graph : \n"+graph+"\n\n ");		
 
 		System.out.println("Strongest CC : " +vList);
-        System.out.println("\n graph Strongest Connected Componnent: \n"+graphStrongestConnectedComponnent+"\n\n ");		
+		System.out.println("\n graph Strongest Connected Componnent: \n"+graphStrongestConnectedComponnent+"\n\n ");		
 		result.forEach(set -> {
-			
+
 			set.forEach(v -> System.out.print(v.getId() + "-> "));
 			System.out.println();
 		});
@@ -388,12 +424,12 @@ public class Graph<T>{
 		graphMaxFlow.addEdge(1, 3, 1);
 		graphMaxFlow.addEdge(3, 4, 1);
 		graphMaxFlow.addEdge(4, 5, 1);
-//		graphMaxFlow.addEdge(1, 6, 1);
+		//		graphMaxFlow.addEdge(1, 6, 1);
 		graphMaxFlow.addEdge(5, 3, 1);
-//		graphMaxFlow.addEdge(5, 6, 1);
+		//		graphMaxFlow.addEdge(5, 6, 1);
 		graphMaxFlow.addEdge(0, 5, 1);
 		graphMaxFlow.addEdge(4, 6, 1);
-		
+
 		//create an Equivalent Array to represent the index for each vertex in graphWeightMatrix 2d array
 		int[] arrayIndexEquivalents=new int[graphMaxFlow.getAllVertex().size()]; //= {2,9,7,5,3,12,1,99};
 		int i=0;
@@ -403,12 +439,12 @@ public class Graph<T>{
 			if(i<arrayIndexEquivalents.length) 
 			{
 				arrayIndexEquivalents[i]=(int)c.getId();
-			//	System.out.println(arrayIndexEquivalents[i]);
+				//	System.out.println(arrayIndexEquivalents[i]);
 				i++;
 			}
 
 		}
-		
+
 		// 2d representation of strongest connected component Edge weights  
 		int graphWeightMatrix[][]=new int[graphMaxFlow.getAllVertex().size()][graphMaxFlow.getAllVertex().size()];
 		//		for (int j = 0; j < arrayIndexEquivalents.length-1; j++) {
@@ -473,7 +509,7 @@ public class Graph<T>{
 		//			}
 		//			System.out.println();
 		//		}
-		
+
 		FordFulkerson maxFlowFinder = new FordFulkerson(graphMaxFlow);
 		int vertexS = 0;   //S is the first thing in the list
 		int vertexT = 6;	//T is the last thing in the list
@@ -490,20 +526,24 @@ public class Graph<T>{
 		System.out.println("\nBasic Ford Fulkerson Max Flow: " + maxFlowFinder.maxFlow( vertexS, vertexT));
 
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
-		
+
 		Graph<Integer> A = new Graph<>(true);
 		Vertex<Integer> s=new Vertex<Integer>(1);
-		Collection<Integer> N=new java.util.LinkedList();
+		Collection<Integer> N=new java.util.LinkedList<Integer>();
 		for(Vertex<Integer> v:graphMaxFlow.getAllVertex()) 
 		{
 			N.add((int) v.getId());
+			
 		}
+		
 		//System.out.println(N);
-	//	constaruction(graphMaxFlow,s,N,A);
-		// System.out.println(A);
+		constaruction(graphMaxFlow,s,N,A);
+		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+		System.out.println("A graph: ");
+		 System.out.println(A);
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 
-		
+
 		//		graphMaxFlow.getAllVertex().forEach(s->{
 		//			arrayIndexEquivalents[i]=(int) s.getId();
 		//			i++;

@@ -210,12 +210,6 @@ public class MinimalModel extends Graph<Integer>{
 				DS.checkForUnits();//remove empty sources
 				Graph<Integer> g = initGraph(DS, size);
 				LinkedList s = sourceOfGraph(g);
-				System.out.println("s list is: ");
-				if(s.getSize()==0)
-				{
-					System.out.println("Check somthing");
-					s= DS.remainingVars();
-				}
 				s.printList();
 				LinkedList Ts=DS.Ts(s);
 				//System.out.println("Ts list is: ");

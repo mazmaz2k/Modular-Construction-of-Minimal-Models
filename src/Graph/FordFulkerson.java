@@ -92,6 +92,7 @@ public class FordFulkerson {
 
         //this is parent map for storing BFS parent
         Map<Integer,Integer> parent = new HashMap<>();
+        
 
         //stores all the augmented paths
         List<List<Integer>> augmentedPaths = new ArrayList<>();
@@ -131,6 +132,7 @@ public class FordFulkerson {
                 v = u;
             }
         }
+        S.add(source);
         for (int i = 0; i < vertexArray.length; i++) {
 			if(parent.containsKey(i)) {
 				S.add(vertexArray[i]);
@@ -138,14 +140,14 @@ public class FordFulkerson {
 				T.add(vertexArray[i]);
 			}
 		}
-        
+        T.remove(source);
         System.out.println(parent);
         System.out.println("ddddddddddddd");
         System.out.println(T);
         System.out.println("ddddddddddddd");
         System.out.println(S);
        //
-//		printAugmentedPaths(augmentedPaths,maxFlow);
+		printAugmentedPaths(augmentedPaths,maxFlow);
         this.maxFlow=maxFlow;
         return maxFlow;
     }
@@ -173,6 +175,7 @@ public class FordFulkerson {
             int source, int sink){
         Set<Integer> visited = new HashSet<>();
         Queue<Integer> queue = new LinkedList<>();
+        parent.clear();
         queue.add(source);
         visited.add(source);
         boolean foundAugmentedPath = false;
@@ -237,9 +240,9 @@ public class FordFulkerson {
 	}
 
 
-//	public void setS(LinkedList<Integer> s) {
-//		S = s;
-//	}
+	public void setS(Collection<Integer> s) {
+		S = s;
+	}
 
 
 	public Collection<Integer> getT() {
@@ -247,7 +250,7 @@ public class FordFulkerson {
 	}
 
 
-//	public void setT(LinkedList<Integer> t) {
-//		T = t;
-//	}
+	public void setT(Collection<Integer> t) {
+		T = t;
+	}
 }

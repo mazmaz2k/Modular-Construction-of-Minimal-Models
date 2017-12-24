@@ -636,7 +636,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	return str;
     }
     
-    public LinkedList remainingVars()
+  /*  public LinkedList remainingVars()
     {
     	LinkedList s = new LinkedList();
     	for (int i = 0; i < RulesArray.length; i++) 
@@ -657,7 +657,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 			}
 		}
     		return s;
-    }
+    }*/
     
     ////////////////////////////////////////////////////////////////////////////////////
  /*  public void ModuMin(LinkedList Ts)

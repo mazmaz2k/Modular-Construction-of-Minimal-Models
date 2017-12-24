@@ -51,7 +51,9 @@ public class StronglyConnectedComponent {
         visited.clear();
         List<Set<Vertex<Integer>>> result = new ArrayList<>();
         while (!stack.isEmpty()) {
+        //	System.out.println("stack "+stack);
             Vertex<Integer> vertex = reverseGraph.getVertex(stack.poll().getId());
+            //System.out.println(vertex+"sssssssssssssssssssssssssssss");
             if(visited.contains(vertex)){
                 continue;
             }
@@ -59,16 +61,32 @@ public class StronglyConnectedComponent {
             DFSUtilForReverseGraph(vertex, visited, set);
             result.add(set);
         }
+//        System.out.println("reverseGraph: ");
+//        System.out.println(reverseGraph);
+//        System.out.println("----------------------------------------------------------: ");
+
         return result;
     }
 
     private Graph<Integer> reverseGraph(Graph<Integer> graph) {
-        Graph<Integer> reverseGraph = new Graph<>(true);
-        for (Edge<Integer> edge : graph.getAllEdges()) {
-            reverseGraph.addEdge(edge.getVertex2().getId(), edge.getVertex1()
-                    .getId(), edge.getWeight());
-        }
-        return reverseGraph;
+    	Graph<Integer> reverseGraph = new Graph<>(true);
+    	//        for (Edge<Integer> edge : graph.getAllEdges()) {
+    	//            reverseGraph.addEdge(edge.getVertex2().getId(), edge.getVertex1()
+    	//                    .getId(), edge.getWeight());
+    	//        }
+
+    	for(Vertex<Integer> v: graph.getAllVertex()) 
+    	{
+    		reverseGraph.addSingleVertex(v.getId());
+    		for (Edge<Integer> edge : graph.getAllEdges()) {
+    			if(edge.getVertex1().equals(v)) {
+    				reverseGraph.addEdge(edge.getVertex2().getId(), edge.getVertex1()
+    						.getId(), edge.getWeight());
+    			}
+    		}
+
+    	}
+    	return reverseGraph;
     }
 
     private void DFSUtil(Vertex<Integer> vertex,
@@ -87,8 +105,11 @@ public class StronglyConnectedComponent {
                                         Set<Vertex<Integer>> visited, Set<Vertex<Integer>> set) {
         visited.add(vertex);
         set.add(vertex);
+//        if(vertex==null) {
+//        	System.out.println("adi is null");
+//        }
         for (Vertex<Integer> v : vertex.getAdjacentVertexes()) {
-            if (visited.contains(v)) {
+            if ( visited.contains(v)) {
                 continue;
             }
             DFSUtilForReverseGraph(v, visited, set);
