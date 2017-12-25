@@ -300,8 +300,8 @@ public class RulesDataStructure extends DavisPutnamHelper
     {
  	  ArrayList<Clause> clauses = new ArrayList<>();
  	  Node nTs = Ts.head;
- 	  for (int i = 0; i < Ts.getSize(); i++) 
- 	  {	
+ 	  while(nTs!=null)
+ 	  {
  		Node nBody =RulesArray[nTs.var].body.head;
 		Node nHead = RulesArray[nTs.var].head.head;
 		Clause clause = new Clause();
@@ -325,8 +325,10 @@ public class RulesDataStructure extends DavisPutnamHelper
 		
  	  }
  	 
- 	  if(DLL(clauses))
+ 	  if(DLL(clauses)==true)
+ 	  {
  		  return true;
+ 	  }
  	  return false;
  	 
     }
@@ -634,6 +636,11 @@ public class RulesDataStructure extends DavisPutnamHelper
    	 	}
     	str+= "]" + "\r\n" +" |MM| = "+ String.valueOf(index);
     	return str;
+    }
+    
+    public void split(LinkedList v)
+    {
+    	
     }
     
   /*  public LinkedList remainingVars()

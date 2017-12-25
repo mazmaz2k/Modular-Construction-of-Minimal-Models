@@ -122,19 +122,22 @@ public class MinimalModel extends Graph<Integer>{
 				{
 					// btnFindMinimalModel.setEnabled(false);
 					lblNewLabel_2.setText("");
-					LinkedList l=DS.checkFormat();
-					if(l.getSize()==0)
-					{
-						ModuMin(DS);
-						lblNewLabel.setText("The minimal model is: " + DS.StringMinimalModel());
-					}
+				//	LinkedList l=DS.checkFormat();
+				//	if(l.getSize()==0)
+				//	{
+						if(ModuMin(DS))
+							lblNewLabel.setText("SAT The minimal model is: " + DS.StringMinimalModel());
+						else
+							lblNewLabel.setText(" UNSAT ");
+							
+				/*	}
 					else
 					{
 						System.out.println("Please correct lines: ");
 						l.printList();
 						System.out.println("Its not in the right format");
 						System.out.println("Can't be a clause where all litarals are negative");
-					}
+					}*/
 				}
 				else
 				{
@@ -198,9 +201,10 @@ public class MinimalModel extends Graph<Integer>{
 		frame.getContentPane().setLayout(groupLayout);
 	}
 	
-	public static void ModuMin(RulesDataStructure DS )
+	public static boolean ModuMin(RulesDataStructure DS )
 	{
 			int size = DS.SIZE;
+			//int threshold =10000;//
 			
 			while(DS.SIZE!=0)
 			{
@@ -210,18 +214,22 @@ public class MinimalModel extends Graph<Integer>{
 				DS.checkForUnits();//remove empty sources
 				Graph<Integer> g = initGraph(DS, size);
 				LinkedList s = sourceOfGraph(g);
-				s.printList();
+			
+					//LinkedList v = new LinkedList();
+				//	DS.split(v);
+				//s.printList();
 				LinkedList Ts=DS.Ts(s);
-				//System.out.println("Ts list is: ");
-				//Ts.printList();
-				DS.FindMinimalModelForTs(Ts);
+				if(!DS.FindMinimalModelForTs(Ts))
+				{
+					System.out.println("UNSAT");
+					return false;
+				}
 				DS.updateRuleDS();
 				
-				
-				//DS.printRulesArray();
-				//
+
 			}
-			DS.printValueOfVariables();
+			return true;
+		//	DS.printValueOfVariables();
 			
 		
 	}
