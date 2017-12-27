@@ -51,7 +51,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 
     }
     
-    public LinkedList checkFormat()
+   /* public LinkedList checkFormat()
     {
     	LinkedList l = new LinkedList();
     	for (int i = 0; i < RulesArray.length; i++) 
@@ -62,7 +62,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     			l.addAtTail(i+2);
 		}
     	return l;
-    }
+    }*/
     
     public void printRulesArray()
     {
@@ -638,10 +638,76 @@ public class RulesDataStructure extends DavisPutnamHelper
     	return str;
     }
     
-    public void split(LinkedList v)
+    public void split(int[] v)
     {
+    	ArrayList<Clause> clauses = new ArrayList<>();
+    	for (int i = 0; i < RulesArray.length; i++) 
+    	{
+    		if(RulesArray[i]!=null)
+    		{
+    			Node nBody =RulesArray[i].body.head;
+    			Node nHead = RulesArray[i].head.head;
+    			Clause clause = new Clause();
+    			String literal;
+    			while(nBody!=null)//first put the negative literals in order to calculate a minimal model (because of the way that DLL works)
+    			{
+    				literal = "-";
+    				literal+= String.valueOf(nBody.var);
+    				clause.addLiteral(literal);
+    				nBody=nBody.next;
+    			}
+    			while(nHead!=null)
+    			{
+    				literal = String.valueOf(nHead.var); 
+    				clause.addLiteral(literal);
+    				nHead=nHead.next;
+    			}
+
+    			clauses.add(clause);
+    		}
+    	}
+    	int N = v.length;
+    	for(int K = 0 ; K <= N ; K++)// K is the number of vars we put true in them
+    	{
+    		int num = N_OVER_K(N,K);
+    		for (int j = 0; j < num; j++) //we go over the array num times
+    		{
+    			
+    			for (int m = 0; m < N; m++) //go over the array
+    			{
+    				String literal;
+    				Clause clause= new Clause();
+    				literal = "-"+String.valueOf(v[m]);
+    			
+    				literal = String.valueOf(v[j]);
+    				
+    				clause.addLiteral(literal);
+    				clauses.add(clause);
+				}
+    			
+    			//check if sat
+			}
+    	}
     	
     }
+    private int N_OVER_K(int n ,int k)
+    {
+    	return (int)(getFactorial(n)/(getFactorial(k)*getFactorial(n-k)));
+    }
+    private long getFactorial(int number) 
+    {
+        long factorial = 1;
+        for (int i = 1; i <= number; ++i) 
+        {
+            factorial *= i;
+        }
+        return factorial;
+    }
+   /* public static void main(String[] args) 
+    {
+    	System.out.println(getFactorial(20));
+    	System.out.println(N_OVER_K(10,5));
+    }*/
     
   /*  public LinkedList remainingVars()
     {
