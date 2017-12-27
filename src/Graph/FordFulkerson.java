@@ -132,7 +132,7 @@ public class FordFulkerson {
                 v = u;
             }
         }
-        S.add(source);
+       
         for (int i = 0; i < vertexArray.length; i++) {
 			if(parent.containsKey(i)) {
 				S.add(vertexArray[i]);
@@ -140,14 +140,15 @@ public class FordFulkerson {
 				T.add(vertexArray[i]);
 			}
 		}
+        S.add(source);
         T.remove(source);
-        System.out.println(parent);
-        System.out.println("ddddddddddddd");
+      //  System.out.println(parent);
+        System.out.println("T is:");
         System.out.println(T);
-        System.out.println("ddddddddddddd");
+        System.out.println("S is:");
         System.out.println(S);
-       //
-		printAugmentedPaths(augmentedPaths,maxFlow);
+       
+		// printAugmentedPaths(augmentedPaths,maxFlow);
         this.maxFlow=maxFlow;
         return maxFlow;
     }
