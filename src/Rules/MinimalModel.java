@@ -45,13 +45,13 @@ public class MinimalModel extends Graph<Integer>{
 	 */
 	public MinimalModel() {
 		super(true);
-		initialize();
+		init();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void init() {
 		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
