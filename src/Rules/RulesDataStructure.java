@@ -16,8 +16,10 @@ public class RulesDataStructure extends DavisPutnamHelper
 {
     public Rule[] RulesArray ;
     Hashtable<Integer, LinkedList> varHT ;
-   static HashMap<String, Boolean> literalMap;// We will store the value of literals in this structure as we go along
-   int SIZE;
+    static HashMap<String, Boolean> literalMap;// We will store the value of literals in this structure as we go along
+    public int counter = 0;
+    public LinkedList minModel;
+    int SIZE;
     public RulesDataStructure (int numOfRules)
     {
     	SIZE=numOfRules;
@@ -30,6 +32,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	varHT = new Hashtable<Integer, LinkedList>();
     	
     	literalMap = new HashMap<String,Boolean>();
+    	minModel = new LinkedList();
     }
    
     public void addToRulsArray(int index , int var)
@@ -365,6 +368,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 					System.out.println("Empty clause detected. Returning false.");
 					return false;
 				}
+				this.counter++;
 			}
 			else
 			{
@@ -422,10 +426,23 @@ public class RulesDataStructure extends DavisPutnamHelper
     public void updateRuleDS()
     {
     	Set<String> keys = literalMap.keySet();
-    	for(String key: keys)
-   	 	{
-    		ChangeDataStrucureByPlacingValueInVar(Integer.parseInt(key), literalMap.get(key));
-   	 	}
+    	try {
+    		for(String key: keys)
+    		{
+    			System.out.println("key: "+ Integer.parseInt(key) + " value:  "+literalMap.get(key) );
+    			if(literalMap.get(key))
+    			{
+    				minModel.addAtTail(Integer.parseInt(key));
+    			}
+    			ChangeDataStrucureByPlacingValueInVar(Integer.parseInt(key), literalMap.get(key));
+    			literalMap.remove(key);
+    			//System.out.println("remove key  " + key);
+    		}
+    	}
+    	catch(Exception e)
+    	{
+    		
+    	}
     }
     public void ChangeDataStrucureByPlacingValueInVar(int var , boolean value)
     {
@@ -623,18 +640,14 @@ public class RulesDataStructure extends DavisPutnamHelper
     
     public String StringMinimalModel()
     {
-    	int index = 0;
     	String str= "[ ";
-    	Set<String> keys = literalMap.keySet();
-    	for(String key: keys)
-   	 	{
-    		if(literalMap.get(key))
-    		{
-    			str+= "{"+key+"}" + " ";
-    			index++;
-    		}
-   	 	}
-    	str+= "]" + "\r\n" +" |MM| = "+ String.valueOf(index);
+    	Node n = minModel.head;
+    	while(n!=null)
+    	{
+    		str+= "{"+n.var+"}" + " ";
+    		n=n.next;
+    	}
+    	str+= "]" + "\r\n" +" |MM| = "+ minModel.getSize();
     	return str;
     }
     
@@ -677,10 +690,14 @@ public class RulesDataStructure extends DavisPutnamHelper
     			{
     				String literal;
     				Clause clause= new Clause();
-    				literal = "-"+String.valueOf(v[m]);
-    			
-    				literal = String.valueOf(v[j]);
-    				
+    				if(m<K&& m==j)
+    				{
+        				literal = String.valueOf(v[m]);
+    				}
+    				else
+    					literal = "-"+String.valueOf(v[m]);
+    		
+ 				
     				clause.addLiteral(literal);
     				clauses.add(clause);
 				}

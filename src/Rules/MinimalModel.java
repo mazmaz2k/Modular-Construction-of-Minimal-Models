@@ -211,23 +211,24 @@ public class MinimalModel extends Graph<Integer>{
 				
 				System.out.println("SIZE OF T: " +DS.SIZE);
 				DS.printRulesArray();
-				DS.checkForUnits();//remove empty sources
+				//DS.checkForUnits();//remove empty sources
 				Graph<Integer> g = initGraph(DS, size);
 				LinkedList s = sourceOfGraph(g);
 			
 					//LinkedList v = new LinkedList();
 				//	DS.split(v);
-				//s.printList();
+				s.printList();
 				LinkedList Ts=DS.Ts(s);
+				Ts.printList();
 				if(!DS.FindMinimalModelForTs(Ts))
 				{
 					System.out.println("UNSAT");
+					System.out.println("The amount of time we put value in a variable is : " + DS.counter);
 					return false;
 				}
 				DS.updateRuleDS();
-				
-
 			}
+			System.out.println("The amount of times we put value in a variable is : " + DS.counter);
 			return true;
 		//	DS.printValueOfVariables();
 			
