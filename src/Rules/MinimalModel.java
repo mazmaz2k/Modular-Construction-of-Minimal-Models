@@ -214,12 +214,14 @@ public class MinimalModel extends Graph<Integer>{
 				//DS.checkForUnits();//remove empty sources
 				Graph<Integer> g = initGraph(DS, size);
 				LinkedList s = sourceOfGraph(g);
-			
-					//LinkedList v = new LinkedList();
-				//	DS.split(v);
 				s.printList();
+			/*	int[] v = {1 ,2 ,3}; 
+				System.out.println("=======================================================");
+				DS.split(v);
+				System.out.println("=======================================================");
+*/
 				LinkedList Ts=DS.Ts(s);
-				Ts.printList();
+				//Ts.printList();
 				if(!DS.FindMinimalModelForTs(Ts))
 				{
 					System.out.println("UNSAT");
