@@ -312,6 +312,7 @@ public class Graph<T>{
 	//FIND ALL K-edge connected component Algorithm !!
 	//input graph(of strongest connected component/original graph) ,s vertex of connected component , N list of all vertexs in connected component
 	//return auxiliary graph
+	
 	public static void constaruction(Graph<Integer> graph ,Vertex<Integer> s, Collection<Integer> N,Graph<Integer> auxiliaryGraph){
 		if(N==null||graph==null||s==null|| !N.contains((int)s.getId())) {
 			System.out.println("wrong input");
@@ -331,15 +332,9 @@ public class Graph<T>{
 			System.out.println("Exit recursion");
 			return;
 		}
-
-//		if(N.size()<=1 && flag) {
-//			System.out.println("Exit recursion");
-//			return;
-//		}
 		int t=-1;
 		for( int vertex: N) {
 			if(vertex!=s.getId()) {
-				
 				t=vertex;
 			}
 		}
@@ -350,45 +345,59 @@ public class Graph<T>{
 		System.out.println("s is : "+s.getId()+" t is: "+t);
 		FordFulkerson f1=new FordFulkerson(graph);
 		FordFulkerson f2=new FordFulkerson(graph);
-		
-		int x1=0;
-		x1=f1.maxFlow((int) s.getId(), t);
+		Vertex<Integer> tVertex=new Vertex<Integer>(t);
+		int x1=f1.maxFlow(f1.findVertexIndex(s), f1.findVertexIndex(tVertex));
 		System.out.println("max flow x1: " +x1);
-
-		int x2= f2.maxFlow( t,(int) s.getId());
+		int x2= f2.maxFlow( f2.findVertexIndex(tVertex),f2.findVertexIndex(s));
 		System.out.println("max flow x2: " +x2);
 		Collection<Integer> S =f1.getS();
-		// remove metrix
-		//N S T Array
+		// remove matrix
+		//Convert N S T  to Arrays
 		Collection<Integer> T =f1.getT();
-
 		if(x1>x2) {
 			x1=x2;
-			T=f2.getS();
 			S=f2.getT();
+			T=f2.getS();
 		}
-
 		//		//may need to add edge from t to s also!!
 		//System.out.println("------------s is : "+s.getId()+" t is: "+ t);
 		auxiliaryGraph.addEdge(s.getId(), t, x1);
-		auxiliaryGraph.addEdge(t, s.getId(), x1);
-
-		
+	//	auxiliaryGraph.addEdge(t, s.getId(), x1);
 		Collection<Integer> N_S=cutLinkList(N,S);
 	//	System.out.println("s is: "+s+"  S is:"+S+" N is: "+N+" the N_S Cut is: "+N_S);
-		
 		constaruction(graph,s,N_S,auxiliaryGraph);
 
 		Collection<Integer> N_T=cutLinkList(N,T);
 		System.out.println("the N_T Cut is: "+N_T);
 
-		Vertex<Integer> tVertex=new Vertex<Integer>(t);
 		constaruction(graph,tVertex, N_T,auxiliaryGraph);
-		
-
-
 	}
 
+	//unique Graph creation -create unique graph data structure for greatest connected component
+	//we will return Graph from which we have double vertex number - I split all node to 2 nodes.
+	
+	public static Graph<Integer> uniqueGraphCreation(Graph<Integer> graph){
+		Graph<Integer> uniqueGraph=new Graph<Integer>(true);
+		for(Vertex<Integer> v:graph.getAllVertex()) {
+			uniqueGraph.addSingleVertex(v.getId());
+			uniqueGraph.addSingleVertex(v.getId()*(-1));
+
+			
+		}
+		System.out.println(uniqueGraph);
+		return uniqueGraph;
+	}
+
+	
+	
+	
+	
+	//Dismantle 
+	public int[] dismantlingStrongestCC(Graph<Integer> graph,Graph<Integer> auxiliaryGraph) {
+		int[] a=new int[auxiliaryGraph.allVertex.size()];
+		
+		return a;
+	}
 
 
 	public static void main(String args[]){
@@ -445,9 +454,9 @@ public class Graph<T>{
 			System.out.println();
 		});
 		Graph<Integer> graphMaxFlow = new Graph<>(true);
-		graphMaxFlow.addEdge(0, 3, 1);
-		graphMaxFlow.addEdge(0, 4, 1);
-		graphMaxFlow.addEdge(1, 0, 1);
+		graphMaxFlow.addEdge(10, 3, 1);
+		graphMaxFlow.addEdge(10, 4, 1);
+		graphMaxFlow.addEdge(1, 10, 1);
 		graphMaxFlow.addEdge(4, 1, 1);
 		graphMaxFlow.addEdge(3, 1, 1);
 		graphMaxFlow.addEdge(1, 5, 1);
@@ -556,8 +565,8 @@ public class Graph<T>{
 
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 
-		Graph<Integer> A = new Graph<>(true);
-		Vertex<Integer> s=new Vertex<Integer>(0);
+		Graph<Integer> A = new Graph<>(false);
+		Vertex<Integer> s=new Vertex<Integer>(10);
 		Collection<Integer> N=new java.util.LinkedList<Integer>();
 		for(Vertex<Integer> v:graphMaxFlow.getAllVertex()) 
 		{
@@ -596,6 +605,8 @@ public class Graph<T>{
 		//			}
 		//		}
 		//		System.out.println("\nMaximum capacity " + ff.maxFlow(capacity, 0, 6));
+		Graph<Integer> g=uniqueGraphCreation(graphMaxFlow);
+		System.out.println(g.getAllVertex().size()+"->"+graphMaxFlow.getAllVertex().size());
 	}	
 	// find an vertex index in array of vertexes return -1 if not there
 	public static int findInArray(int[] arr,long a) {

@@ -54,7 +54,7 @@ public class FordFulkerson {
 				}
 			}
 		}
-//		for (int j = 0; j < c.length; j++) {
+//		for (int j = 0; j < vertexArray.length; j++) {
 //			System.out.println(vertexArray[i]);
 //
 //		}
@@ -140,8 +140,10 @@ public class FordFulkerson {
 				T.add(vertexArray[i]);
 			}
 		}
-        S.add(source);
-        T.remove(source);
+        Vertex<Integer> v=new Vertex<Integer>(source);
+       System.out.println(vertexArray[source]+"->>>>>>>"+ source);
+         S.add(vertexArray[source]);
+        T.remove(vertexArray[source]);
       //  System.out.println(parent);
         System.out.println("T is:");
         System.out.println(T);
@@ -216,21 +218,23 @@ public class FordFulkerson {
 //                            {0, 0, 0, 0, 0, 0, 0}};
 //        
         
-        Graph<Integer> graphMaxFlow = new Graph<>(true);
-		graphMaxFlow.addEdge(0, 1, 1);
+    	Graph<Integer> graphMaxFlow = new Graph<>(true);
+		graphMaxFlow.addEdge(10, 3, 1);
+		graphMaxFlow.addEdge(10, 4, 1);
+		graphMaxFlow.addEdge(1, 10, 1);
+		graphMaxFlow.addEdge(4, 1, 1);
+		graphMaxFlow.addEdge(3, 1, 1);
+		graphMaxFlow.addEdge(1, 5, 1);
 		graphMaxFlow.addEdge(1, 2, 1);
-		graphMaxFlow.addEdge(2, 0, 1);
-		graphMaxFlow.addEdge(1, 3, 1);
-		graphMaxFlow.addEdge(3, 4, 1);
-		graphMaxFlow.addEdge(4, 5, 1);
-		graphMaxFlow.addEdge(1, 6, 1);
-		graphMaxFlow.addEdge(5, 3, 1);
+		graphMaxFlow.addEdge(2, 1, 1);
+		graphMaxFlow.addEdge(6, 1, 1);
+		graphMaxFlow.addEdge(6, 5, 1);
 		graphMaxFlow.addEdge(5, 6, 1);
-		graphMaxFlow.addEdge(0, 5, 1);
-		graphMaxFlow.addEdge(4, 6, 1);
+		graphMaxFlow.addEdge(2, 6, 1);
+		graphMaxFlow.addEdge(5, 2, 1);
 		 FordFulkerson ff = new FordFulkerson(graphMaxFlow);
-		
-        System.out.println("\nMaximum capacity " + ff.maxFlow( 0, 6));
+		System.out.println(graphMaxFlow.getAllVertex());
+        System.out.println("\nMaximum capacity " + ff.maxFlow( 3, 2));
         System.out.println("T: "+ff.getT());
 		 System.out.println("S: "+ ff.getS());
     }
