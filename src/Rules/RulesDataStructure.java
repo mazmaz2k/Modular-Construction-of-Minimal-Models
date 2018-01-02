@@ -3,7 +3,6 @@ package Rules;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Map;
 import java.util.Set;
 
 //import Graph.LinkedList1;
@@ -182,7 +181,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     
     
     
-   public void checkForUnits()
+  /* public void checkForUnits()
     {
     	
     	for (int i = 0; i < RulesArray.length; i++)
@@ -209,7 +208,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 		}
     	System.out.println("Ufter unit check");
 
-    }
+    }*/
     public void printValueOfVariables()
     {
     	System.out.println("-------THE VALUE TABLE--------");
@@ -429,7 +428,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	try {
     		for(String key: keys)
     		{
-    			System.out.println("key: "+ Integer.parseInt(key) + " value:  "+literalMap.get(key) );
+    			//System.out.println("key: "+ Integer.parseInt(key) + " value:  "+literalMap.get(key) );
     			if(literalMap.get(key))
     			{
     				minModel.addAtTail(Integer.parseInt(key));
@@ -679,35 +678,72 @@ public class RulesDataStructure extends DavisPutnamHelper
     			clauses.add(clause);
     		}
     	}
-    	int N = v.length;
-    	for(int K = 0 ; K <= N ; K++)// K is the number of vars we put true in them
+    	System.out.println("print clauses");
+    	printClauses(clauses);
+    	System.out.println("copy to array list");
+    	int size = v.length;
+    	System.out.println("size of array is: " + size);
+    	int N = (int)Math.pow(2,size);
+    	boolean[] b ;
+		String literal;
+		Clause clause;
+		ArrayList<Clause> copy;
+    	for (int i = 0; i < N; i++)//from 0 to 2^n -1
     	{
-    		int num = N_OVER_K(N,K);
-    		for (int j = 0; j < num; j++) //we go over the array num times
+    		copy = new ArrayList<Clause>();//
+    		for(Clause c: clauses)
     		{
-    			
-    			for (int m = 0; m < N; m++) //go over the array
+    			Clause c2 = new Clause();
+    			for(String s: c.literals)
     			{
-    				String literal;
-    				Clause clause= new Clause();
-    				if(m<K&& m==j)
-    				{
-        				literal = String.valueOf(v[m]);
-    				}
-    				else
-    					literal = "-"+String.valueOf(v[m]);
-    		
- 				
-    				clause.addLiteral(literal);
-    				clauses.add(clause);
+    				c2.addLiteral(s);
+    			}
+    			copy.add(c2);
+    		}// copy original to not make any changes
+    		b = toBinary(i,size);//returns array
+    		for (int j = 0; j < size; j++) 
+    		{
+    			clause= new Clause();
+				if(b[j])
+				{
+					literal = String.valueOf(v[j]);
 				}
-    			
-    			//check if sat
+				else
+				{
+					literal = "-"+String.valueOf(v[j]);
+				}
+				clause.addLiteral(literal);
+				copy.add(clause);
+				System.out.println( "Adding clause: "+clause.printClause());		
 			}
-    	}
+    		//check if sat
+    		System.out.println("check sat");
+    		if(DLL(copy))
+    		{
+    			System.out.println("found and update . we found in index: "+ i);
+    			updateRuleDS();
+    			break;
+    		}
+    		
+		}
     	
     }
-    private int N_OVER_K(int n ,int k)
+     private boolean[] toBinary(int number, int base)
+     {
+        final boolean[] ret = new boolean[base];
+        for (int i = 0; i < base; i++) {
+            ret[base - 1 - i] = (1 << i & number) != 0;
+        }
+        return ret;
+    }
+    /*public static void main(String[] args)
+    {
+    		boolean[] a = toBinary(15,8);
+    		for (int i = 0; i < a.length; i++) {
+				System.out.print(" "+a[i]);
+			}
+    }*/
+   /* private int N_OVER_K(int n ,int k)
     {
     	return (int)(getFactorial(n)/(getFactorial(k)*getFactorial(n-k)));
     }
@@ -719,7 +755,7 @@ public class RulesDataStructure extends DavisPutnamHelper
             factorial *= i;
         }
         return factorial;
-    }
+    }*/
    /* public static void main(String[] args) 
     {
     	System.out.println(getFactorial(20));
