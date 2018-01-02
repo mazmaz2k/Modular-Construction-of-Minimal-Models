@@ -150,7 +150,7 @@ public class FordFulkerson {
         System.out.println("S is:");
         System.out.println(S);
        
-		// printAugmentedPaths(augmentedPaths,maxFlow);
+		 printAugmentedPaths(augmentedPaths,maxFlow);
         this.maxFlow=maxFlow;
         return maxFlow;
     }
@@ -166,7 +166,7 @@ public class FordFulkerson {
         System.out.println("Augmented paths");
         augmentedPaths.forEach(path -> {
             path.forEach(i -> System.out.print(vertexArray[i] + " "));
-            System.out.println(" flow is: "+maxFlow);
+           // System.out.println(" flow is: "+maxFlow);
             System.out.println();
         });
     }

@@ -379,11 +379,18 @@ public class Graph<T>{
 	public static Graph<Integer> uniqueGraphCreation(Graph<Integer> graph){
 		Graph<Integer> uniqueGraph=new Graph<Integer>(true);
 		for(Vertex<Integer> v:graph.getAllVertex()) {
-			uniqueGraph.addSingleVertex(v.getId());
-			uniqueGraph.addSingleVertex(v.getId()*(-1));
-
-			
+//			uniqueGraph.addSingleVertex(v.getId());
+//			uniqueGraph.addSingleVertex(v.getId()*(-1));
+			uniqueGraph.addEdge(v.getId()*(-1), v.getId(), 1);
+			for(Edge<Integer> e: graph.getAllEdges()) {
+				if(e.getVertex2().equals(v)) {
+					uniqueGraph.addEdge(e.getVertex1().getId(), v.getId()*(-1), 1);
+				}
+			}
 		}
+//		System.out.println("-------------------real Graph-----------------");
+//		System.out.println(graph);
+//		System.out.println("-------------------unique Graph-----------------");
 		System.out.println(uniqueGraph);
 		return uniqueGraph;
 	}
@@ -394,9 +401,18 @@ public class Graph<T>{
 	
 	//Dismantle 
 	public int[] dismantlingStrongestCC(Graph<Integer> graph,Graph<Integer> auxiliaryGraph) {
-		int[] a=new int[auxiliaryGraph.allVertex.size()];
-		
-		return a;
+		Graph<Integer> uniqeGraph=uniqueGraphCreation(auxiliaryGraph); // duplicate graph to change K-edge connected component to find vertex to remove
+		int[] vertexArray=new int[auxiliaryGraph.allVertex.size()]; //array of vertex id's so return to Rules Data structure 
+		int min=Integer.MAX_VALUE,a=0,b=0;
+		for(Edge<Integer> e: uniqeGraph.getAllEdges()) { //find smallest K
+			if(e.getWeight()<min) {
+				a=(int)e.getVertex1().getId();
+				b=(int)e.getVertex2().getId();
+			}
+		}
+		FordFulkerson fordFulkerson= new FordFulkerson(graph); //find cut between a an b  
+		int maxflow=fordFulkerson.maxFlow(a, b);
+		return vertexArray;
 	}
 
 
@@ -606,7 +622,7 @@ public class Graph<T>{
 		//		}
 		//		System.out.println("\nMaximum capacity " + ff.maxFlow(capacity, 0, 6));
 		Graph<Integer> g=uniqueGraphCreation(graphMaxFlow);
-		System.out.println(g.getAllVertex().size()+"->"+graphMaxFlow.getAllVertex().size());
+//		System.out.println(g.getAllVertex().size()+"->"+graphMaxFlow.getAllVertex().size());
 	}	
 	// find an vertex index in array of vertexes return -1 if not there
 	public static int findInArray(int[] arr,long a) {
