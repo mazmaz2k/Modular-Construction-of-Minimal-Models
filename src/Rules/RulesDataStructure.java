@@ -320,7 +320,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 		  literal = String.valueOf(nHead.var); 
 		  clause.addLiteral(literal);
 		  nHead=nHead.next;
-		  }
+		}
 		clauses.add(clause);
 
 		 nTs=nTs.next;	
@@ -650,7 +650,11 @@ public class RulesDataStructure extends DavisPutnamHelper
     	return str;
     }
     
-    public void split(int[] v)
+  /***Receive a set of vertexes from graph ds and put values on each vertex
+    also checks if the values we put in the variables return SAT if so we change rules ds 
+    by the values we found and if not we try different values for te variables
+     ***/
+    public void splitConnectedComponent(int[] v)
     {
     	ArrayList<Clause> clauses = new ArrayList<>();
     	for (int i = 0; i < RulesArray.length; i++) 
@@ -684,7 +688,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	int size = v.length;
     	System.out.println("size of array is: " + size);
     	int N = (int)Math.pow(2,size);
-    	boolean[] b ;
+    	boolean[] binaryArray ;
 		String literal;
 		Clause clause;
 		ArrayList<Clause> copy;
@@ -700,11 +704,11 @@ public class RulesDataStructure extends DavisPutnamHelper
     			}
     			copy.add(c2);
     		}// copy original to not make any changes
-    		b = toBinary(i,size);//returns array
+    		binaryArray = toBinary(i,size);//returns array
     		for (int j = 0; j < size; j++) 
     		{
     			clause= new Clause();
-				if(b[j])
+				if(binaryArray[j])
 				{
 					literal = String.valueOf(v[j]);
 				}

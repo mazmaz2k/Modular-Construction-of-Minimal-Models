@@ -203,9 +203,7 @@ public class MinimalModel extends Graph<Integer>{
 	
 	public static boolean ModuMin(RulesDataStructure DS )
 	{
-			int size = DS.SIZE;
-			//int threshold =10000;//
-			
+			int size = DS.SIZE;			
 			while(DS.SIZE!=0)
 			{
 				
@@ -215,6 +213,10 @@ public class MinimalModel extends Graph<Integer>{
 				Graph<Integer> g = initGraph(DS, size);
 				LinkedList s = sourceOfGraph(g);
 				s.printList();
+				if(s.getSize() > 0.2*g.getAllVertex().size())
+				{
+					/**get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS*/
+				}
 			/*	int[] v = {1 ,2 ,3}; 
 				System.out.println("=======================================================");
 				DS.split(v);
