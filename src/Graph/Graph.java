@@ -107,54 +107,9 @@ public class Graph<T>{
 
 
 
-	//	// A function used by DFS
-	//	void DFSUtil(Vertex <Object> v,boolean visited[])
-	//	{
-	//		// Mark the current node as visited and print it
-	//		visited[(int)v.getId()] = true;
-	//		System.out.print(v+" ");
-	//
-	//		// Recur for all the vertices adjacent to this vertex
-	//		//List<Vertex<T>> adjcentVertex = v.getAdjacentVertexes()	;	
-	//		Iterator<Vertex<Object>> i =  v.getAdjacentVertexes().listIterator();
-	//		
-	//		while (i.hasNext())
-	//		{
-	//			Vertex<Object> n = i.next();
-	//			if (!visited[(int) n.getId()])
-	//				DFSUtil(n, visited);
-	//		}
-	//	}
-	//    
-	//	// The function to do DFS traversal. It uses recursive DFSUtil()
-	//	void DFS(Vertex <Object> v)
-	//	{
-	//		// Mark all the vertices as not visited(set as
-	//		// false by default in java)
-	//		boolean visited[] = new boolean[allVertex.size()+1];
-	//
-	//		// Call the recursive helper function to print DFS traversal
-	//		DFSUtil(v, visited);
-	//		
-	//	}
-
-	//    /// find vertex of original graph in super graph, return id of where in superGraph it was found (id of superGraph vertex) -1 if not found  
-	//	public int findIdInVertexCC(Graph<Integer> graph,int id) {
-	//		for(Vertex<Integer> v : graph.getAllVertex()) {
-	//			for(Vertex<Integer> vertexInCC: v.getCCList() ) {
-	//				if(vertexInCC.getId()==id) {
-	//					return (int) v.getId();
-	//				}
-	//				
-	//			}
-	//			
-	//		}	
-	//		return -1;
-	//	}
-
-	//Initialize graph from Rules data structure
-	//also return strongest connected component of the graph 
-
+	
+/**	find cut from two set of vertexes id's collection
+ * **/
 	public static Collection<Integer> cutLinkList(Collection<Integer> A,Collection<Integer> B){
 		Collection<Integer> A_B= new java.util.LinkedList<Integer>();
 		for(Integer a:A) {
@@ -164,7 +119,8 @@ public class Graph<T>{
 		}
 		return A_B;
 	}
-
+/**
+ * we find source of the graph-omly the first source is relevant**/
 	public static LinkedList sourceOfGraph(Graph<Integer>  graph)
 	{
 		StronglyConnectedComponent scc = new StronglyConnectedComponent();
@@ -183,7 +139,10 @@ public class Graph<T>{
 		return s;
 	}
 
-
+/**
+ * convert clauses data structure in to graph body-->head
+ * body  has edge to head
+ * this is a directed**/
 	public static Graph<Integer> initGraph(RulesDataStructure DS ,int numOfRules) 
 	{
 
@@ -196,7 +155,6 @@ public class Graph<T>{
 			if(DS.RulesArray[i]!=null)
 			{
 				n1 =DS.RulesArray[i].body.head;
-				//v1=new Vertex<Integer>(n1.var);
 				if(n1==null) 
 				{
 					n2=DS.RulesArray[i].head.head;
@@ -213,81 +171,25 @@ public class Graph<T>{
 
 					while(n2!=null)
 					{
-						//v2=new Vertex<Integer>(n2.var);
-						//graph.addSingleVertex(n2.var);
+						
 						graph.addEdge(n1.var,n2.var);
 						n2=n2.next;
 					}
-					//flag=false;
 					n1=n1.next;
 
 				}
-				//n3=DS.RulesArray[i].head.head;
-
-				// we can run also on head only to enter vertexs that only in head array
-				//				while(n3!=null && flag)
-				//				{
-				//					//v2=new Vertex<Integer>(n2.var);
-				//					graph.addSingleVertex(n3.var);
-				//					n3=n3.next;
-				//				}
-				//				flag=true;
+				
 			}
 
 
 		}
 		System.out.println("This is the Graph:");
 		System.out.println(graph);
-		//        graph.addEdge(7, 1);
-		//        graph.addEdge(1, 2);
-		//        graph.addEdge(2, 7);
-		//        graph.addEdge(1, 3);
-		//        graph.addEdge(3, 4);
-		//        graph.addEdge(4, 5);
-		//        graph.addEdge(5, 3);
-		//        graph.addEdge(5, 6);
-		/*StronglyConnectedComponent scc = new StronglyConnectedComponent();
-		List<Set<Vertex<Integer>>> result = scc.scc(graph);
-		 */
-		//System.out.println(graph);
-		// Create a graph given in the above diagram
-		//		System.out.println("Following are size of the strongly connected components in given graph ");
-		// graph.printSCCs();
-
-
-		//find strongest connected component
-		/*int max=0; 
-		for(Set<Vertex<Integer>> s: result) {
-			//	System.out.println(s.size());
-			if(max<s.size())
-				max=s.size();
-		}
-		System.out.println("Following are THE strongly connected componentsin given graph ");
-		for(Set<Vertex<Integer>> s: result) {
-			if(s.size()==max) {
-				s.forEach(v -> System.out.print(v.getId() + "-> "));
-				System.out.println();
-			}
-		}
-		//		result.forEach(set -> {
-		//			System.out.println(set.size()); 
-		//		});
-		System.out.println();*/
-
-		/*	System.out.println("Following are ALL strongly connected componentsin given graph ");
-		//print the result
-
-
-		result.forEach(set -> {
-
-			set.forEach(v -> System.out.print(v.getId() + "-> "));
-			System.out.println();
-
-		});*/
+		
 
 		return graph;	
 	} 
-	//input original graph and set of vertexes and return (create) a smaller graph from those set of vertexes 
+	/**input original graph and set of vertexes and return (create) a smaller graph from those set of vertexes */
 
 	public static Graph<Integer> copyGraph(Set<Vertex<Integer>> setOfVertex,Graph<Integer> oldGraph) {
 		Graph<Integer> newGraph = new Graph<>(true);
@@ -309,52 +211,44 @@ public class Graph<T>{
 		return newGraph;
 	} 
 
-	//FIND ALL K-edge connected component Algorithm !!
-	//input graph(of strongest connected component/original graph) ,s vertex of connected component , N list of all vertexs in connected component
-	//return auxiliary graph
+	/**FIND ALL K-edge connected component Algorithm !!
+	input graph(of strongest connected component/original graph) ,s vertex of connected component , N list of all vertexs in connected component
+	return auxiliary graph*/
 	
 	public static void constaruction(Graph<Integer> graph ,Vertex<Integer> s, Collection<Integer> N,Graph<Integer> auxiliaryGraph){
-		if(N==null||graph==null||s==null|| !N.contains((int)s.getId())) {
+		if(N==null||graph==null||s==null|| !N.contains((int)s.getId())) { //check if input are wrong -save recursive problems 
 			System.out.println("wrong input");
 			System.out.println(s.getId()+" "+N);
 			System.out.println("111111111111111111");
 
-			//return;
-		}
-		
-//		boolean flag=false;
-//		for(int x:N) {
-//			if(x==s.getId()) {
-//				flag =true;
-//			}
-//		}
-		if(N.contains((int) s.getId()) && N.size()==1) {
+					}
+
+		if(N.contains((int) s.getId()) && N.size()==1) { // exit condition from recursive 
 			System.out.println("Exit recursion");
 			return;
 		}
 		int t=-1;
-		for( int vertex: N) {
+		for( int vertex: N) { //find t vertex  from N- t!=s
 			if(vertex!=s.getId()) {
 				t=vertex;
 			}
 		}
-		if(t==-1) {
+		if(t==-1) { //check t is in N- if not there is problem in recursive
 			System.out.println("Error:  N is Empty");
-			//return;
 		}
 		System.out.println("s is : "+s.getId()+" t is: "+t);
-		FordFulkerson f1=new FordFulkerson(graph);
-		FordFulkerson f2=new FordFulkerson(graph);
+		FordFulkerson f1=new FordFulkerson(graph);	//find flow from s to t
+		FordFulkerson f2=new FordFulkerson(graph);  //finf flow from t to s
 		Vertex<Integer> tVertex=new Vertex<Integer>(t);
 		int x1=f1.maxFlow(f1.findVertexIndex(s), f1.findVertexIndex(tVertex));
 		System.out.println("max flow x1: " +x1);
 		int x2= f2.maxFlow( f2.findVertexIndex(tVertex),f2.findVertexIndex(s));
 		System.out.println("max flow x2: " +x2);
-		Collection<Integer> S =f1.getS();
+		Collection<Integer> S =f1.getS(); //find S- set of vertex in front the cut
 		// remove matrix
 		//Convert N S T  to Arrays
-		Collection<Integer> T =f1.getT();
-		if(x1>x2) {
+		Collection<Integer> T =f1.getT(); // find T- set of vertex behind the cut
+		if(x1>x2) { //find maximum ways from s to t and t to s- way have to be equles 
 			x1=x2;
 			S=f2.getT();
 			T=f2.getS();
@@ -363,7 +257,7 @@ public class Graph<T>{
 		//System.out.println("------------s is : "+s.getId()+" t is: "+ t);
 		auxiliaryGraph.addEdge(s.getId(), t, x1);
 	//	auxiliaryGraph.addEdge(t, s.getId(), x1);
-		Collection<Integer> N_S=cutLinkList(N,S);
+		Collection<Integer> N_S=cutLinkList(N,S); //find cut from two set of vertexes  
 	//	System.out.println("s is: "+s+"  S is:"+S+" N is: "+N+" the N_S Cut is: "+N_S);
 		constaruction(graph,s,N_S,auxiliaryGraph);
 
@@ -373,8 +267,8 @@ public class Graph<T>{
 		constaruction(graph,tVertex, N_T,auxiliaryGraph);
 	}
 
-	//unique Graph creation -create unique graph data structure for greatest connected component
-	//we will return Graph from which we have double vertex number - I split all node to 2 nodes.
+	/***unique Graph creation -create unique graph data structure for greatest connected component
+	we will return Graph from which we have double vertex number - I split all node to 2 nodes.**/
 	
 	public static Graph<Integer> uniqueGraphCreation(Graph<Integer> graph){
 		Graph<Integer> uniqueGraph=new Graph<Integer>(true);
@@ -399,7 +293,8 @@ public class Graph<T>{
 	
 	
 	
-	//Dismantle 
+	/** Dismantle strongest connected component
+	 * return array of vertex which will be put in rules array**/
 	public int[] dismantlingStrongestCC(Graph<Integer> graph,Graph<Integer> auxiliaryGraph) {
 		Graph<Integer> uniqeGraph=uniqueGraphCreation(auxiliaryGraph); // duplicate graph to change K-edge connected component to find vertex to remove
 		int[] vertexArray=new int[auxiliaryGraph.allVertex.size()]; //array of vertex id's so return to Rules Data structure 
@@ -412,6 +307,10 @@ public class Graph<T>{
 		}
 		FordFulkerson fordFulkerson= new FordFulkerson(graph); //find cut between a an b  
 		int maxflow=fordFulkerson.maxFlow(a, b);
+		
+		
+		
+		
 		return vertexArray;
 	}
 
