@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence-diagram version="1.2.2" icons="true" generate-combined-fragments="true">  
+  <object id="1" language="java" name="Rules.RulesDataStructure" project="Modular-Construction-of-Minimal-Models" 
+    file="/Modular-Construction-of-Minimal-Models/src/Rules/RulesDataStructure.java" binary="false" 
+    label="rulesDataStructure" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="593" y="0"/>  
+  </object>  
+  <object id="2" language="java" name="Rules.Rule" project="Modular-Construction-of-Minimal-Models" 
+    file="/Modular-Construction-of-Minimal-Models/src/Rules/Rule.java" binary="false" label="rule" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="593" y="0"/>  
+  </object>  
+  <object id="3" language="java" name="Rules.MinimalModel" project="Modular-Construction-of-Minimal-Models" 
+    file="/Modular-Construction-of-Minimal-Models/src/Rules/MinimalModel.java" binary="false" label="minimalModel" 
+    type="class" autoSize="true">    
+    <position height="-1" width="-1" x="593" y="0"/>  
+  </object>  
+  <object id="4" language="java" name="Rules.LinkedList.Node" project="Modular-Construction-of-Minimal-Models" 
+    file="/Modular-Construction-of-Minimal-Models/src/Rules/LinkedList.java" binary="false" label="node" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="593" y="0"/>  
+  </object>  
+  <object id="5" language="java" name="Rules.LinkedList" project="Modular-Construction-of-Minimal-Models" 
+    file="/Modular-Construction-of-Minimal-Models/src/Rules/LinkedList.java" binary="false" label="linkedList" 
+    type="class" autoSize="true">    
+    <position height="-1" width="-1" x="593" y="0"/>  
+  </object>  
+  <object id="6" language="java" name="Rules.DefaultHashMap" project="Modular-Construction-of-Minimal-Models" 
+    file="/Modular-Construction-of-Minimal-Models/src/Rules/DefaultHashMap.java" binary="false" label="defaultHashMap" 
+    type="class" autoSize="true">    
+    <position height="-1" width="-1" x="593" y="0"/>  
+  </object>  
+  <object id="7" language="java" name="Rules.DavisPutnamHelper" project="Modular-Construction-of-Minimal-Models" 
+    file="/Modular-Construction-of-Minimal-Models/src/Rules/DavisPutnamHelper.java" binary="false" 
+    label="davisPutnamHelper" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="593" y="0"/>  
+  </object>  
+  <object id="8" language="java" name="Rules.Clause" project="Modular-Construction-of-Minimal-Models" 
+    file="/Modular-Construction-of-Minimal-Models/src/Rules/Clause.java" binary="false" label="clause" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="593" y="0"/>  
+  </object>  
+  <object id="9" language="java" name="Graph.Vertex" project="Modular-Construction-of-Minimal-Models" 
+    file="/Modular-Construction-of-Minimal-Models/src/Graph/Vertex.java" binary="false" label="vertex" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="1226" y="0"/>  
+  </object>  
+  <object id="10" language="java" name="Graph.ValidTree" project="Modular-Construction-of-Minimal-Models" 
+    file="/Modular-Construction-of-Minimal-Models/src/Graph/ValidTree.java" binary="false" label="validTree" 
+    type="class" autoSize="true">    
+    <position height="-1" width="-1" x="1226" y="0"/>  
+  </object>  
+  <object id="11" language="java" name="Graph.SuperGraph" project="Modular-Construction-of-Minimal-Models" 
+    file="/Modular-Construction-of-Minimal-Models/src/Graph/SuperGraph.java" binary="false" label="superGraph" 
+    type="class" autoSize="true">    
+    <position height="-1" width="-1" x="1226" y="0"/>  
+  </object>  
+  <object id="12" language="java" name="Graph.StronglyConnectedComponent" 
+    project="Modular-Construction-of-Minimal-Models" 
+    file="/Modular-Construction-of-Minimal-Models/src/Graph/StronglyConnectedComponent.java" binary="false" 
+    label="stronglyConnectedComponent" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="1226" y="0"/>  
+  </object>  
+  <object id="13" language="java" name="Graph.Graph" project="Modular-Construction-of-Minimal-Models" 
+    file="/Modular-Construction-of-Minimal-Models/src/Graph/Graph.java" binary="false" label="graph" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="1226" y="0"/>  
+  </object>  
+  <object id="14" language="java" name="Graph.FordFulkerson" project="Modular-Construction-of-Minimal-Models" 
+    file="/Modular-Construction-of-Minimal-Models/src/Graph/FordFulkerson.java" binary="false" label="fordFulkerson" 
+    type="class" autoSize="true">    
+    <position height="-1" width="-1" x="1226" y="0"/>  
+  </object>  
+  <object id="15" language="java" name="Graph.Edge" project="Modular-Construction-of-Minimal-Models" 
+    file="/Modular-Construction-of-Minimal-Models/src/Graph/Edge.java" binary="false" label="edge" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="1226" y="0"/>  
+  </object>
+</sequence-diagram>
