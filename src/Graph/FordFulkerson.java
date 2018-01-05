@@ -21,7 +21,7 @@ import java.util.*;
  */
 public class FordFulkerson {
 
-	public int[] vertexArray;//= {"S","2","3","4","5","6","T"};
+	public static int[] vertexArray;//= {"S","2","3","4","5","6","T"};
 	public int[][] c;
 	private int maxFlow;
 	private Collection<Integer> T,S;
@@ -141,16 +141,16 @@ public class FordFulkerson {
 			}
 		}
         Vertex<Integer> v=new Vertex<Integer>(source);
-       System.out.println(vertexArray[source]+"->>>>>>>"+ source);
-         S.add(vertexArray[source]);
+//      System.out.println(vertexArray[source]+"->>>>>>>"+ source);
+        S.add(vertexArray[source]);
         T.remove(vertexArray[source]);
       //  System.out.println(parent);
-        System.out.println("T is:");
-        System.out.println(T);
-        System.out.println("S is:");
-        System.out.println(S);
+        System.out.println("T is:"+T);
+ //       System.out.println(T);
+        System.out.println("S is: "+S);
+ //       System.out.println();
        
-		 printAugmentedPaths(augmentedPaths,maxFlow);
+//		 printAugmentedPaths(augmentedPaths,maxFlow);
         this.maxFlow=maxFlow;
         return maxFlow;
     }
@@ -234,7 +234,12 @@ public class FordFulkerson {
 		graphMaxFlow.addEdge(5, 2, 1);
 		 FordFulkerson ff = new FordFulkerson(graphMaxFlow);
 		System.out.println(graphMaxFlow.getAllVertex());
-        System.out.println("\nMaximum capacity " + ff.maxFlow( 3, 2));
+        System.out.println("\nMaximum capacity " + ff.maxFlow( 0, 6));
+        System.out.println("vertexArray is :");
+        for (int i = 0; i < vertexArray.length; i++) {
+			System.out.print(vertexArray[i]+" ");
+		}
+        System.out.println();
         System.out.println("T: "+ff.getT());
 		 System.out.println("S: "+ ff.getS());
     }
