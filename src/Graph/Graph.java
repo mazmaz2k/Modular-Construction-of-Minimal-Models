@@ -30,14 +30,14 @@ public class Graph<T>{
 	public void addEdge(long id1, long id2){
 		addEdge(id1,id2,0);
 	}
-	
+
 	public boolean hasEdge(Vertex<T> v1 ,Vertex<T> v2) {
 		if(v1.getEdges().contains(v2)) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	//This works only for directed graph because for undirected graph we can end up
 	//adding edges two times to allEdges
 	public void addVertex(Vertex<T> vertex){
@@ -101,34 +101,41 @@ public class Graph<T>{
 			vertex.setData(data);
 		}
 	}
-	 /**
-     * Remove the vertex v from the graph.
-     * 
-     * @param v The vertex that will be removed.
-     */
-    public void removeVertex(Vertex<T> v) {
-        if (!this.allVertex.containsKey(v.getId())) {
-            throw new IllegalArgumentException("Vertex doesn't exist.");
-        }
-        
-        this.allVertex.remove(v.id);
-
-       
-           
-            	try {
-            		 for (Edge<T> e: getAllEdges()) {
-            		 if(e.getVertex2().equals(v) || e.getVertex1().equals(v)) {
-            		this.allEdges.remove(e);
-            		 }
-            		}
-            	}catch (Exception e2) {
-					// TODO: handle exception
-            		System.err.println("Remove Error");
+	public void removeEdge(Edge<T> edge) {
+		 List<Edge<T>> newEdgeList= new ArrayList<Edge<T>>();
+		 for(Edge<T> e: getAllEdges()) {
+			 if(!e.equals(edge)) {
+				 newEdgeList.add(e);
+			 }
+		 }
+		 this.allEdges=newEdgeList;
+	}
+	/**
+	 * Remove the vertex v from the graph.
+	 * 
+	 * @param v The vertex that will be removed.
+	 */
+	public Graph<Integer> removeVertex(ArrayList<Vertex<Integer>> vertexsListToRemove) {
+		Graph<Integer> newGraph= new Graph<Integer>(isDirected); 
+		try {
+//			System.out.println(" test:::------------------------------------------------------");
+			for (Edge<T> e: getAllEdges()) {
+				if(!vertexsListToRemove.contains(e.getVertex1()) && !vertexsListToRemove.contains(e.getVertex2())) {
+					//getAllEdges().remove(e);
+//					System.out.println("v1:" +e.getVertex1().getId()+" v2: "+e.getVertex2().getId());
+					newGraph.addEdge(e.getVertex1().getId(), e.getVertex2().getId(),1);
+//					System.out.println("end test ------------------------------------------");
 				}
-            
-        
+			}
 
-    }
+		}catch (Exception e2) {
+			// TODO: handle exception
+			System.err.println("Remove Error: "+e2);
+		}
+
+
+		return newGraph;
+	}
 
 	@Override
 	public String toString(){
@@ -142,9 +149,9 @@ public class Graph<T>{
 
 
 
-	
-/**	find cut from two set of vertexes id's collection
- * **/
+
+	/**	find cut from two set of vertexes id's collection
+	 * **/
 	public static Collection<Integer> cutLinkList(Collection<Integer> A,Collection<Integer> B){
 		Collection<Integer> A_B= new java.util.LinkedList<Integer>();
 		for(Integer a:A) {
@@ -154,8 +161,8 @@ public class Graph<T>{
 		}
 		return A_B;
 	}
-/**
- * we find source of the graph-omly the first source is relevant**/
+	/**
+	 * we find source of the graph-omly the first source is relevant**/
 	public static LinkedList sourceOfGraph(Graph<Integer>  graph)
 	{
 		StronglyConnectedComponent scc = new StronglyConnectedComponent();
@@ -174,10 +181,10 @@ public class Graph<T>{
 		return s;
 	}
 
-/**
- * convert clauses data structure in to graph body-->head
- * body  has edge to head
- * this is a directed**/
+	/**
+	 * convert clauses data structure in to graph body-->head
+	 * body  has edge to head
+	 * this is a directed**/
 	public static Graph<Integer> initGraph(RulesDataStructure DS ,int numOfRules) 
 	{
 
@@ -206,21 +213,21 @@ public class Graph<T>{
 
 					while(n2!=null)
 					{
-						
+
 						graph.addEdge(n1.var,n2.var);
 						n2=n2.next;
 					}
 					n1=n1.next;
 
 				}
-				
+
 			}
 
 
 		}
 		System.out.println("This is the Graph:");
 		System.out.println(graph);
-		
+
 
 		return graph;	
 	} 
@@ -249,14 +256,14 @@ public class Graph<T>{
 	/**FIND ALL K-edge connected component Algorithm !!
 	input graph(of strongest connected component/original graph) ,s vertex of connected component , N list of all vertexs in connected component
 	return auxiliary graph*/
-	
+
 	public static void constaruction(Graph<Integer> graph ,Vertex<Integer> s, Collection<Integer> N,Graph<Integer> auxiliaryGraph){
 		if(N==null||graph==null||s==null|| !N.contains((int)s.getId())) { //check if input are wrong -save recursive problems 
 			System.out.println("wrong input");
 			System.out.println(s.getId()+" "+N);
 			System.out.println("111111111111111111");
 
-					}
+		}
 
 		if(N.contains((int) s.getId()) && N.size()==1) { // exit condition from recursive 
 			System.out.println("Exit recursion");
@@ -291,9 +298,9 @@ public class Graph<T>{
 		//		//may need to add edge from t to s also!!
 		//System.out.println("------------s is : "+s.getId()+" t is: "+ t);
 		auxiliaryGraph.addEdge(s.getId(), t, x1);
-	//	auxiliaryGraph.addEdge(t, s.getId(), x1);
+		//	auxiliaryGraph.addEdge(t, s.getId(), x1);
 		Collection<Integer> N_S=cutLinkList(N,S); //find cut from two set of vertexes  
-	//	System.out.println("s is: "+s+"  S is:"+S+" N is: "+N+" the N_S Cut is: "+N_S);
+		//	System.out.println("s is: "+s+"  S is:"+S+" N is: "+N+" the N_S Cut is: "+N_S);
 		constaruction(graph,s,N_S,auxiliaryGraph);
 
 		Collection<Integer> N_T=cutLinkList(N,T);
@@ -304,12 +311,12 @@ public class Graph<T>{
 
 	/***unique Graph creation -create unique graph data structure for greatest connected component
 	we will return Graph from which we have double vertex number - I split all node to 2 nodes.**/
-	
+
 	public static Graph<Integer> uniqueGraphCreation(Graph<Integer> graph){
 		Graph<Integer> uniqueGraph=new Graph<Integer>(true);
 		for(Vertex<Integer> v:graph.getAllVertex()) {
-//			uniqueGraph.addSingleVertex(v.getId());
-//			uniqueGraph.addSingleVertex(v.getId()*(-1));
+			//			uniqueGraph.addSingleVertex(v.getId());
+			//			uniqueGraph.addSingleVertex(v.getId()*(-1));
 			uniqueGraph.addEdge(v.getId()*(-1), v.getId(), 1);
 			for(Edge<Integer> e: graph.getAllEdges()) {
 				if(e.getVertex2().equals(v)) {
@@ -317,17 +324,17 @@ public class Graph<T>{
 				}
 			}
 		}
-//		System.out.println("-------------------real Graph-----------------");
-//		System.out.println(graph);
-//		System.out.println("-------------------unique Graph-----------------");
+		//		System.out.println("-------------------real Graph-----------------");
+		//		System.out.println(graph);
+		//		System.out.println("-------------------unique Graph-----------------");
 		System.out.println(uniqueGraph);
 		return uniqueGraph;
 	}
 
-	
-	
-	
-	
+
+
+
+
 	/** Dismantle strongest connected component
 	 * return array of vertex which will be put in rules array**/
 	public static ArrayList<Vertex<Integer>> dismantlingStrongestCC(Graph<Integer> graph,Graph<Integer> auxiliaryGraph) {
@@ -337,11 +344,11 @@ public class Graph<T>{
 		Vertex<Integer> a=null,b = null;
 		for(Edge<Integer> e: auxiliaryGraph.getAllEdges()) { //find smallest K
 			if(e.getWeight()<min) {
-//				a=(int)e.getVertex1().getId();
-//				b=(int)e.getVertex2().getId();
+				//				a=(int)e.getVertex1().getId();
+				//				b=(int)e.getVertex2().getId();
 				a=e.getVertex1();
 				b=e.getVertex2();
-				
+
 			}
 		}
 		FordFulkerson fordFulkerson= new FordFulkerson(uniqeGraph); //find cut between a an b  
@@ -359,32 +366,47 @@ public class Graph<T>{
 					}
 				}
 			}
-			
+
 		}
 		for(Edge<Integer> e: edgeList) {
 			if(!vertexsListToRemove.contains(e.getVertex1())) {
 				vertexsListToRemove.add(e.getVertex1());
-				
+
 			}else {
 				vertexsListToRemove.add(e.getVertex2());
 			}
 		}
-		System.out.println("real graph is:");
-		System.out.println(graph);
-      StronglyConnectedComponent scc = new StronglyConnectedComponent();
-      List<Set<Vertex<Integer>>> result = scc.scc(graph);
+//		System.out.println("real graph is:");
+//		System.out.println(graph);
+		StronglyConnectedComponent scc = new StronglyConnectedComponent();
 
-      //print the result
-      result.forEach(set -> {
-          set.forEach(v -> System.out.print(v.getId() + " "));
-          System.out.println();
-      });
-      for(Vertex<Integer> v: vertexsListToRemove) {
-    	  graph.removeVertex(v);
-      }
-		System.out.println("New graph is:");
+		//for(Vertex<Integer> v: vertexsListToRemove) { //may not need to do it -anyway new graph is assembling   
+		//	graph.removeVertex(v);
+		//}
+		System.out.println("old coneccted component is:");
+
+		List<Set<Vertex<Integer>>> result1 = scc.scc(graph);
+
+		//print the result
+		result1.forEach(set -> {
+			set.forEach(v -> System.out.print(v.getId() + " "));
+			System.out.println();
+		});
+		System.out.println("End old coneccted component is:");
+		graph=graph.removeVertex(vertexsListToRemove);
 		System.out.println("vertex that removed: "+vertexsListToRemove);
+		System.out.println("New graph is:");
 		System.out.println(graph);
+		System.out.println("New coneccted component is:");
+
+		List<Set<Vertex<Integer>>> result = scc.scc(graph);
+
+		//print the result
+		result.forEach(set -> {
+			set.forEach(v -> System.out.print(v.getId() + " "));
+			System.out.println();
+		});
+		System.out.println("End New coneccted component is:");
 
 		return vertexsListToRemove;
 	}
@@ -561,14 +583,14 @@ public class Graph<T>{
 		for(Vertex<Integer> v:graphMaxFlow.getAllVertex()) 
 		{
 			N.add((int) v.getId());
-		
+
 		}
 
 		//System.out.println(N);
 		constaruction(graphMaxFlow,s,N,A);
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 		System.out.println("A graph: ");
-		System.out.println(A);
+//		System.out.println(A);
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 		ArrayList<Vertex<Integer>> arr= dismantlingStrongestCC(graphMaxFlow,A);
 
@@ -596,7 +618,7 @@ public class Graph<T>{
 		//		}
 		//		System.out.println("\nMaximum capacity " + ff.maxFlow(capacity, 0, 6));
 		Graph<Integer> g=uniqueGraphCreation(graphMaxFlow);
-//		System.out.println(g.getAllVertex().size()+"->"+graphMaxFlow.getAllVertex().size());
+		//		System.out.println(g.getAllVertex().size()+"->"+graphMaxFlow.getAllVertex().size());
 	}	
 	// find an vertex index in array of vertexes return -1 if not there
 	public static int findInArray(int[] arr,long a) {
