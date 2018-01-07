@@ -216,6 +216,8 @@ public class MinimalModel extends Graph<Integer>{
 			if(s.getSize() > 0.2*g.getAllVertex().size())
 			{
 				/**get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS*/
+				//Graph<Integer> connectedComponentGraph = copyGraph(s, g);
+				int[] a=dismntleToArray(g,s); 
 			}
 			/*	int[] v = {1 ,2 ,3}; 
 				System.out.println("=======================================================");

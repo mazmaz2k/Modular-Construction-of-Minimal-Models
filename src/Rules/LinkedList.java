@@ -105,6 +105,17 @@ public class LinkedList
 	{
 		return numNodes;
 	}
+	public boolean contains(int var)
+	{
+		Node n = head;
+		while(n!=null)
+		{
+			if(var==n.var)
+				return true;
+			n=n.next;
+		}
+		return false;
+	}
 	
 	
 	/*public static void main(String [] args)

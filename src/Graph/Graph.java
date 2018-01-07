@@ -162,7 +162,7 @@ public class Graph<T>{
 		return A_B;
 	}
 	/**
-	 * we find source of the graph-omly the first source is relevant**/
+	 * we find source of the graph-only the first source is relevant**/
 	public static LinkedList sourceOfGraph(Graph<Integer>  graph)
 	{
 		StronglyConnectedComponent scc = new StronglyConnectedComponent();
@@ -172,12 +172,12 @@ public class Graph<T>{
 		{
 			return s;
 		}
-		for (Vertex<Integer> vertex : result.get(0)) 
+		for (Vertex<Integer> vertex : result.get(0)) // go over first set of vertex
 		{
-			s.addAtTail((int)vertex.getId());
+			s.addAtTail((int)vertex.getId());	//add to source arrayList 
 		}
-
-
+		
+	
 		return s;
 	}
 
@@ -233,19 +233,20 @@ public class Graph<T>{
 	} 
 	/**input original graph and set of vertexes and return (create) a smaller graph from those set of vertexes */
 
-	public static Graph<Integer> copyGraph(Set<Vertex<Integer>> setOfVertex,Graph<Integer> oldGraph) {
+	public static Graph<Integer> copyGraph(LinkedList setOfVertex,Graph<Integer> oldGraph) {
 		Graph<Integer> newGraph = new Graph<>(true);
-
-		for(Vertex<Integer> v:setOfVertex) {
-
+		Node n = setOfVertex.head;
+		while(n!=null)
+		{
 			for(Edge<Integer> e : oldGraph.getAllEdges()) {
 
-				if( v.getId()==e.getVertex1().getId()) {
-					newGraph.addEdge(v.getId(), e.getVertex2().getId());
+				if( n.var==e.getVertex1().getId() && setOfVertex.contains((int)e.getVertex2().getId())) {
+					newGraph.addEdge(n.var, e.getVertex2().getId());
 					//System.out.println("v1: "+v.getId()+" v2: "+e.getVertex2().getId());
 				}
 
 			}
+			n=n.next;
 		}
 
 		//System.out.println(newGraph.getAllEdges().toString());
@@ -355,14 +356,14 @@ public class Graph<T>{
 	
 //		System.out.println(a.getId()+" "+b.getId());
 		Graph<Integer> uniqeGraph=uniqueGraphCreation(graph); // duplicate graph to change K-edge connected component to find vertex to remove
-		for(Vertex<Integer> v: uniqeGraph.getAllVertex()) {
-			if(v.getId()==1) {
-				a=v;
-			}
-			if(v.getId()==-5) {
-				b=v;
-			}
-		}
+//		for(Vertex<Integer> v: uniqeGraph.getAllVertex()) {
+//			if(v.getId()==1) {
+//				a=v;
+//			}
+//			if(v.getId()==-5) {
+//				b=v;
+//			}
+//		}
 		FordFulkerson fordFulkerson= new FordFulkerson(uniqeGraph); //find cut between a an b  
 //		System.out.println("a is: "+a.getId()+" b is: "+ b.getId()+"----------------------------------------------------------");
 		int maxflow=fordFulkerson.maxFlow(fordFulkerson.findVertexIndex(a), fordFulkerson.findVertexIndex(b));
@@ -431,6 +432,47 @@ public class Graph<T>{
 		return vertexsListToRemove;
 	}
 
+//  unite all dismantle graph methodes 
+	//ALL OF THAT IN COPY GRAPH: change name of method copy graph to something else
+	//receve a source
+	//create graph from the sorce
+	//send the graph to dismantle methods
+	//return array of vertexes to main
+	public static int[] dismntleToArray(Graph<Integer> graph,LinkedList source) {
+
+		Graph<Integer> connectedComponentGraph = copyGraph(source, graph);
+
+		Graph<Integer> A = new Graph<>(false);
+		Node n=source.head;
+		Vertex<Integer> s=null;//new Vertex<Integer>(10);
+
+		while(n!=null) {
+			s=new Vertex<Integer>(n.var);
+			//n=n.next;
+		}
+		
+		
+		Collection<Integer> N=new java.util.LinkedList<Integer>();
+		for(Vertex<Integer> v:connectedComponentGraph.getAllVertex()) 
+		{
+			N.add((int) v.getId());
+
+		}
+
+		//System.out.println(N);
+		constaruction(connectedComponentGraph,s,N,A);
+//		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+//		System.out.println("A graph: ");
+//		System.out.println(A);
+//		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+		ArrayList<Vertex<Integer>> arr= dismantlingStrongestCC(connectedComponentGraph,A);
+		int [] a=new int[arr.size()];
+		int i=0;
+		for(Vertex<Integer> v: arr) {
+			a[i]=(int)v.getId();
+		}
+		return a;
+	}
 
 	public static void main(String args[]){
 		Graph<Integer> graph = new Graph<>(true);
@@ -475,16 +517,16 @@ public class Graph<T>{
 			}
 
 		}
-		Graph<Integer> graphStrongestConnectedComponnent =copyGraph(vList,graph);
-		System.out.println("\n Origunal graph : \n"+graph+"\n\n ");		
-
-		System.out.println("Strongest CC : " +vList);
-		System.out.println("\n graph Strongest Connected Componnent: \n"+graphStrongestConnectedComponnent+"\n\n ");		
-		result.forEach(set -> {
-
-			set.forEach(v -> System.out.print(v.getId() + "-> "));
-			System.out.println();
-		});
+//		Graph<Integer> graphStrongestConnectedComponnent =copyGraph(vList,graph);
+//		System.out.println("\n Origunal graph : \n"+graph+"\n\n ");		
+//
+//		System.out.println("Strongest CC : " +vList);
+//		System.out.println("\n graph Strongest Connected Componnent: \n"+graphStrongestConnectedComponnent+"\n\n ");		
+//		result.forEach(set -> {
+//
+//			set.forEach(v -> System.out.print(v.getId() + "-> "));
+//			System.out.println();
+//		});
 		Graph<Integer> graphMaxFlow = new Graph<>(true);
 		graphMaxFlow.addEdge(10, 3, 1);
 		graphMaxFlow.addEdge(10, 4, 1);
