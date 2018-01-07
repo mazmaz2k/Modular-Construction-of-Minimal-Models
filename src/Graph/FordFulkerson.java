@@ -80,7 +80,8 @@ public class FordFulkerson {
 	}
 	
     public int maxFlow( int source, int sink){
-
+    	T.clear();
+    	S.clear();
     	int capacity[][]=this.c;
         //declare and initialize residual capacity as total avaiable capacity initially.
         int residualCapacity[][] = new int[capacity.length][capacity[0].length];

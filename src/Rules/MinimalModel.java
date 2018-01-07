@@ -52,20 +52,20 @@ public class MinimalModel extends Graph<Integer>{
 	 * Initialize the contents of the frame.
 	 */
 	private void init() {
-		
+
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		
+
+
 		JLabel lblPath = new JLabel("Path: ");
 		textField = new JTextField();
 		textField.setColumns(10);
-		
+
 		textField.setText(".\\CnfFile.txt");
-		
-		
-		
+
+
+
 		JButton btnReadFile = new JButton("Read File");
 		JLabel lblNewLabel_1 = new JLabel("");
 
@@ -76,11 +76,11 @@ public class MinimalModel extends Graph<Integer>{
 				int var ;
 				int index = 0;
 				int numOfRules;
-				
+
 
 				try 
 				{
-					
+
 					String Path = textField.getText();
 					sc = new Scanner(new File(Path));//read file
 					numOfRules = sc.nextInt();
@@ -105,16 +105,16 @@ public class MinimalModel extends Graph<Integer>{
 					lblNewLabel_1.setText("Error on reading the file");
 					lblNewLabel_1.setForeground(Color.RED);
 
-				
+
 				}
-				
+
 			}
 		});
-		
+
 		JLabel lblNewLabel = new JLabel("");
 		JButton btnFindMinimalModel = new JButton("Find Minimal Model");
 		JLabel lblNewLabel_2 = new JLabel("");
-		
+
 		btnFindMinimalModel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
@@ -122,15 +122,15 @@ public class MinimalModel extends Graph<Integer>{
 				{
 					// btnFindMinimalModel.setEnabled(false);
 					lblNewLabel_2.setText("");
-				//	LinkedList l=DS.checkFormat();
-				//	if(l.getSize()==0)
-				//	{
-						if(ModuMin(DS))
-							lblNewLabel.setText("SAT The minimal model is: " + DS.StringMinimalModel());
-						else
-							lblNewLabel.setText(" UNSAT ");
-							
-				/*	}
+					//	LinkedList l=DS.checkFormat();
+					//	if(l.getSize()==0)
+					//	{
+					if(ModuMin(DS))
+						lblNewLabel.setText("SAT The minimal model is: " + DS.StringMinimalModel());
+					else
+						lblNewLabel.setText(" UNSAT ");
+
+					/*	}
 					else
 					{
 						System.out.println("Please correct lines: ");
@@ -144,101 +144,101 @@ public class MinimalModel extends Graph<Integer>{
 					lblNewLabel_2.setText("Please read a file");
 					lblNewLabel_2.setForeground(Color.RED);
 					lblNewLabel_2.setHorizontalAlignment(JLabel.CENTER);
-				    lblNewLabel_2.setVerticalAlignment(JLabel.CENTER);
+					lblNewLabel_2.setVerticalAlignment(JLabel.CENTER);
 				}
 			}
 		});
-		
-		
-		
-		
-		
+
+
+
+
+
 
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+				groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(77)
-							.addComponent(lblPath)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(172)
-							.addComponent(btnReadFile)
-							.addGap(18)
-							.addComponent(lblNewLabel_1))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(156)
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(lblNewLabel_2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(btnFindMinimalModel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-					.addContainerGap())
-		);
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createSequentialGroup()
+										.addGap(77)
+										.addComponent(lblPath)
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addComponent(textField, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+										.addGap(172)
+										.addComponent(btnReadFile)
+										.addGap(18)
+										.addComponent(lblNewLabel_1))
+								.addGroup(groupLayout.createSequentialGroup()
+										.addContainerGap()
+										.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE))
+								.addGroup(groupLayout.createSequentialGroup()
+										.addGap(156)
+										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+												.addComponent(lblNewLabel_2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(btnFindMinimalModel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+						.addContainerGap())
+				);
 		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+				groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblPath)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnReadFile)
-						.addComponent(lblNewLabel_1))
-					.addGap(41)
-					.addComponent(btnFindMinimalModel)
-					.addGap(18)
-					.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
-					.addGap(11)
-					.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
-					.addContainerGap())
-		);
+						.addContainerGap()
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblPath)
+								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnReadFile)
+								.addComponent(lblNewLabel_1))
+						.addGap(41)
+						.addComponent(btnFindMinimalModel)
+						.addGap(18)
+						.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
+						.addGap(11)
+						.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
+						.addContainerGap())
+				);
 		frame.getContentPane().setLayout(groupLayout);
 	}
-	
+
 	public static boolean ModuMin(RulesDataStructure DS )
 	{
-			int size = DS.SIZE;			
-			while(DS.SIZE!=0)
+		int size = DS.SIZE;			
+		while(DS.SIZE!=0)
+		{
+
+			System.out.println("SIZE OF T: " +DS.SIZE);
+			DS.printRulesArray();
+			//DS.checkForUnits();//remove empty sources
+			Graph<Integer> g = initGraph(DS, size);
+			LinkedList s = sourceOfGraph(g);
+			s.printList();
+			if(s.getSize() > 0.2*g.getAllVertex().size())
 			{
-				
-				System.out.println("SIZE OF T: " +DS.SIZE);
-				DS.printRulesArray();
-				//DS.checkForUnits();//remove empty sources
-				Graph<Integer> g = initGraph(DS, size);
-				LinkedList s = sourceOfGraph(g);
-				s.printList();
-				if(s.getSize() > 0.2*g.getAllVertex().size())
-				{
-					/**get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS*/
-				}
+				/**get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS*/
+			}
 			/*	int[] v = {1 ,2 ,3}; 
 				System.out.println("=======================================================");
 				DS.split(v);
 				System.out.println("=======================================================");
-*/
-				LinkedList Ts=DS.Ts(s);
-				//Ts.printList();
-				if(!DS.FindMinimalModelForTs(Ts))
-				{
-					System.out.println("UNSAT");
-					System.out.println("The amount of time we put value in a variable is : " + DS.counter);
-					return false;
-				}
-				DS.updateRuleDS();
+			 */
+			LinkedList Ts=DS.Ts(s);
+			//Ts.printList();
+			if(!DS.FindMinimalModelForTs(Ts))
+			{
+				System.out.println("UNSAT");
+				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
+				return false;
 			}
-			System.out.println("The amount of times we put value in a variable is : " + DS.counter);
-			return true;
+			DS.updateRuleDS();
+		}
+		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
+		return true;
 		//	DS.printValueOfVariables();
-			
-		
+
+
 	}
-	
-		
-	
+
+
+
 }

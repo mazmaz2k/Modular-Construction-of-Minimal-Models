@@ -338,36 +338,56 @@ public class Graph<T>{
 	/** Dismantle strongest connected component
 	 * return array of vertex which will be put in rules array**/
 	public static ArrayList<Vertex<Integer>> dismantlingStrongestCC(Graph<Integer> graph,Graph<Integer> auxiliaryGraph) {
-		Graph<Integer> uniqeGraph=uniqueGraphCreation(auxiliaryGraph); // duplicate graph to change K-edge connected component to find vertex to remove
 		//int[] vertexArray=new int[auxiliaryGraph.allVertex.size()]; //array of vertex id's so return to Rules Data structure 
 		int min=Integer.MAX_VALUE;
 		Vertex<Integer> a=null,b = null;
+		System.out.println(auxiliaryGraph);
 		for(Edge<Integer> e: auxiliaryGraph.getAllEdges()) { //find smallest K
 			if(e.getWeight()<min) {
 				//				a=(int)e.getVertex1().getId();
 				//				b=(int)e.getVertex2().getId();
 				a=e.getVertex1();
 				b=e.getVertex2();
+				min=e.getWeight();
 
 			}
 		}
+	
+//		System.out.println(a.getId()+" "+b.getId());
+		Graph<Integer> uniqeGraph=uniqueGraphCreation(graph); // duplicate graph to change K-edge connected component to find vertex to remove
+		for(Vertex<Integer> v: uniqeGraph.getAllVertex()) {
+			if(v.getId()==1) {
+				a=v;
+			}
+			if(v.getId()==-5) {
+				b=v;
+			}
+		}
 		FordFulkerson fordFulkerson= new FordFulkerson(uniqeGraph); //find cut between a an b  
-		System.out.println("a is: "+a.getId()+" b is: "+ b.getId()+"----------------------------------------------------------");
+//		System.out.println("a is: "+a.getId()+" b is: "+ b.getId()+"----------------------------------------------------------");
 		int maxflow=fordFulkerson.maxFlow(fordFulkerson.findVertexIndex(a), fordFulkerson.findVertexIndex(b));
+		if(maxflow>min) {
+			//int maxflow2=fordFulkerson.maxFlow(fordFulkerson.findVertexIndex(b), fordFulkerson.findVertexIndex(a));//neeed more work
+		}
+
 		Collection<Integer> S =fordFulkerson.getS(); // find S- set of vertex before the cut
 		Collection<Integer> T =fordFulkerson.getT(); // find T- set of vertex behind the cut
 		ArrayList<Edge<Integer>> edgeList=new ArrayList<>(); //array list to hold all the edges of the CUT !
 		ArrayList<Vertex<Integer>> vertexsListToRemove= new ArrayList<>();
-		for(Vertex<Integer> v: graph.getAllVertex()) {
+		System.out.println("soooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+		for(Vertex<Integer> v: uniqeGraph.getAllVertex()) {
 			if(S.contains((int)v.getId())) {
 				for(Edge<Integer> e : v.getEdges()) {
 					if(T.contains((int)e.getVertex2().getId())) {
 						edgeList.add(e); //add edge  of the cut 
+						System.out.println(e);
 					}
 				}
 			}
 
 		}
+		System.out.println("soooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+
 		for(Edge<Integer> e: edgeList) {
 			if(!vertexsListToRemove.contains(e.getVertex1())) {
 				vertexsListToRemove.add(e.getVertex1());
@@ -590,7 +610,7 @@ public class Graph<T>{
 		constaruction(graphMaxFlow,s,N,A);
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 		System.out.println("A graph: ");
-//		System.out.println(A);
+		System.out.println(A);
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 		ArrayList<Vertex<Integer>> arr= dismantlingStrongestCC(graphMaxFlow,A);
 
