@@ -238,8 +238,11 @@ public class Graph<T>{
 		Node n = setOfVertex.head;
 		while(n!=null)
 		{
+			if(oldGraph.getAllVertex().contains(oldGraph.getVertex((int)n.var))){
+				newGraph.addSingleVertex(n.var);
+			}
 			for(Edge<Integer> e : oldGraph.getAllEdges()) {
-
+				
 				if( n.var==e.getVertex1().getId() && setOfVertex.contains((int)e.getVertex2().getId())) {
 					newGraph.addEdge(n.var, e.getVertex2().getId());
 					//System.out.println("v1: "+v.getId()+" v2: "+e.getVertex2().getId());
@@ -262,7 +265,7 @@ public class Graph<T>{
 		if(N==null||graph==null||s==null|| !N.contains((int)s.getId())) { //check if input are wrong -save recursive problems 
 			System.out.println("wrong input");
 			System.out.println(s.getId()+" "+N);
-			System.out.println("111111111111111111");
+	//		System.out.println("111111111111111111");
 
 		}
 
@@ -278,6 +281,7 @@ public class Graph<T>{
 		}
 		if(t==-1) { //check t is in N- if not there is problem in recursive
 			System.out.println("Error:  N is Empty");
+		
 		}
 		System.out.println("s is : "+s.getId()+" t is: "+t);
 		FordFulkerson f1=new FordFulkerson(graph);	//find flow from s to t
@@ -342,7 +346,10 @@ public class Graph<T>{
 		//int[] vertexArray=new int[auxiliaryGraph.allVertex.size()]; //array of vertex id's so return to Rules Data structure 
 		int min=Integer.MAX_VALUE;
 		Vertex<Integer> a=null,b = null;
+		System.out.println("A graph is:");
 		System.out.println(auxiliaryGraph);
+		System.out.println("end of A graph ");
+
 		for(Edge<Integer> e: auxiliaryGraph.getAllEdges()) { //find smallest K
 			if(e.getWeight()<min) {
 				//				a=(int)e.getVertex1().getId();
@@ -365,7 +372,7 @@ public class Graph<T>{
 //			}
 //		}
 		FordFulkerson fordFulkerson= new FordFulkerson(uniqeGraph); //find cut between a an b  
-//		System.out.println("a is: "+a.getId()+" b is: "+ b.getId()+"----------------------------------------------------------");
+		System.out.println("a is: "+a.getId()+" b is: "+ b.getId()+"----------------------------------------------------------");
 		int maxflow=fordFulkerson.maxFlow(fordFulkerson.findVertexIndex(a), fordFulkerson.findVertexIndex(b));
 		if(maxflow>min) {
 			//int maxflow2=fordFulkerson.maxFlow(fordFulkerson.findVertexIndex(b), fordFulkerson.findVertexIndex(a));//neeed more work
@@ -399,35 +406,35 @@ public class Graph<T>{
 		}
 //		System.out.println("real graph is:");
 //		System.out.println(graph);
-		StronglyConnectedComponent scc = new StronglyConnectedComponent();
+//		StronglyConnectedComponent scc = new StronglyConnectedComponent();
 
 		//for(Vertex<Integer> v: vertexsListToRemove) { //may not need to do it -anyway new graph is assembling   
 		//	graph.removeVertex(v);
 		//}
-		System.out.println("old coneccted component is:");
+//		System.out.println("old coneccted component is:");
 
-		List<Set<Vertex<Integer>>> result1 = scc.scc(graph);
+//		List<Set<Vertex<Integer>>> result1 = scc.scc(graph);
 
-		//print the result
-		result1.forEach(set -> {
-			set.forEach(v -> System.out.print(v.getId() + " "));
-			System.out.println();
-		});
-		System.out.println("End old coneccted component is:");
-		graph=graph.removeVertex(vertexsListToRemove);
-		System.out.println("vertex that removed: "+vertexsListToRemove);
-		System.out.println("New graph is:");
-		System.out.println(graph);
-		System.out.println("New coneccted component is:");
+		////print the result
+//		result1.forEach(set -> {
+//			set.forEach(v -> System.out.print(v.getId() + " "));
+//			System.out.println();
+//		});
+//		System.out.println("End old coneccted component is:");
+//		graph=graph.removeVertex(vertexsListToRemove);
+//		System.out.println("vertex that removed: "+vertexsListToRemove);
+//		System.out.println("New graph is:");
+//		System.out.println(graph);
+//		System.out.println("New coneccted component is:");
 
-		List<Set<Vertex<Integer>>> result = scc.scc(graph);
+//		List<Set<Vertex<Integer>>> result = scc.scc(graph);
 
-		//print the result
-		result.forEach(set -> {
-			set.forEach(v -> System.out.print(v.getId() + " "));
-			System.out.println();
-		});
-		System.out.println("End New coneccted component is:");
+//		//print the result
+//		result.forEach(set -> {
+//			set.forEach(v -> System.out.print(v.getId() + " "));
+//			System.out.println();
+//		});
+//		System.out.println("End New coneccted component is:");
 
 		return vertexsListToRemove;
 	}
@@ -461,13 +468,28 @@ public class Graph<T>{
 			N.add((int) v.getId());
 
 		}
+//		System.out.println("check here---------------------------------------------------------------------------");
+//		System.out.println(connectedComponentGraph);
+//		System.out.println(N);
+		
+//		System.out.println("source is: -------------\n"+s+"\n end source");
 
-		//System.out.println(N);
+//		System.out.println("connectedComponentGraph is: -------------\n"+connectedComponentGraph.getAllVertex()+"\n end connectedComponentGraph");
+//
+//		System.out.println("check here---------------------------------------------------------------------------");
+//		System.out.println(N+"N is: -------------");
 		constaruction(connectedComponentGraph,s,N,A);
 //		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
-//		System.out.println("A graph: ");
-//		System.out.println(A);
+//		System.out.println("connectedComponentGraph graph: ");
+//		System.out.println("A is: -------------\n"+A+"\n end A");
+
+//		System.out.println(connectedComponentGraph);
 //		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+		if(A.getAllVertex().size()==0) {
+			int[] a=new int[1];
+			a[0]=(int)s.getId();
+			return a;
+		}
 		ArrayList<Vertex<Integer>> arr= dismantlingStrongestCC(connectedComponentGraph,A);
 		int [] a=new int[arr.size()];
 		int i=0;
