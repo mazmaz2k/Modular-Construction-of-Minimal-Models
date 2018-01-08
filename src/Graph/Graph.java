@@ -446,9 +446,13 @@ public class Graph<T>{
 		Node n=source.head;
 		Vertex<Integer> s=null;//new Vertex<Integer>(10);
 
-		while(n!=null) {
+		if(n!=null) {
 			s=new Vertex<Integer>(n.var);
 			//n=n.next;
+		}
+		else
+		{
+			System.out.println("ERROR SOURCE IS EMPTY");
 		}
 		
 		
