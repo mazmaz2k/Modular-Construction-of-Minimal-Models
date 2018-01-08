@@ -443,15 +443,19 @@ public class Graph<T>{
 		Graph<Integer> connectedComponentGraph = copyGraph(source, graph);
 
 		Graph<Integer> A = new Graph<>(false);
-		Node n=source.head;
 		Vertex<Integer> s=null;//new Vertex<Integer>(10);
 
-		while(n!=null) {
-			s=new Vertex<Integer>(n.var);
-			//n=n.next;
+//		while(n!=null) {
+//			s=new Vertex<Integer>(n.var);
+//			//n=n.next;
+//		}
+		Node n=source.head;
+
+		if(n==null) {
+			System.err.println("error in linked list DS");
+			return null;
 		}
-		
-		
+		s=new Vertex<Integer>(n.var);
 		Collection<Integer> N=new java.util.LinkedList<Integer>();
 		for(Vertex<Integer> v:connectedComponentGraph.getAllVertex()) 
 		{
