@@ -445,11 +445,6 @@ public class Graph<T>{
 		Graph<Integer> A = new Graph<>(false);
 		Vertex<Integer> s=null;//new Vertex<Integer>(10);
 
-<<<<<<< HEAD
-//		while(n!=null) {
-//			s=new Vertex<Integer>(n.var);
-//			//n=n.next;
-//		}
 		Node n=source.head;
 
 		if(n==null) {
@@ -457,18 +452,9 @@ public class Graph<T>{
 			return null;
 		}
 		s=new Vertex<Integer>(n.var);
-=======
-		if(n!=null) {
-			s=new Vertex<Integer>(n.var);
-			//n=n.next;
-		}
-		else
-		{
-			System.out.println("ERROR SOURCE IS EMPTY");
-		}
+
 		
 		
->>>>>>> aefcadd995f098a9272405d0a7284e65ca1dfa8e
 		Collection<Integer> N=new java.util.LinkedList<Integer>();
 		for(Vertex<Integer> v:connectedComponentGraph.getAllVertex()) 
 		{
