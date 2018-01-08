@@ -212,28 +212,33 @@ public class MinimalModel extends Graph<Integer>{
 			//DS.checkForUnits();//remove empty sources
 			Graph<Integer> g = initGraph(DS, size);
 			LinkedList s = sourceOfGraph(g);
+			System.out.println("print the source");
 			s.printList();
+			/**If we have a large source 
+			 * then we build a graph from the source which is a connected component
+			 *  and dismantle the connected component by removing some vertexes */
 			if(s.getSize() > 0.2*g.getAllVertex().size())
 			{
+				System.out.println("Dismantle the CC");
 				/**get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS*/
-				//Graph<Integer> connectedComponentGraph = copyGraph(s, g);
 				int[] a=dismntleToArray(g,s); 
+				DS.splitConnectedComponent(a);
 			}
-			/*	int[] v = {1 ,2 ,3}; 
-				System.out.println("=======================================================");
-				DS.split(v);
-				System.out.println("=======================================================");
-			 */
-			LinkedList Ts=DS.Ts(s);
-			//Ts.printList();
-			if(!DS.FindMinimalModelForTs(Ts))
+			else
 			{
-				System.out.println("UNSAT");
-				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
-				return false;
+				LinkedList Ts=DS.Ts(s);
+				Ts.printList();
+				if(!DS.FindMinimalModelForTs(Ts))
+				{
+					System.out.println("UNSAT");
+					System.out.println("The amount of time we put value in a variable is : " + DS.counter);
+					return false;
+				}
+				DS.updateRuleDS();
 			}
-			DS.updateRuleDS();
 		}
+		
+		
 		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
 		return true;
 		//	DS.printValueOfVariables();

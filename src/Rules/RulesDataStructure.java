@@ -489,6 +489,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	
     }
     
+    /**check if variable exist in the set of rules*/
     public boolean variableExist(int var)
     {
     	LinkedList l = varHT.get(var);
@@ -498,7 +499,10 @@ public class RulesDataStructure extends DavisPutnamHelper
     	}
     	return true;
     }
-    public boolean conflictExist(int var ,boolean b)
+    
+    /**check if we can put value inside the variable
+     * by the rules of logic*/
+    public boolean conflictExist(int var ,boolean val)
     {
     	LinkedList l = varHT.get(var);
     	if(variableExist(var))
@@ -509,11 +513,11 @@ public class RulesDataStructure extends DavisPutnamHelper
     			int sizeOfBody, sizeOfHead;
     			sizeOfBody = RulesArray[n.var].body.getSize();
     			sizeOfHead = RulesArray[n.var].head.getSize();
-    			if( (existInBody(var,n.var )) && sizeOfBody==1 && b &&sizeOfHead==0)
+    			if( (existInBody(var,n.var )) && sizeOfBody==1 && val &&sizeOfHead==0)
     			{
     				return true;
     			}
-    			else if((existInHead(var,n.var)) && sizeOfHead==1 && !b &&sizeOfBody==0)
+    			else if((existInHead(var,n.var)) && sizeOfHead==1 && !val &&sizeOfBody==0)
     			{
     				return true;
     			}
@@ -526,7 +530,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	return false;   	
     }
     
-    
+    /**receive a rule number an delete the rule from rules array*/
     private void deleteRule(int ruleNum)
     {
     	updateHT(0,ruleNum);
@@ -535,6 +539,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	RulesArray[ruleNum]=null;
     }
     
+    /**delete variable from body inside rules array */
     private void deleteVarFromBody(int var, int ruleNum)
     {
     	updateHT(var, ruleNum);
@@ -552,6 +557,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     		n=n.next;
     	}
     }
+    /**delete variable from head inside rules array*/
     private void deleteVarFromHead(int var, int ruleNum)
     {
     	updateHT(var, ruleNum);
@@ -570,6 +576,8 @@ public class RulesDataStructure extends DavisPutnamHelper
     	}
     }
     
+    /**update the hash table of the variables
+     * on every changes we make */
     private void updateHT(int var , int ruleNum)
     {
     	if(var==0)//from deleteRule method
@@ -636,7 +644,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	}   	
     	
     }
-    
+    /**return a string of the minimal model */
     public String StringMinimalModel()
     {
     	String str= "[ ";
@@ -732,6 +740,8 @@ public class RulesDataStructure extends DavisPutnamHelper
 		}
     	
     }
+    /**return a binary value of the number 
+     * ,the (base) last bits */
      private boolean[] toBinary(int number, int base)
      {
         final boolean[] ret = new boolean[base];

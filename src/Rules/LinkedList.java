@@ -118,7 +118,7 @@ public class LinkedList
 	}
 	
 	
-	/*public static void main(String [] args)
+/*	public static void main(String [] args)
 	{
 		System.out.println("/=/=/=/= TESTING /=/=/=/=");
 		LinkedList ll = new LinkedList();
@@ -126,14 +126,12 @@ public class LinkedList
 		ll.addAtTail(15);
 		ll.addAtTail(14);
 		ll.addAtHead(13);
-		ll.deleteAtIndex(0);
-
 		
 		
 		ll.printList();
 		
-	}*/
-	
+	}
+	*/
 	
 	
 }
