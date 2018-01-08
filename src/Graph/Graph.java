@@ -433,11 +433,11 @@ public class Graph<T>{
 	}
 
 //  unite all dismantle graph methodes 
-	//ALL OF THAT IN COPY GRAPH: change name of method copy graph to something else
-	//receve a source
-	//create graph from the sorce
-	//send the graph to dismantle methods
-	//return array of vertexes to main
+//	ALL OF THAT IN COPY GRAPH: change name of method copy graph to something else
+//	receve a source
+//	create graph from the sorce
+//	send the graph to dismantle methods
+//	return array of vertexes to main
 	public static int[] dismntleToArray(Graph<Integer> graph,LinkedList source) {
 
 		Graph<Integer> connectedComponentGraph = copyGraph(source, graph);
