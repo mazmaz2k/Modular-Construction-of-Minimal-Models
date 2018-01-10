@@ -87,6 +87,30 @@ public class Graph<T>{
 		}
 
 	}
+	public void addEdge(long id1,long id2, int weight,int sizeOfS){
+		Vertex<T> vertex1 = null;
+		if(allVertex.containsKey(id1)){
+			vertex1 = allVertex.get(id1);
+		}else{
+			vertex1 = new Vertex<T>(id1);
+			allVertex.put(id1, vertex1);
+		}
+		Vertex<T> vertex2 = null;
+		if(allVertex.containsKey(id2)){
+			vertex2 = allVertex.get(id2);
+		}else{
+			vertex2 = new Vertex<T>(id2);
+			allVertex.put(id2, vertex2);
+		}
+
+		Edge<T> edge = new Edge<T>(vertex1,vertex2,isDirected,weight,sizeOfS);
+		allEdges.add(edge);
+		vertex1.addAdjacentVertex(edge, vertex2);
+		if(!isDirected){
+			vertex2.addAdjacentVertex(edge, vertex1);
+		}
+
+	}
 
 	public List<Edge<T>> getAllEdges(){
 		return allEdges;
@@ -141,7 +165,7 @@ public class Graph<T>{
 	public String toString(){
 		StringBuffer buffer = new StringBuffer();
 		for(Edge<T> edge : getAllEdges()){
-			buffer.append(edge.getVertex1() + " " + edge.getVertex2() + " " + edge.getWeight());
+			buffer.append(edge.getVertex1() + " -> " + edge.getVertex2() + " w: " + edge.getWeight() +" s size:"+ edge.getS());
 			buffer.append("\n");
 		}
 		return buffer.toString();
@@ -262,11 +286,9 @@ public class Graph<T>{
 	return auxiliary graph*/
 
 	public static void constaruction(Graph<Integer> graph ,Vertex<Integer> s, Collection<Integer> N,Graph<Integer> auxiliaryGraph){
-		if(N==null||graph==null||s==null|| !N.contains((int)s.getId())) { //check if input are wrong -save recursive problems 
+		if(N==null||graph==null||s==null|| !N.contains((int)s.getId())|| !graph.getAllVertex().contains(s)) { //check if input are wrong -save recursive problems 
 			System.out.println("wrong input");
 			System.out.println(s.getId()+" "+N);
-	//		System.out.println("111111111111111111");
-
 		}
 
 		if(N.contains((int) s.getId()) && N.size()==1) { // exit condition from recursive 
@@ -289,6 +311,12 @@ public class Graph<T>{
 		Vertex<Integer> tVertex=new Vertex<Integer>(t);
 		int x1=f1.maxFlow(f1.findVertexIndex(s), f1.findVertexIndex(tVertex));
 		System.out.println("max flow x1: " +x1);
+		for(Edge<Integer> e: graph.getAllEdges()) {
+			if(f1.getT().contains((int)e.getVertex2().getId())&& f1.getS().contains((int) tVertex.getId())) {
+				e.setSizeOfS(f1.getS().size()); //save size of S to all cut edges!
+				
+			}
+		}
 		int x2= f2.maxFlow( f2.findVertexIndex(tVertex),f2.findVertexIndex(s));
 		System.out.println("max flow x2: " +x2);
 		Collection<Integer> S =f1.getS(); //find S- set of vertex in front the cut
@@ -299,10 +327,12 @@ public class Graph<T>{
 			x1=x2;
 			S=f2.getT();
 			T=f2.getS();
+			
 		}
+		
 		//		//may need to add edge from t to s also!!
 		//System.out.println("------------s is : "+s.getId()+" t is: "+ t);
-		auxiliaryGraph.addEdge(s.getId(), t, x1);
+		auxiliaryGraph.addEdge(s.getId(), t, x1,S.size());
 		//	auxiliaryGraph.addEdge(t, s.getId(), x1);
 		Collection<Integer> N_S=cutLinkList(N,S); //find cut from two set of vertexes  
 		//	System.out.println("s is: "+s+"  S is:"+S+" N is: "+N+" the N_S Cut is: "+N_S);
@@ -351,12 +381,14 @@ public class Graph<T>{
 		System.out.println("end of A graph ");
 
 		for(Edge<Integer> e: auxiliaryGraph.getAllEdges()) { //find smallest K
-			if(e.getWeight()<min) {
+			if(e.getWeight()<min && Math.abs(e.getS()-Math.abs(graph.getAllVertex().size()/2))>=0.5) {
 				//				a=(int)e.getVertex1().getId();
 				//				b=(int)e.getVertex2().getId();
 				a=e.getVertex1();
 				b=e.getVertex2();
 				min=e.getWeight();
+				System.out.println(" finding min: a : "+a.getId()+" b:"+b.getId() );
+
 
 			}
 		}
@@ -373,35 +405,32 @@ public class Graph<T>{
 //		}
 		FordFulkerson fordFulkerson= new FordFulkerson(uniqeGraph); //find cut between a an b  
 		System.out.println("a is: "+a.getId()+" b is: "+ b.getId()+"----------------------------------------------------------");
-		int maxflow=fordFulkerson.maxFlow(fordFulkerson.findVertexIndex(a), fordFulkerson.findVertexIndex(b));
+		int maxflow=fordFulkerson.maxFlow(fordFulkerson.findVertexIndex(uniqeGraph.getVertex(Math.abs(a.getId()))), fordFulkerson.findVertexIndex(uniqeGraph.getVertex(-Math.abs(b.getId()))));
 		if(maxflow>min) {
-			//int maxflow2=fordFulkerson.maxFlow(fordFulkerson.findVertexIndex(b), fordFulkerson.findVertexIndex(a));//neeed more work
+			maxflow=fordFulkerson.maxFlow(fordFulkerson.findVertexIndex(uniqeGraph.getVertex(Math.abs(b.getId()))), fordFulkerson.findVertexIndex(uniqeGraph.getVertex(-Math.abs(a.getId()))));
 		}
 
 		Collection<Integer> S =fordFulkerson.getS(); // find S- set of vertex before the cut
 		Collection<Integer> T =fordFulkerson.getT(); // find T- set of vertex behind the cut
 		ArrayList<Edge<Integer>> edgeList=new ArrayList<>(); //array list to hold all the edges of the CUT !
 		ArrayList<Vertex<Integer>> vertexsListToRemove= new ArrayList<>();
-		System.out.println("soooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 		for(Vertex<Integer> v: uniqeGraph.getAllVertex()) {
 			if(S.contains((int)v.getId())) {
 				for(Edge<Integer> e : v.getEdges()) {
 					if(T.contains((int)e.getVertex2().getId())) {
 						edgeList.add(e); //add edge  of the cut 
-						System.out.println(e);
+						
 					}
 				}
 			}
 
 		}
-		System.out.println("soooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 
 		for(Edge<Integer> e: edgeList) {
 			if(!vertexsListToRemove.contains(e.getVertex1())) {
 				vertexsListToRemove.add(e.getVertex1());
-
-			}else {
-				vertexsListToRemove.add(e.getVertex2());
+			}else if(!vertexsListToRemove.contains(e.getVertex2())) {
+				vertexsListToRemove.add(uniqeGraph.getVertex(Math.abs(e.getVertex2().getId())));
 			}
 		}
 //		System.out.println("real graph is:");
@@ -680,7 +709,7 @@ public class Graph<T>{
 		System.out.println(A);
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 		ArrayList<Vertex<Integer>> arr= dismantlingStrongestCC(graphMaxFlow,A);
-
+		System.out.println("Vertex to remove: "+arr);
 		//		graphMaxFlow.getAllVertex().forEach(s->{
 		//			arrayIndexEquivalents[i]=(int) s.getId();
 		//			i++;
@@ -704,7 +733,7 @@ public class Graph<T>{
 		//			}
 		//		}
 		//		System.out.println("\nMaximum capacity " + ff.maxFlow(capacity, 0, 6));
-		Graph<Integer> g=uniqueGraphCreation(graphMaxFlow);
+//		Graph<Integer> g=uniqueGraphCreation(graphMaxFlow);
 		//		System.out.println(g.getAllVertex().size()+"->"+graphMaxFlow.getAllVertex().size());
 	}	
 	// find an vertex index in array of vertexes return -1 if not there

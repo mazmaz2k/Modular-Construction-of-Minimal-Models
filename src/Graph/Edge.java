@@ -7,6 +7,7 @@ class Edge<T>{
     private Vertex<T> vertex1;
     private Vertex<T> vertex2;
     private int weight;
+    private int sizeOfS;
     
     Edge(Vertex<T> vertex1, Vertex<T> vertex2){
         this.vertex1 = vertex1;
@@ -19,7 +20,13 @@ class Edge<T>{
         this.weight = weight;
         this.isDirected = isDirected;
     }
-    
+    Edge(Vertex<T> vertex1, Vertex<T> vertex2,boolean isDirected,int weight,int s){
+        this.vertex1 = vertex1;
+        this.vertex2 = vertex2;
+        this.weight = weight;
+        this.isDirected = isDirected;
+        this.sizeOfS=s;
+    }
     Edge(Vertex<T> vertex1, Vertex<T> vertex2,boolean isDirected){
         this.vertex1 = vertex1;
         this.vertex2 = vertex2;
@@ -34,6 +41,13 @@ class Edge<T>{
         return vertex2;
     }
     
+    public void setSizeOfS(int s) {
+    	this.sizeOfS=s;
+    }
+    
+    int getS() {
+    	return sizeOfS;
+    }
     int getWeight(){
         return weight;
     }
@@ -76,6 +90,6 @@ class Edge<T>{
     @Override
     public String toString() {
         return "Edge [isDirected=" + isDirected + ", vertex1=" + vertex1
-                + ", vertex2=" + vertex2 + ", weight=" + weight + "]";
+                + ", vertex2=" + vertex2 + ", weight=" + weight + ", size of S is :"+sizeOfS+ "]";
     }
 }
