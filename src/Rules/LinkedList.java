@@ -116,6 +116,10 @@ public class LinkedList
 		}
 		return false;
 	}
+	public boolean isEmpty()
+	{
+		return numNodes==0;
+	}
 	
 	
 /*	public static void main(String [] args)

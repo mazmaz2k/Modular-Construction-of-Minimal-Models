@@ -234,7 +234,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	LinkedList Ts = new LinkedList();
     	
     	Node Snode =s.head;
-    	DefaultHashMap<Integer, Boolean> map = new DefaultHashMap<Integer, Boolean>(false);
+    	DefaultHashMap<Integer, Boolean> map = new DefaultHashMap<Integer, Boolean>(false);//on default we did not check the rules
     	boolean addToTs;
     	for (int i = 0; i < s.getSize() ; i++)
     	{
@@ -264,11 +264,10 @@ public class RulesDataStructure extends DavisPutnamHelper
     		}
     		Snode= Snode.next;
 		}
-    	
-    	
-    	
-    	
-    	
+    	if(Ts.isEmpty())
+    	{
+    		this.counter+=s.getSize();//count how many times we put value in a variable
+    	}
     	return Ts;
     }
     private boolean allExistInList(int ruleNum , LinkedList l)//all vars in rule exist in List
@@ -347,6 +346,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 			String literalToRemove =searchSingleLiteral(Clauses, literalMap);
 			if(!literalToRemove.equals("NotFoundYet"))
 			{
+				this.counter++;//count how many times we put value in a variable
 				printClauses(Clauses);
 				System.out.println("Performing unitary propagation with: "+literalToRemove);
 				removeClauses(literalToRemove,Clauses);
@@ -367,7 +367,6 @@ public class RulesDataStructure extends DavisPutnamHelper
 					System.out.println("Empty clause detected. Returning false.");
 					return false;
 				}
-				this.counter++;
 			}
 			else
 			{
@@ -500,7 +499,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	return true;
     }
     
-    /**check if we can put value inside the variable
+    /**check if we return false if we put value inside the variable
      * by the rules of logic*/
     public boolean conflictExist(int var ,boolean val)
     {
