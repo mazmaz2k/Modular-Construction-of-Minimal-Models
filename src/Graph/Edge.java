@@ -45,7 +45,7 @@ class Edge<T>{
     	this.sizeOfS=s;
     }
     
-    int getS() {
+    int getSSize() {
     	return sizeOfS;
     }
     int getWeight(){

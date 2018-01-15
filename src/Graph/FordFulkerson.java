@@ -152,9 +152,9 @@ public class FordFulkerson {
         S.add(vertexArray[source]);
         T.remove(vertexArray[source]);
       //  System.out.println(parent);
-        System.out.println("T is:"+T);
+ //       System.out.println("T is:"+T);
  //       System.out.println(T);
-        System.out.println("S is: "+S);
+ //       System.out.println("S is: "+S);
  //       System.out.println();
 
 //		 printAugmentedPaths(augmentedPaths,maxFlow);

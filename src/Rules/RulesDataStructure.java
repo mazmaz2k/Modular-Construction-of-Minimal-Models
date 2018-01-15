@@ -338,7 +338,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 	{
     	if(Clauses.size() == 0) 
 		{
-			System.out.println("T = {EMPTY}");
+		//	System.out.println("T = {EMPTY}");
 			return true;
 		}
 		//Unitary Propagation
@@ -347,32 +347,32 @@ public class RulesDataStructure extends DavisPutnamHelper
 			String literalToRemove =searchSingleLiteral(Clauses, literalMap);
 			if(!literalToRemove.equals("NotFoundYet"))
 			{
-				printClauses(Clauses);
-				System.out.println("Performing unitary propagation with: "+literalToRemove);
+				//printClauses(Clauses);
+				//System.out.println("Performing unitary propagation with: "+literalToRemove);
 				removeClauses(literalToRemove,Clauses);
 				cutClauses(literalToRemove,Clauses);
-				printClauses(Clauses);
+				//printClauses(Clauses);
 				if(Clauses.size() == 0) 
 				{
-					System.out.println("All clauses removed. Returning true.");
+				//	System.out.println("All clauses removed. Returning true.");
 					return true;
 				}
 				if(hasFalsehood(Clauses)) 
 				{
-					System.out.println("Falsehood detected. Returning false.");
+				//	System.out.println("Falsehood detected. Returning false.");
 					return false;
 				}
 				else if(hasEmptyClause(Clauses))
 				{
-					System.out.println("Empty clause detected. Returning false.");
+				//	System.out.println("Empty clause detected. Returning false.");
 					return false;
 				}
 				this.counter++;
 			}
 			else
 			{
-				System.out.println("No single literals.");
-				System.out.println("Cannot perform unitary propagation.");
+			//	System.out.println("No single literals.");
+			//	System.out.println("Cannot perform unitary propagation.");
 				break;
 			}
 		}
@@ -410,14 +410,14 @@ public class RulesDataStructure extends DavisPutnamHelper
 		copy1.add(clause1);
 		copy2.add(clause2);
 		//Moment of the truth
-		System.out.println("Adding clause: ["+l1+"]");
+		//System.out.println("Adding clause: ["+l1+"]");
 		if(DLL(copy1) == true)
 		{
 			return true;
 		}
 		else
 		{
-			System.out.println("Trying opposite clause: ["+l2+"]");
+		//	System.out.println("Trying opposite clause: ["+l2+"]");
 			return DLL(copy2);
 		}
 	}
@@ -662,7 +662,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     also checks if the values we put in the variables return SAT if so we change rules ds 
     by the values we found and if not we try different values for te variables
      ***/
-    public void splitConnectedComponent(int[] v)
+    public boolean splitConnectedComponent(int[] v)
     {
     	ArrayList<Clause> clauses = new ArrayList<>();
     	for (int i = 0; i < RulesArray.length; i++) 
@@ -690,11 +690,11 @@ public class RulesDataStructure extends DavisPutnamHelper
     			clauses.add(clause);
     		}
     	}
-    	System.out.println("print clauses");
-    	printClauses(clauses);
-    	System.out.println("copy to array list");
+//    	System.out.println("print clauses");
+    	//printClauses(clauses);
+ //   	System.out.println("copy to array list");
     	int size = v.length;
-    	System.out.println("size of array is: " + size);
+//    	System.out.println("size of array is: " + size);
     	int N = (int)Math.pow(2,size);
     	boolean[] binaryArray ;
 		String literal;
@@ -726,19 +726,20 @@ public class RulesDataStructure extends DavisPutnamHelper
 				}
 				clause.addLiteral(literal);
 				copy.add(clause);
-				System.out.println( "Adding clause: "+clause.printClause());		
+				//System.out.println( "Adding clause: "+clause.printClause());		
 			}
     		//check if sat
-    		System.out.println("check sat");
+    		//System.out.println("check sat");
     		if(DLL(copy))
     		{
-    			System.out.println("found and update . we found in index: "+ i);
+    		//	System.out.println("found and update . we found in index: "+ i);
     			updateRuleDS();
-    			break;
+    			return true;
     		}
+
     		
 		}
-    	
+    	return false;
     }
     /**return a binary value of the number 
      * ,the (base) last bits */

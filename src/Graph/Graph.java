@@ -165,7 +165,7 @@ public class Graph<T>{
 	public String toString(){
 		StringBuffer buffer = new StringBuffer();
 		for(Edge<T> edge : getAllEdges()){
-			buffer.append(edge.getVertex1() + " -> " + edge.getVertex2() + " w: " + edge.getWeight() +" s size:"+ edge.getS());
+			buffer.append(edge.getVertex1() + " -> " + edge.getVertex2() + " w: " + edge.getWeight() +" s size:"+ edge.getSSize());
 			buffer.append("\n");
 		}
 		return buffer.toString();
@@ -238,7 +238,7 @@ public class Graph<T>{
 					while(n2!=null)
 					{
 
-						graph.addEdge(n1.var,n2.var);
+						graph.addEdge(n1.var,n2.var,1);
 						n2=n2.next;
 					}
 					n1=n1.next;
@@ -268,7 +268,7 @@ public class Graph<T>{
 			for(Edge<Integer> e : oldGraph.getAllEdges()) {
 				
 				if( n.var==e.getVertex1().getId() && setOfVertex.contains((int)e.getVertex2().getId())) {
-					newGraph.addEdge(n.var, e.getVertex2().getId());
+					newGraph.addEdge(n.var, e.getVertex2().getId(),e.getWeight());
 					//System.out.println("v1: "+v.getId()+" v2: "+e.getVertex2().getId());
 				}
 
@@ -374,6 +374,7 @@ public class Graph<T>{
 	 * return array of vertex which will be put in rules array**/
 	public static ArrayList<Vertex<Integer>> dismantlingStrongestCC(Graph<Integer> graph,Graph<Integer> auxiliaryGraph) {
 		//int[] vertexArray=new int[auxiliaryGraph.allVertex.size()]; //array of vertex id's so return to Rules Data structure 
+		
 		int min=Integer.MAX_VALUE;
 		Vertex<Integer> a=null,b = null;
 		System.out.println("A graph is:");
@@ -381,15 +382,15 @@ public class Graph<T>{
 		System.out.println("end of A graph ");
 
 		for(Edge<Integer> e: auxiliaryGraph.getAllEdges()) { //find smallest K
-			if(e.getWeight()<min && Math.abs(e.getS()-Math.abs(graph.getAllVertex().size()/2))>=0.5) {
+			if(e.getWeight()<min ) {
 				//				a=(int)e.getVertex1().getId();
 				//				b=(int)e.getVertex2().getId();
 				a=e.getVertex1();
 				b=e.getVertex2();
 				min=e.getWeight();
-				System.out.println(" finding min: a : "+a.getId()+" b:"+b.getId() );
+		//		System.out.println(" finding min: a : "+a.getId()+" b:"+b.getId() );
 
-
+//&& Math.abs(e.getSSize()-(graph.getAllVertex().size()/2))<=0.5
 			}
 		}
 	
@@ -428,7 +429,7 @@ public class Graph<T>{
 
 		for(Edge<Integer> e: edgeList) {
 			if(!vertexsListToRemove.contains(e.getVertex1())) {
-				vertexsListToRemove.add(e.getVertex1());
+				vertexsListToRemove.add(uniqeGraph.getVertex(Math.abs(e.getVertex1().getId())));
 			}else if(!vertexsListToRemove.contains(e.getVertex2())) {
 				vertexsListToRemove.add(uniqeGraph.getVertex(Math.abs(e.getVertex2().getId())));
 			}
@@ -475,7 +476,7 @@ public class Graph<T>{
 //	send the graph to dismantle methods
 //	return array of vertexes to main
 	public static int[] dismntleToArray(Graph<Integer> graph,LinkedList source) {
-
+		System.out.println("Enter dismntleToArray----------------------------------------------------------------------");
 		Graph<Integer> connectedComponentGraph = copyGraph(source, graph);
 
 		Graph<Integer> A = new Graph<>(false);
@@ -507,8 +508,20 @@ public class Graph<T>{
 //
 //		System.out.println("check here---------------------------------------------------------------------------");
 //		System.out.println(N+"N is: -------------");
+        StronglyConnectedComponent scc = new StronglyConnectedComponent();
+        
+        List<Set<Vertex<Integer>>> result = scc.scc(connectedComponentGraph);
+        System.out.println("88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888");
+        //print the result
+        result.forEach(set -> {
+        	System.out.println("sizeof :"+ set.size());
+            set.forEach(v -> System.out.print(v.getId() + " "));
+            System.out.println();
+        });
+        System.out.println("88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888");
+
 		constaruction(connectedComponentGraph,s,N,A);
-//		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+		System.out.println("Exiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiitttttttttttttttttttttttttttttttttttttttttttttttttt");
 //		System.out.println("connectedComponentGraph graph: ");
 //		System.out.println("A is: -------------\n"+A+"\n end A");
 

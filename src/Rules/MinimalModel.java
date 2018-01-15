@@ -2,13 +2,16 @@ package Rules;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.GroupLayout;
@@ -16,6 +19,8 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import Graph.Graph;
+import Graph.StronglyConnectedComponent;
+import Graph.Vertex;
 
 public class MinimalModel extends Graph<Integer>{
 
@@ -211,23 +216,44 @@ public class MinimalModel extends Graph<Integer>{
 			DS.printRulesArray();
 			//DS.checkForUnits();//remove empty sources
 			Graph<Integer> g = initGraph(DS, size);
+	        StronglyConnectedComponent scc = new StronglyConnectedComponent();
+	        
+	        List<Set<Vertex<Integer>>> result = scc.scc(g);
+	        System.out.println("999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999");
+	        //print the result
+	        result.forEach(set -> {
+	        	System.out.println("sizeof :"+ set.size());
+	           // set.forEach(v -> System.out.print(v.getId() + " "));
+	            System.out.println();
+	        });
+	        System.out.println("999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999");
+
 			LinkedList s = sourceOfGraph(g);
 			System.out.println("print the source");
 			s.printList();
 			/**If we have a large source 
 			 * then we build a graph from the source which is a connected component
 			 *  and dismantle the connected component by removing some vertexes */
-			if(s.getSize() > 0.2*g.getAllVertex().size())
+			if(s.getSize()/g.getAllVertex().size() > 0.2)
 			{
+				System.out.println("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+
 				System.out.println("Dismantle the CC");
 				/**get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS*/
 				int[] a=dismntleToArray(g,s); 
-				DS.splitConnectedComponent(a);
+				System.out.println(a.length+" - a length");
+				System.out.println("1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
+				if(!DS.splitConnectedComponent(a))
+				{
+					return false;
+				}
 			}
 			else
 			{
+				System.out.println("2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222");
+
 				LinkedList Ts=DS.Ts(s);
-				Ts.printList();
+				//Ts.printList();
 				if(!DS.FindMinimalModelForTs(Ts))
 				{
 					System.out.println("UNSAT");
