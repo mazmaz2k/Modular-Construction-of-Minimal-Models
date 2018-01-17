@@ -346,14 +346,11 @@ public class RulesDataStructure extends DavisPutnamHelper
 			String literalToRemove =searchSingleLiteral(Clauses, literalMap);
 			if(!literalToRemove.equals("NotFoundYet"))
 			{
-<<<<<<< HEAD
 				//printClauses(Clauses);
 				//System.out.println("Performing unitary propagation with: "+literalToRemove);
-=======
 				this.counter++;//count how many times we put value in a variable
 				printClauses(Clauses);
 				System.out.println("Performing unitary propagation with: "+literalToRemove);
->>>>>>> bcfb8a9f9ce82a69658fdd57cf8c07dd94e5ed78
 				removeClauses(literalToRemove,Clauses);
 				cutClauses(literalToRemove,Clauses);
 				//printClauses(Clauses);
@@ -429,7 +426,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     public void updateRuleDS()
     {
     	Set<String> keys = literalMap.keySet();
-    	try {
+    	//try {
     		for(String key: keys)
     		{
     			//System.out.println("key: "+ Integer.parseInt(key) + " value:  "+literalMap.get(key) );
@@ -438,14 +435,14 @@ public class RulesDataStructure extends DavisPutnamHelper
     				minModel.addAtTail(Integer.parseInt(key));
     			}
     			ChangeDataStrucureByPlacingValueInVar(Integer.parseInt(key), literalMap.get(key));
-    			literalMap.remove(key);
+    		//	literalMap.remove(key);
     			//System.out.println("remove key  " + key);
     		}
-    	}
-    	catch(Exception e)
+    //	}
+    	/*catch(Exception e)
     	{
     		
-    	}
+    	}*/
     }
     public void ChangeDataStrucureByPlacingValueInVar(int var , boolean value)
     {

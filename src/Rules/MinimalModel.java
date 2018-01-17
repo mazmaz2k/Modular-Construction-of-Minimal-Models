@@ -28,6 +28,7 @@ public class MinimalModel extends Graph<Integer>{
 	private JTextField textField;
 	RulesDataStructure DS ;
 	boolean readFile = false;
+	static int rulesNum;
 	/**
 	 * Launch the application.
 	 */
@@ -89,6 +90,7 @@ public class MinimalModel extends Graph<Integer>{
 					String Path = textField.getText();
 					sc = new Scanner(new File(Path));//read file
 					numOfRules = sc.nextInt();
+					rulesNum=numOfRules;
 					DS = new RulesDataStructure(numOfRules);
 					lblNewLabel_1.setText("Please wait...");
 					while (sc.hasNextLine()) 
@@ -214,46 +216,44 @@ public class MinimalModel extends Graph<Integer>{
 
 			System.out.println("SIZE OF T: " +DS.SIZE);
 			DS.printRulesArray();
-			//DS.checkForUnits();//remove empty sources
+//			//DS.checkForUnits();//remove empty sources
 			Graph<Integer> g = initGraph(DS, size);
-	        StronglyConnectedComponent scc = new StronglyConnectedComponent();
-	        
-	        List<Set<Vertex<Integer>>> result = scc.scc(g);
-	        System.out.println("999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999");
-	        //print the result
-	        result.forEach(set -> {
-	        	System.out.println("sizeof :"+ set.size());
-	           // set.forEach(v -> System.out.print(v.getId() + " "));
-	            System.out.println();
-	        });
-	        System.out.println("999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999");
-
+////	        StronglyConnectedComponent scc = new StronglyConnectedComponent();
+////	        
+////	        List<Set<Vertex<Integer>>> result = scc.scc(g);
+////	        System.out.println("999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999");
+////	        //print the result
+////	        result.forEach(set -> {
+////	        	System.out.println("sizeof :"+ set.size());
+////	           // set.forEach(v -> System.out.print(v.getId() + " "));
+////	            System.out.println();
+////	        });
+////	        System.out.println("999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999");
+//
 			LinkedList s = sourceOfGraph(g);
 			System.out.println("print the source");
 			s.printList();
 			/**If we have a large source 
 			 * then we build a graph from the source which is a connected component
 			 *  and dismantle the connected component by removing some vertexes */
-			if(s.getSize()/g.getAllVertex().size() > 0.2)
+			if(/*s.getSize()/g.getAllVertex().size() > 0.2*/false)
 			{
-				System.out.println("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
-
-				System.out.println("Dismantle the CC");
-				/**get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS*/
-				int[] a=dismntleToArray(g,s); 
-				System.out.println(a.length+" - a length");
-				System.out.println("1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
-				if(!DS.splitConnectedComponent(a))
-				{
-					return false;
-				}
+//
+//				System.out.println("Dismantle the CC");
+//				/**get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS*/
+//				int[] a=dismntleToArray(g,s); 
+//				System.out.println(a.length+" - a length");
+//				if(!DS.splitConnectedComponent(a))
+//				{
+//					return false;
+//				}
 			}
 			else
 			{
-				System.out.println("2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222");
 
 				LinkedList Ts=DS.Ts(s);
 				//Ts.printList();
+				
 				if(!DS.FindMinimalModelForTs(Ts))
 				{
 					System.out.println("UNSAT");
@@ -270,6 +270,24 @@ public class MinimalModel extends Graph<Integer>{
 		//	DS.printValueOfVariables();
 
 
+	}
+	
+	public static boolean DP(RulesDataStructure DS)
+	{
+		LinkedList Ts=new LinkedList();
+		System.out.println(rulesNum);
+		for (int i = 0; i < rulesNum ; i++) {
+			Ts.addAtTail(i);
+		}
+		if(!DS.FindMinimalModelForTs(Ts))
+		{
+			System.out.println("UNSAT");
+			System.out.println("The amount of time we put value in a variable is : " + DS.counter);
+			return false;
+		}
+		DS.updateRuleDS();
+		DS.printValueOfVariables();
+		return true;
 	}
 
 
