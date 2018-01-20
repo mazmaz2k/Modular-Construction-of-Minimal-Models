@@ -151,8 +151,8 @@ public class FordFulkerson {
 //      System.out.println(vertexArray[source]+"->>>>>>>"+ source);
         S.add(vertexArray[source]);
         T.remove(vertexArray[source]);
-      //  System.out.println(parent);
- //       System.out.println("T is:"+T);
+//       System.out.println(parent);
+ //      System.out.println("T is:"+T);
  //       System.out.println(T);
  //       System.out.println("S is: "+S);
  //       System.out.println();

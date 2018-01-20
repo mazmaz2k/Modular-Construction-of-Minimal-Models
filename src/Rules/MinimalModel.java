@@ -214,39 +214,57 @@ public class MinimalModel extends Graph<Integer>{
 		while(DS.SIZE!=0)
 		{
 
-			System.out.println("SIZE OF T: " +DS.SIZE);
-			DS.printRulesArray();
+//			System.out.println("Rules array SIZE  : " +DS.SIZE);
+//			DS.printRulesArray();
 //			//DS.checkForUnits();//remove empty sources
+			//TODO : print CC and see if I seperate them!!!!!!!
 			Graph<Integer> g = initGraph(DS, size);
-////	        StronglyConnectedComponent scc = new StronglyConnectedComponent();
+	        StronglyConnectedComponent scc = new StronglyConnectedComponent();
 ////	        
-////	        List<Set<Vertex<Integer>>> result = scc.scc(g);
-////	        System.out.println("999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999");
+//////	        List<Set<Vertex<Integer>>> result = scc.scc(g);
+////	        System.out.println("------------------------------------------------------------------------------------------------------------------");
+////	        System.out.println("Here are the size of all the connected component in the graph");
 ////	        //print the result
 ////	        result.forEach(set -> {
 ////	        	System.out.println("sizeof :"+ set.size());
 ////	           // set.forEach(v -> System.out.print(v.getId() + " "));
 ////	            System.out.println();
 ////	        });
-////	        System.out.println("999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999");
+//	        System.out.println("------------------------------------------------------------------------------------------------------------------");
 //
 			LinkedList s = sourceOfGraph(g);
-			System.out.println("print the source");
-			s.printList();
+			System.out.println("print the source size "+ s.getSize());
 			/**If we have a large source 
 			 * then we build a graph from the source which is a connected component
 			 *  and dismantle the connected component by removing some vertexes */
-			if(/*s.getSize()/g.getAllVertex().size() > 0.2*/false)
+			double temp=0.2*g.getAllVertex().size(),sSize=s.getSize();
+			System.out.println("this is the size "+temp+" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+			if(sSize> temp)
 			{
-//
-//				System.out.println("Dismantle the CC");
-//				/**get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS*/
-//				int[] a=dismntleToArray(g,s); 
-//				System.out.println(a.length+" - a length");
-//				if(!DS.splitConnectedComponent(a))
-//				{
-//					return false;
-//				}
+				
+				System.out.println("Dismantle the CC");
+				/**get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS*/
+				int[] a=dismntleToArray(g,s); 
+				System.out.println(a.length+" - a length-------------------------------------------------------------------");
+				if(!DS.splitConnectedComponent(a))
+				{
+					Graph<Integer> g2 = initGraph(DS, size);
+			        List<Set<Vertex<Integer>>> result = scc.scc(g2);
+			        System.out.println("------------------------------------------------------------------------------------------------------------------");
+			        System.out.println("Here are the size of all the connected component in the graph after Dismantle the CC");
+			        //print the result
+			        result.forEach(set -> {
+			        	System.out.println("sizeof :"+ set.size());
+			           // set.forEach(v -> System.out.print(v.getId() + " "));
+			            System.out.println();
+			        });
+			        System.out.println("------------------------------------------------------------------------------------------------------------------");
+
+
+					return false;
+				}
+
 			}
 			else
 			{
@@ -256,8 +274,8 @@ public class MinimalModel extends Graph<Integer>{
 				
 				if(!DS.FindMinimalModelForTs(Ts))
 				{
-					System.out.println("UNSAT");
-					System.out.println("The amount of time we put value in a variable is : " + DS.counter);
+//					System.out.println("UNSAT");
+//					System.out.println("The amount of time we put value in a variable is : " + DS.counter);
 					return false;
 				}
 				DS.updateRuleDS();
@@ -265,7 +283,7 @@ public class MinimalModel extends Graph<Integer>{
 		}
 		
 		
-		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
+//		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
 		return true;
 		//	DS.printValueOfVariables();
 
@@ -275,18 +293,18 @@ public class MinimalModel extends Graph<Integer>{
 	public static boolean DP(RulesDataStructure DS)
 	{
 		LinkedList Ts=new LinkedList();
-		System.out.println(rulesNum);
+//		System.out.println(rulesNum);
 		for (int i = 0; i < rulesNum ; i++) {
 			Ts.addAtTail(i);
 		}
 		if(!DS.FindMinimalModelForTs(Ts))
 		{
-			System.out.println("UNSAT");
-			System.out.println("The amount of time we put value in a variable is : " + DS.counter);
+//			System.out.println("UNSAT");
+//			System.out.println("The amount of time we put value in a variable is : " + DS.counter);
 			return false;
 		}
 		DS.updateRuleDS();
-		DS.printValueOfVariables();
+//		DS.printValueOfVariables();
 		return true;
 	}
 

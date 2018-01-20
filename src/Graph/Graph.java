@@ -201,7 +201,15 @@ public class Graph<T>{
 			s.addAtTail((int)vertex.getId());	//add to source arrayList 
 		}
 		
-	
+    System.out.println("------------------------------------------------------------------------------------------------------------------");
+    System.out.println("Here are the size of all the connected component in the graph");
+    //print the result
+    result.forEach(set -> {
+    	System.out.println("sizeof :"+ set.size());
+       // set.forEach(v -> System.out.print(v.getId() + " "));
+        System.out.println();
+    });
+    System.out.println("------------------------------------------------------------------------------------------------------------------");
 		return s;
 	}
 
@@ -249,8 +257,8 @@ public class Graph<T>{
 
 
 		}
-		System.out.println("This is the Graph:");
-		System.out.println(graph);
+//		System.out.println("This is the Graph:");
+//		System.out.println(graph);
 
 
 		return graph;	
@@ -353,10 +361,10 @@ public class Graph<T>{
 			//			uniqueGraph.addSingleVertex(v.getId());
 			//			uniqueGraph.addSingleVertex(v.getId()*(-1));
 			uniqueGraph.addEdge(v.getId()*(-1), v.getId(), 1);
-			for(Edge<Integer> e: graph.getAllEdges()) {
-				if(e.getVertex2().equals(v)) {
+			for(Edge<Integer> e: v.getEdges()) {
+//				if(e.getVertex2().equals(v)) {
 					uniqueGraph.addEdge(e.getVertex1().getId(), v.getId()*(-1), 1);
-				}
+//				}
 			}
 		}
 		//		System.out.println("-------------------real Graph-----------------");
@@ -390,10 +398,10 @@ public class Graph<T>{
 				min=e.getWeight();
 		//		System.out.println(" finding min: a : "+a.getId()+" b:"+b.getId() );
 
-//&& Math.abs(e.getSSize()-(graph.getAllVertex().size()/2))<=0.5
 			}
 		}
-	
+	// TODO  t=Math.abs(e.getSSize()-(graph.getAllVertex().size()/2))          check    s+t <=0.5
+
 //		System.out.println(a.getId()+" "+b.getId());
 		Graph<Integer> uniqeGraph=uniqueGraphCreation(graph); // duplicate graph to change K-edge connected component to find vertex to remove
 //		for(Vertex<Integer> v: uniqeGraph.getAllVertex()) {
@@ -508,20 +516,19 @@ public class Graph<T>{
 //
 //		System.out.println("check here---------------------------------------------------------------------------");
 //		System.out.println(N+"N is: -------------");
-        StronglyConnectedComponent scc = new StronglyConnectedComponent();
+//        StronglyConnectedComponent scc = new StronglyConnectedComponent();
         
-        List<Set<Vertex<Integer>>> result = scc.scc(connectedComponentGraph);
-        System.out.println("88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888");
+//        List<Set<Vertex<Integer>>> result = scc.scc(connectedComponentGraph);
+//        System.out.println("88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888");
         //print the result
-        result.forEach(set -> {
-        	System.out.println("sizeof :"+ set.size());
-            set.forEach(v -> System.out.print(v.getId() + " "));
-            System.out.println();
-        });
-        System.out.println("88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888");
-
-		constaruction(connectedComponentGraph,s,N,A);
-		System.out.println("Exiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiitttttttttttttttttttttttttttttttttttttttttttttttttt");
+ //       result.forEach(set -> {
+ //       	System.out.println("sizeof :"+ set.size());
+//            set.forEach(v -> System.out.print(v.getId() + " "));
+//            System.out.println();
+//        });
+//        System.out.println("88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888");
+//
+//		constaruction(connectedComponentGraph,s,N,A);
 //		System.out.println("connectedComponentGraph graph: ");
 //		System.out.println("A is: -------------\n"+A+"\n end A");
 

@@ -349,8 +349,8 @@ public class RulesDataStructure extends DavisPutnamHelper
 				//printClauses(Clauses);
 				//System.out.println("Performing unitary propagation with: "+literalToRemove);
 				this.counter++;//count how many times we put value in a variable
-				printClauses(Clauses);
-				System.out.println("Performing unitary propagation with: "+literalToRemove);
+//				printClauses(Clauses);
+//				System.out.println("Performing unitary propagation with: "+literalToRemove);
 				removeClauses(literalToRemove,Clauses);
 				cutClauses(literalToRemove,Clauses);
 				//printClauses(Clauses);
@@ -448,13 +448,13 @@ public class RulesDataStructure extends DavisPutnamHelper
     {
     	if(conflictExist(var, value))
     	{
-    		System.out.println("CONFLICT");
+//    		System.out.println("CONFLICT");
     		return ;
     	}
     	if(!variableExist(var))
     	{
     		System.out.println("VARIABLE NOT EXIST");
-    		return ;
+//    		return ;
     	}
     	LinkedList l = varHT.get(var);
     	Node n = l.head;
@@ -464,23 +464,23 @@ public class RulesDataStructure extends DavisPutnamHelper
     		{
     			deleteRule(n.var);
     			this.SIZE--;
-    			System.out.println("DELETE RULE NUMBER " + n.var);
+ //   			System.out.println("DELETE RULE NUMBER " + n.var);
     		}
     		else if((existInBody(var, n.var)&& value))
     		{
     			deleteVarFromBody(var,n.var);
-    			System.out.println( "DELETE VARIABLE " + var + " IN RULE " + n.var);
+//    			System.out.println( "DELETE VARIABLE " + var + " IN RULE " + n.var);
     		}
     		else if(existInHead(var, n.var)&& value)
     		{
     			deleteRule(n.var);
     			this.SIZE--;
-    			System.out.println("DELETE RULE NUMBER " + n.var);
+//    			System.out.println("DELETE RULE NUMBER " + n.var);
     		}
     		else if (existInHead(var, n.var)&& !value)
     		{
     			deleteVarFromHead(var,n.var);
-    			System.out.println("DELETE VARIABLE "+var+" IN RULE " + n.var);
+//    			System.out.println("DELETE VARIABLE "+var+" IN RULE " + n.var);
     		}
     		
     		n=n.next;
@@ -661,7 +661,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     
   /***Receive a set of vertexes from graph ds and put values on each vertex
     also checks if the values we put in the variables return SAT if so we change rules ds 
-    by the values we found and if not we try different values for te variables
+    by the values we found and if not we try different values for the variables
      ***/
     public boolean splitConnectedComponent(int[] v)
     {
@@ -696,7 +696,7 @@ public class RulesDataStructure extends DavisPutnamHelper
  //   	System.out.println("copy to array list");
     	int size = v.length;
 //    	System.out.println("size of array is: " + size);
-    	int N = (int)Math.pow(2,size);
+    	int N = (int)Math.pow(2,size); 
     	boolean[] binaryArray ;
 		String literal;
 		Clause clause;
