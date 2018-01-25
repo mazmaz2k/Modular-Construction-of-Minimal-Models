@@ -249,17 +249,17 @@ public class MinimalModel extends Graph<Integer>{
 				System.out.println(a.length+" - a length-------------------------------------------------------------------");
 				if(!DS.splitConnectedComponent(a))
 				{
-					Graph<Integer> g2 = initGraph(DS, size);
-			        List<Set<Vertex<Integer>>> result = scc.scc(g2);
-			        System.out.println("------------------------------------------------------------------------------------------------------------------");
-			        System.out.println("Here are the size of all the connected component in the graph after Dismantle the CC");
-			        //print the result
-			        result.forEach(set -> {
-			        	System.out.println("sizeof :"+ set.size());
-			           // set.forEach(v -> System.out.print(v.getId() + " "));
-			            System.out.println();
-			        });
-			        System.out.println("------------------------------------------------------------------------------------------------------------------");
+//					Graph<Integer> g2 = initGraph(DS, size);
+//			        List<Set<Vertex<Integer>>> result = scc.scc(g2);
+//			        System.out.println("------------------------------------------------------------------------------------------------------------------");
+//			        System.out.println("Here are the size of all the connected component in the graph after Dismantle the CC");
+//			        //print the result
+//			        result.forEach(set -> {
+//			        	System.out.println("sizeof :"+ set.size());
+//			           // set.forEach(v -> System.out.print(v.getId() + " "));
+//			            System.out.println();
+//			        });
+//			        System.out.println("------------------------------------------------------------------------------------------------------------------");
 
 
 					return false;
