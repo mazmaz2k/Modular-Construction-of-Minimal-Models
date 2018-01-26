@@ -132,9 +132,10 @@ public class MinimalModel extends Graph<Integer>{
 					//	LinkedList l=DS.checkFormat();
 					//	if(l.getSize()==0)
 					//	{
-					if(ModuMin(DS))
+					if(ModuMin(DS)) {
 						lblNewLabel.setText("SAT The minimal model is: " + DS.StringMinimalModel());
-					else
+						System.out.println(DS.StringMinimalModel());
+					}else
 						lblNewLabel.setText(" UNSAT ");
 
 					/*	}
@@ -261,10 +262,11 @@ public class MinimalModel extends Graph<Integer>{
 //			        });
 //			        System.out.println("------------------------------------------------------------------------------------------------------------------");
 
-					System.out.println("exit split connected component");
 					return false;
 				}
+				System.out.println("exit split connected component");
 
+				
 			}
 			else
 			{

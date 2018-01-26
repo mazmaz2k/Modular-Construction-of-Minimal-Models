@@ -676,82 +676,90 @@ public class RulesDataStructure extends DavisPutnamHelper
      ***/
     public boolean splitConnectedComponent(int[] v)
     {
-    	ArrayList<Clause> clauses = new ArrayList<>();
-    	for (int i = 0; i < RulesArray.length; i++) 
-    	{
-    		if(RulesArray[i]!=null)
-    		{
-    			Node nBody =RulesArray[i].body.head;
-    			Node nHead = RulesArray[i].head.head;
-    			Clause clause = new Clause();
-    			String literal;
-    			while(nBody!=null)//first put the negative literals in order to calculate a minimal model (because of the way that DLL works)
-    			{
-    				literal = "-";
-    				literal+= String.valueOf(nBody.var);
-    				clause.addLiteral(literal);
-    				nBody=nBody.next;
-    			}
-    			while(nHead!=null)
-    			{
-    				literal = String.valueOf(nHead.var); 
-    				clause.addLiteral(literal);
-    				nHead=nHead.next;
-    			}
-
-    			clauses.add(clause);
-    		}
-    	}
-//    	System.out.println("print clauses");
-    	//printClauses(clauses);
- //   	System.out.println("copy to array list");
-    	int size = v.length;
-    	System.out.println("size of array is: " + size);
-    	int N = (int)Math.pow(2,size); 
-    	boolean[] binaryArray ;
-		String literal;
-		Clause clause;
-		ArrayList<Clause> copy;
-    	for (int i = 0; i < N; i++)//from 0 to 2^n -1
-    	{
-    		copy = new ArrayList<Clause>();//
-    		for(Clause c: clauses)
-    		{
-    			Clause c2 = new Clause();
-    			for(String s: c.literals)
-    			{
-    				c2.addLiteral(s);
-    			}
-    			copy.add(c2);
-    		}// copy original to not make any changes
-    		binaryArray = toBinary(i,size);//returns array
-    		for (int j = 0; j < size; j++) 
-    		{
-    			clause= new Clause();
-				if(binaryArray[j])
-				{
-					literal = String.valueOf(v[j]);
-				}
-				else
-				{
-					literal = "-"+String.valueOf(v[j]);
-				}
-				clause.addLiteral(literal);
-				copy.add(clause);
-				System.out.println( "Adding clause: "+clause.printClause());		
-			}
-    		//check if sat
-    		//System.out.println("check sat");
-    		if(DLL(copy))
-    		{
-    			System.out.println("found and update . we found in index: "+ i);
-    			updateRuleDS();
-    			return true;
-    		}
-    		//System.out.println(i);
-    		
+    	
+    	for(int j=0;j<v.length;j++) {
+			ChangeDataStrucureByPlacingValueInVar(v[j], false);
 		}
-    	return false;
+    	return true;
+//    	ArrayList<Clause> clauses = new ArrayList<>();
+//    	for (int i = 0; i < RulesArray.length; i++) 
+//    	{
+//    		if(RulesArray[i]!=null)
+//    		{
+//    			Node nBody =RulesArray[i].body.head;
+//    			Node nHead = RulesArray[i].head.head;
+//    			Clause clause = new Clause();
+//    			String literal;
+//    			while(nBody!=null)//first put the negative literals in order to calculate a minimal model (because of the way that DLL works)
+//    			{
+//    				literal = "-";
+//    				literal+= String.valueOf(nBody.var);
+//    				clause.addLiteral(literal);
+//    				nBody=nBody.next;
+//    			}
+//    			while(nHead!=null)
+//    			{
+//    				literal = String.valueOf(nHead.var); 
+//    				clause.addLiteral(literal);
+//    				nHead=nHead.next;
+//    			}
+//
+//    			clauses.add(clause);
+//    		}
+//    	}
+////    	System.out.println("print clauses");
+//    	//printClauses(clauses);
+// //   	System.out.println("copy to array list");
+//    	int size = v.length;
+//    	System.out.println("size of array is: " + size);
+//    	int N = (int)Math.pow(2,size); 
+//    	boolean[] binaryArray ;
+//		String literal;
+//		Clause clause;
+//		ArrayList<Clause> copy;
+//    	for (int i = 0; i < N; i++)//from 0 to 2^n -1
+//    	{
+//    		copy = new ArrayList<Clause>();//
+//    		for(Clause c: clauses)
+//    		{
+//    			Clause c2 = new Clause();
+//    			for(String s: c.literals)
+//    			{
+//    				c2.addLiteral(s);
+//    			}
+//    			copy.add(c2);
+//    		}// copy original to not make any changes
+//    		binaryArray = toBinary(i,size);//returns array
+//    		for (int j = 0; j < size; j++) 
+//    		{
+//    			clause= new Clause();
+//				if(binaryArray[j])
+//				{
+//					literal = String.valueOf(v[j]);
+//				}
+//				else
+//				{
+//					literal = "-"+String.valueOf(v[j]);
+//				}
+//				clause.addLiteral(literal);
+//				copy.add(clause);
+//				System.out.println( "Adding clause: "+clause.printClause());		
+//			}
+//    		//check if sat
+//    		//System.out.println("check sat");
+//    		if(DLL(copy))
+//    		{
+//    			System.out.println("found and  we do NOT need to update . we found in index: "+ i);
+//    			//updateRuleDS();
+//    			for(int j=0;j<size;j++) {
+//    				ChangeDataStrucureByPlacingValueInVar(v[j], binaryArray[j]);
+//    			}
+//    			return true;
+//    		}
+//    		//System.out.println(i);
+//    		
+//		}
+//    	return false;
     }
     /**return a binary value of the number 
      * ,the (base) last bits */
