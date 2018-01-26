@@ -403,13 +403,23 @@ public class RulesDataStructure extends DavisPutnamHelper
 		String l2 = "";
 		
 		if(l1.startsWith("-"))
+		{
 			l2 = l1.substring(1);
+			clause1.addLiteral(l1);
+			clause2.addLiteral(l2);
+			copy1.add(clause1);
+			copy2.add(clause2);
+		}
 		else
+		{
 			l2 = "-"+l1;
-		clause1.addLiteral(l1);
-		clause2.addLiteral(l2);
-		copy1.add(clause1);
-		copy2.add(clause2);
+			clause1.addLiteral(l2);
+			clause2.addLiteral(l1);
+			copy1.add(clause1);
+			copy2.add(clause2);
+		}
+		
+		
 		//Moment of the truth
 		//System.out.println("Adding clause: ["+l1+"]");
 		if(DLL(copy1) == true)
@@ -438,6 +448,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     		//	literalMap.remove(key);
     			//System.out.println("remove key  " + key);
     		}
+    		literalMap.clear();
     //	}
     	/*catch(Exception e)
     	{
@@ -695,7 +706,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	//printClauses(clauses);
  //   	System.out.println("copy to array list");
     	int size = v.length;
-//    	System.out.println("size of array is: " + size);
+    	System.out.println("size of array is: " + size);
     	int N = (int)Math.pow(2,size); 
     	boolean[] binaryArray ;
 		String literal;
@@ -727,17 +738,17 @@ public class RulesDataStructure extends DavisPutnamHelper
 				}
 				clause.addLiteral(literal);
 				copy.add(clause);
-				//System.out.println( "Adding clause: "+clause.printClause());		
+				System.out.println( "Adding clause: "+clause.printClause());		
 			}
     		//check if sat
     		//System.out.println("check sat");
     		if(DLL(copy))
     		{
-    		//	System.out.println("found and update . we found in index: "+ i);
+    			System.out.println("found and update . we found in index: "+ i);
     			updateRuleDS();
     			return true;
     		}
-
+    		//System.out.println(i);
     		
 		}
     	return false;

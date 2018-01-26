@@ -261,7 +261,7 @@ public class MinimalModel extends Graph<Integer>{
 //			        });
 //			        System.out.println("------------------------------------------------------------------------------------------------------------------");
 
-
+					System.out.println("exit split connected component");
 					return false;
 				}
 
