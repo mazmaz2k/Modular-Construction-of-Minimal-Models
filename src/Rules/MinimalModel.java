@@ -129,16 +129,19 @@ public class MinimalModel extends Graph<Integer>{
 				{
 					// btnFindMinimalModel.setEnabled(false);
 					lblNewLabel_2.setText("");
-					//	LinkedList l=DS.checkFormat();
-					//	if(l.getSize()==0)
-					//	{
+					/*	LinkedList l=DS.checkFormat();
+						if(l.getSize()==0)
+						{*/
 					if(ModuMin(DS))
+					{
 						lblNewLabel.setText("SAT The minimal model is: " + DS.StringMinimalModel());
+						System.out.println(DS.StringMinimalModel());
+					}
 					else
 						lblNewLabel.setText(" UNSAT ");
 
-					/*	}
-					else
+						//}
+					/*else
 					{
 						System.out.println("Please correct lines: ");
 						l.printList();
@@ -208,7 +211,7 @@ public class MinimalModel extends Graph<Integer>{
 		frame.getContentPane().setLayout(groupLayout);
 	}
 
-	public static boolean ModuMin(RulesDataStructure DS )
+/*	public static boolean ModuMin(RulesDataStructure DS )
 	{
 		int size = DS.SIZE;			
 		while(DS.SIZE!=0)
@@ -234,17 +237,17 @@ public class MinimalModel extends Graph<Integer>{
 //
 			LinkedList s = sourceOfGraph(g);
 			System.out.println("print the source size "+ s.getSize());
-			/**If we have a large source 
-			 * then we build a graph from the source which is a connected component
-			 *  and dismantle the connected component by removing some vertexes */
-			double temp=0.2*g.getAllVertex().size(),sSize=s.getSize();
-			System.out.println("this is the size "+temp+" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//			/***If we have a large source 
+//			 * then we build a graph from the source which is a connected component
+//			 *  and dismantle the connected component by removing some vertexes ?
+//			double temp=0.2*g.getAllVertex().size(),sSize=s.getSize();
+//			System.out.println("this is the size "+temp+" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 			if(sSize> temp)
 			{
 				
 				System.out.println("Dismantle the CC");
-				/**get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS*/
+				//get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS
 				int[] a=dismntleToArray(g,s); 
 				System.out.println(a.length+" - a length-------------------------------------------------------------------");
 				if(!DS.splitConnectedComponent(a))
@@ -286,8 +289,33 @@ public class MinimalModel extends Graph<Integer>{
 //		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
 		return true;
 		//	DS.printValueOfVariables();
+	}*/
+	
+	public static boolean ModuMin(RulesDataStructure DS )
+	{
+		int size = DS.SIZE;			
+		while(DS.SIZE!=0)
+		{
 
-
+//			System.out.println("Rules array SIZE  : " +DS.SIZE);
+//			DS.printRulesArray();
+//			//DS.checkForUnits();//remove empty sources
+			//TODO : print CC and see if I seperate them!!!!!!!
+			Graph<Integer> g = initGraph(DS, size);
+			LinkedList s = sourceOfGraph(g);
+			LinkedList Ts=DS.Ts(s);
+			//Ts.printList();	
+			if(!DS.FindMinimalModelForTs(Ts))
+			{
+//				System.out.println("UNSAT");
+//				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
+				return false;
+			}
+			DS.updateRuleDS();
+		}		
+//		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
+		return true;
+		//	DS.printValueOfVariables();
 	}
 	
 	public static boolean DP(RulesDataStructure DS)
@@ -304,7 +332,6 @@ public class MinimalModel extends Graph<Integer>{
 			return false;
 		}
 		DS.updateRuleDS();
-//		DS.printValueOfVariables();
 		return true;
 	}
 
