@@ -53,7 +53,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 
     }
     
-   /* public LinkedList checkFormat()
+    public LinkedList checkFormat()
     {
     	LinkedList l = new LinkedList();
     	for (int i = 0; i < RulesArray.length; i++) 
@@ -64,7 +64,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     			l.addAtTail(i+2);
 		}
     	return l;
-    }*/
+    }
     
     public void printRulesArray()
     {
