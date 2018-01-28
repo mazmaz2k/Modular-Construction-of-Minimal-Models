@@ -239,17 +239,18 @@ public class MinimalModel extends Graph<Integer>{
 			 * then we build a graph from the source which is a connected component
 			 *  and dismantle the connected component by removing some vertexes */
 			double temp=0.2*g.getAllVertex().size(),sSize=s.getSize();
-			System.out.println("this is the size "+temp+" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//			System.out.println("this is the size "+temp+" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-			if(sSize> temp)
+			if(sSize>temp)
 			{
 				
-				System.out.println("Dismantle the CC");
+				System.out.println("use Dismantle the CC method");
 				/**get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS*/
 				int[] a=dismntleToArray(g,s); 
-				System.out.println(a.length+" - a length-------------------------------------------------------------------");
+				System.out.println("Number of vertex to remove "+ a.length);
 				if(!DS.splitConnectedComponent(a))
 				{
+//					System.out.println("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
 //					Graph<Integer> g2 = initGraph(DS, size);
 //			        List<Set<Vertex<Integer>>> result = scc.scc(g2);
 //			        System.out.println("------------------------------------------------------------------------------------------------------------------");
@@ -264,7 +265,7 @@ public class MinimalModel extends Graph<Integer>{
 
 					return false;
 				}
-				System.out.println("exit split connected component");
+//				System.out.println("exit split connected component");
 
 				
 			}

@@ -678,7 +678,14 @@ public class RulesDataStructure extends DavisPutnamHelper
     {
     	
     	for(int j=0;j<v.length;j++) {
-			ChangeDataStrucureByPlacingValueInVar(v[j], false);
+			if(!conflictExist(v[j], false))
+			{
+				ChangeDataStrucureByPlacingValueInVar(v[j], false);
+
+			}else {
+				ChangeDataStrucureByPlacingValueInVar(v[j], true);
+
+			}
 		}
     	return true;
 //    	ArrayList<Clause> clauses = new ArrayList<>();
