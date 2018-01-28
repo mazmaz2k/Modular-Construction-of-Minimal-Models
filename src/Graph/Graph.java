@@ -300,7 +300,7 @@ public class Graph<T>{
 		}
 
 		if(N.contains((int) s.getId()) && N.size()==1) { // exit condition from recursive 
-			System.out.println("Exit recursion");
+//			System.out.println("Exit recursion");
 			return;
 		}
 		int t=-1;
@@ -313,12 +313,12 @@ public class Graph<T>{
 			System.out.println("Error:  N is Empty");
 		
 		}
-		System.out.println("s is : "+s.getId()+" t is: "+t);
+//		System.out.println("s is : "+s.getId()+" t is: "+t);
 		FordFulkerson f1=new FordFulkerson(graph);	//find flow from s to t
 		FordFulkerson f2=new FordFulkerson(graph);  //finf flow from t to s
 		Vertex<Integer> tVertex=new Vertex<Integer>(t);
 		int x1=f1.maxFlow(f1.findVertexIndex(s), f1.findVertexIndex(tVertex));
-		System.out.println("max flow x1: " +x1);
+//		System.out.println("max flow x1: " +x1);
 		for(Edge<Integer> e: graph.getAllEdges()) {
 			if(f1.getT().contains((int)e.getVertex2().getId())&& f1.getS().contains((int) tVertex.getId())) {
 				e.setSizeOfS(f1.getS().size()); //save size of S to all cut edges!
@@ -326,7 +326,7 @@ public class Graph<T>{
 			}
 		}
 		int x2= f2.maxFlow( f2.findVertexIndex(tVertex),f2.findVertexIndex(s));
-		System.out.println("max flow x2: " +x2);
+//		System.out.println("max flow x2: " +x2);
 		Collection<Integer> S =f1.getS(); //find S- set of vertex in front the cut
 		// remove matrix
 		//Convert N S T  to Arrays
@@ -347,7 +347,7 @@ public class Graph<T>{
 		constaruction(graph,s,N_S,auxiliaryGraph);
 
 		Collection<Integer> N_T=cutLinkList(N,T);
-		System.out.println("the N_T Cut is: "+N_T);
+//		System.out.println("the N_T Cut is: "+N_T);
 
 		constaruction(graph,tVertex, N_T,auxiliaryGraph);
 	}
@@ -370,7 +370,7 @@ public class Graph<T>{
 		//		System.out.println("-------------------real Graph-----------------");
 		//		System.out.println(graph);
 		//		System.out.println("-------------------unique Graph-----------------");
-		System.out.println(uniqueGraph);
+		//System.out.println(uniqueGraph);
 		return uniqueGraph;
 	}
 
@@ -385,9 +385,9 @@ public class Graph<T>{
 		
 		int min=Integer.MAX_VALUE;
 		Vertex<Integer> a=null,b = null;
-		System.out.println("A graph is:");
-		System.out.println(auxiliaryGraph);
-		System.out.println("end of A graph ");
+//		System.out.println("A graph is:");
+//		System.out.println(auxiliaryGraph);
+//		System.out.println("end of A graph ");
 
 		for(Edge<Integer> e: auxiliaryGraph.getAllEdges()) { //find smallest K
 			if(e.getWeight()<min ) {
@@ -477,12 +477,12 @@ public class Graph<T>{
 		return vertexsListToRemove;
 	}
 
-//  unite all dismantle graph methodes 
-//	ALL OF THAT IN COPY GRAPH: change name of method copy graph to something else
-//	receve a source
-//	create graph from the sorce
-//	send the graph to dismantle methods
-//	return array of vertexes to main
+/***  unite all dismantle graph methodes 
+	ALL OF THAT IN COPY GRAPH: change name of method copy graph to something else
+	receve a source
+	create graph from the sorce
+	send the graph to dismantle methods
+	return array of vertexes to main***/
 	public static int[] dismntleToArray(Graph<Integer> graph,LinkedList source) {
 		System.out.println("Enter dismntleToArray----------------------------------------------------------------------");
 		Graph<Integer> connectedComponentGraph = copyGraph(source, graph);
@@ -516,24 +516,8 @@ public class Graph<T>{
 //
 //		System.out.println("check here---------------------------------------------------------------------------");
 //		System.out.println(N+"N is: -------------");
-//        StronglyConnectedComponent scc = new StronglyConnectedComponent();
-        
-//        List<Set<Vertex<Integer>>> result = scc.scc(connectedComponentGraph);
-//        System.out.println("88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888");
-        //print the result
- //       result.forEach(set -> {
- //       	System.out.println("sizeof :"+ set.size());
-//            set.forEach(v -> System.out.print(v.getId() + " "));
-//            System.out.println();
-//        });
-//        System.out.println("88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888");
-//
-//		constaruction(connectedComponentGraph,s,N,A);
-//		System.out.println("connectedComponentGraph graph: ");
-//		System.out.println("A is: -------------\n"+A+"\n end A");
 
-//		System.out.println(connectedComponentGraph);
-//		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+		constaruction(connectedComponentGraph,s,N,A);
 		if(A.getAllVertex().size()==0) {
 			int[] a=new int[1];
 			a[0]=(int)s.getId();
