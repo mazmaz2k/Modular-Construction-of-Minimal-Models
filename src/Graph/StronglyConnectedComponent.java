@@ -53,7 +53,6 @@ public class StronglyConnectedComponent {
         while (!stack.isEmpty()) {
         //	System.out.println("stack "+stack);
             Vertex<Integer> vertex = reverseGraph.getVertex(stack.poll().getId());
-            //System.out.println(vertex+"sssssssssssssssssssssssssssss");
             if(visited.contains(vertex)){
                 continue;
             }
@@ -61,9 +60,6 @@ public class StronglyConnectedComponent {
             DFSUtilForReverseGraph(vertex, visited, set);
             result.add(set);
         }
-//        System.out.println("reverseGraph: ");
-//        System.out.println(reverseGraph);
-//        System.out.println("----------------------------------------------------------: ");
 
         return result;
     }
