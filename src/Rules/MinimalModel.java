@@ -106,36 +106,6 @@ public class MinimalModel extends Graph<Integer>{
 			//TODO : print CC and see if I seperate them!!!!!!!
 			Graph<Integer> g = initGraph(DS, size);
 			LinkedList s = sourceOfGraph(g);
-<<<<<<< HEAD
-//			double temp=0.2*g.getAllVertex().size(),sSize=s.getSize();
-//			if(sSize> temp)
-//			{
-//				
-//				System.out.println("Dismantle the CC");
-//				//get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS
-//				int[] a=dismntleToArray(g,s); 
-//				System.out.println(a.length+" - a length-------------------------------------------------------------------");
-//				DS.splitConnectedComponent(a);
-//				
-////					Graph<Integer> g2 = initGraph(DS, size);
-////			        List<Set<Vertex<Integer>>> result = scc.scc(g2);
-////			        System.out.println("------------------------------------------------------------------------------------------------------------------");
-////			        System.out.println("Here are the size of all the connected component in the graph after Dismantle the CC");
-////			        //print the result
-////			        result.forEach(set -> {
-////			        	System.out.println("sizeof :"+ set.size());
-////			           // set.forEach(v -> System.out.print(v.getId() + " "));
-////			            System.out.println();
-////			        });
-////			        System.out.println("------------------------------------------------------------------------------------------------------------------");
-//
-//					System.out.println("exit split connected component");
-//				
-//
-//			}
-//			else
-//			{
-=======
 			double temp=0.2*g.getAllVertex().size(),sSize=s.getSize();
 			if(sSize> temp)
 			{	
@@ -152,18 +122,15 @@ public class MinimalModel extends Graph<Integer>{
 			}
 			else
 			{
->>>>>>> e2075965b0f73c6cfd9e0f2350c012cd32def5cb
 			
 				LinkedList Ts=DS.Ts(s);
 				//Ts.printList();	
 				if(!DS.FindMinimalModelForTs(Ts))
 				{
-					//				System.out.println("UNSAT");
-					//				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
 					return false;
 				}
 				DS.updateRuleDS();
-		//	}
+			}
 		}		
 //		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
 		return true;

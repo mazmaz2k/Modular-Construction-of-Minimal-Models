@@ -391,7 +391,7 @@ public class Graph<T>{
 		int t=0;
 		for(Edge<Integer> e: auxiliaryGraph.getAllEdges()) { //find smallest K+t
 			t=Math.abs(e.getSSize()-(auxiliaryGraph.getAllVertex().size()/2)) ;
-			System.out.println("t is: "+t +", k is:"+e.getWeight() );
+//			System.out.println("t is: "+t +", k is:"+e.getWeight() );
 
 			if(e.getWeight()+t<min ) {
 				//				a=(int)e.getVertex1().getId();
@@ -399,9 +399,9 @@ public class Graph<T>{
 				a=e.getVertex1();
 				b=e.getVertex2();
 				min=e.getWeight()+t;
-				System.out.println("min t is: "+t+" k is: "+ e.getWeight());
-				System.out.println(e.getSSize()+"-"+(auxiliaryGraph.getAllVertex().size()/2));
-				System.out.println(" finding min: a : "+a.getId()+" b:"+b.getId() );
+//				System.out.println("min t is: "+t+" k is: "+ e.getWeight());
+//				System.out.println(e.getSSize()+"-"+(auxiliaryGraph.getAllVertex().size()/2));
+//				System.out.println(" finding min: a : "+a.getId()+" b:"+b.getId() );
 			}
 		//	System.out.println("e is: "+e+" t is: "+t+" minus "+auxiliaryGraph.getAllVertex().size());
 
@@ -416,17 +416,17 @@ public class Graph<T>{
 		if(maxflow>min) {
 			maxflow=fordFulkerson.maxFlow(fordFulkerson.findVertexIndex(uniqeGraph.getVertex(Math.abs(b.getId()))), fordFulkerson.findVertexIndex(uniqeGraph.getVertex(-Math.abs(a.getId()))));
 		}
-		System.out.println("a is: "+a.getId()+" b is: "+ b.getId()+"----------------------------------------------------------");
+//		System.out.println("a is: "+a.getId()+" b is: "+ b.getId()+"----------------------------------------------------------");
 
 		Collection<Integer> S =fordFulkerson.getS(); // find S- set of vertex before the cut
 		Collection<Integer> T =fordFulkerson.getT(); // find T- set of vertex behind the cut
 		ArrayList<Edge<Integer>> edgeList=new ArrayList<>(); //array list to hold all the edges of the CUT !
 		ArrayList<Vertex<Integer>> vertexsListToRemove= new ArrayList<>();
-		System.out.println(" uniqe graph:------------------------------------------");
-		System.out.println(uniqeGraph);
-		System.out.println("-------------------------------------------------------");
-		System.out.println("S of cut: "+S);
-		System.out.println("T of cut: "+ T);
+//		System.out.println(" uniqe graph:------------------------------------------");
+//		System.out.println(uniqeGraph);
+//		System.out.println("-------------------------------------------------------");
+//		System.out.println("S of cut: "+S);
+//		System.out.println("T of cut: "+ T);
 		for(Vertex<Integer> v: uniqeGraph.getAllVertex()) {
 			if(S.contains((int)v.getId())) {
 				for(Edge<Integer> e : v.getEdges()) {
@@ -437,7 +437,7 @@ public class Graph<T>{
 			}
 
 		}
-		System.out.println(edgeList);
+//		System.out.println(edgeList);
 		for(Edge<Integer> e: edgeList) {
 			if(!vertexsListToRemove.contains(e.getVertex1())) {
 				vertexsListToRemove.add(uniqeGraph.getVertex(Math.abs(e.getVertex1().getId())));
@@ -478,17 +478,6 @@ public class Graph<T>{
 			N.add((int) v.getId());
 
 		}
-//		System.out.println("check here---------------------------------------------------------------------------");
-//		System.out.println(connectedComponentGraph);
-//		System.out.println(N);
-		
-//		System.out.println("source is: -------------\n"+s+"\n end source");
-
-//		System.out.println("connectedComponentGraph is: -------------\n"+connectedComponentGraph.getAllVertex()+"\n end connectedComponentGraph");
-//
-//		System.out.println("check here---------------------------------------------------------------------------");
-//		System.out.println(N+"N is: -------------");
-
 		constaruction(connectedComponentGraph,s,N,A);
 		if(A.getAllVertex().size()==0) {
 			int[] a=new int[1];
@@ -498,8 +487,10 @@ public class Graph<T>{
 		ArrayList<Vertex<Integer>> arr= dismantlingStrongestCC(connectedComponentGraph,A);
 		int [] a=new int[arr.size()];
 		int i=0;
+		System.out.println("a:---------------------"+arr);
 		for(Vertex<Integer> v: arr) {
 			a[i]=(int)v.getId();
+			i++;
 		}
 		return a;
 	}
