@@ -466,10 +466,10 @@ public class RulesDataStructure extends DavisPutnamHelper
     	if(!variableExist(var))
     	{
     		System.out.println("VARIABLE NOT EXIST");
-//    		return ;
+    		return ;
     	}
     	LinkedList l = varHT.get(var);
-    	Node n = l.head;
+	    Node n = l.head;
     	while(n!=null)
     	{
     		if(existInBody(var, n.var)&& !value)
@@ -756,8 +756,6 @@ public class RulesDataStructure extends DavisPutnamHelper
 			}
     		//check if sat
     		//System.out.println("check sat");
-    		/**Here is the problem!!!!!!!!!! Run DP on large source!!!!!!!!!!!!!
-    		 * */
     		if(DLL(copy))
     		{
     			System.out.println("found and update . we found in index: "+ i);

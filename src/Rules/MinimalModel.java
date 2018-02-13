@@ -66,7 +66,6 @@ public class MinimalModel extends Graph<Integer>{
 		int index = 0;
 		int numOfRules;
 
-
 		try 
 		{
 
