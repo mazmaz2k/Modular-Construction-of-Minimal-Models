@@ -108,29 +108,17 @@ public class MinimalModel extends Graph<Integer>{
 			LinkedList s = sourceOfGraph(g);
 			double temp=0.2*g.getAllVertex().size(),sSize=s.getSize();
 			if(sSize> temp)
-			{
-				
+			{	
 				System.out.println("Dismantle the CC");
 				//get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS
 				int[] a=dismntleToArray(g,s); 
-				System.out.println(a.length+" - a length-------------------------------------------------------------------");
+				System.out.println("print array");
+				for (int i = 0; i < a.length; i++)
+				{
+					System.out.println(a[i]);
+				}
 				DS.splitConnectedComponent(a);
-				
-//					Graph<Integer> g2 = initGraph(DS, size);
-//			        List<Set<Vertex<Integer>>> result = scc.scc(g2);
-//			        System.out.println("------------------------------------------------------------------------------------------------------------------");
-//			        System.out.println("Here are the size of all the connected component in the graph after Dismantle the CC");
-//			        //print the result
-//			        result.forEach(set -> {
-//			        	System.out.println("sizeof :"+ set.size());
-//			           // set.forEach(v -> System.out.print(v.getId() + " "));
-//			            System.out.println();
-//			        });
-//			        System.out.println("------------------------------------------------------------------------------------------------------------------");
-
-					System.out.println("exit split connected component");
-				
-
+				System.out.println("exit split connected component");
 			}
 			else
 			{
