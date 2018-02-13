@@ -683,10 +683,14 @@ public class RulesDataStructure extends DavisPutnamHelper
     		if(!conflictExist(v[i], false))
     		{
     			ChangeDataStrucureByPlacingValueInVar(v[i], false);
+    			System.out.println(v[i]+" false");
     		}
     		else
     		{
+    			System.out.println("conflict exist");
     			ChangeDataStrucureByPlacingValueInVar(v[i], true);
+    			System.out.println(v[i]+" true");
+
     		}
 		}
     	
