@@ -131,10 +131,11 @@ public class MinimalModel extends Graph<Integer>{
 				}
 				DS.updateRuleDS();
 			}
-		}		
+		}	
+		
 //		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
+	//	DS.printValueOfVariables();
 		return true;
-		//	DS.printValueOfVariables();
 	}
 	public boolean DP()
 	{
