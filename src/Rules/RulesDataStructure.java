@@ -1,5 +1,6 @@
 package Rules;
 
+import java.io.ObjectOutputStream.PutField;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -674,9 +675,22 @@ public class RulesDataStructure extends DavisPutnamHelper
     also checks if the values we put in the variables return SAT if so we change rules ds 
     by the values we found and if not we try different values for the variables
      ***/
-    public boolean splitConnectedComponent(int[] v)
+    public void splitConnectedComponent(int[] v)
     {
-    	ArrayList<Clause> clauses = new ArrayList<>();
+    	
+    	for (int i = 0; i < v.length; i++) 
+    	{
+    		if(!conflictExist(v[i], false))
+    		{
+    			ChangeDataStrucureByPlacingValueInVar(v[i], false);
+    		}
+    		else
+    		{
+    			ChangeDataStrucureByPlacingValueInVar(v[i], true);
+    		}
+		}
+    	
+    	/*ArrayList<Clause> clauses = new ArrayList<>();
     	for (int i = 0; i < RulesArray.length; i++) 
     	{
     		if(RulesArray[i]!=null)
@@ -753,7 +767,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     		//System.out.println(i);
     		
 		}
-    	return false;
+    	return false;*/
     }
     /**return a binary value of the number 
      * ,the (base) last bits */

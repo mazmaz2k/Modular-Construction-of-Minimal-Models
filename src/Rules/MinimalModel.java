@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.security.spec.DSAGenParameterSpec;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -34,7 +35,7 @@ public class MinimalModel extends Graph<Integer>{
 	 */
 	public static void main(String[] args) 
 	{
-		EventQueue.invokeLater(new Runnable() {
+		/*EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					MinimalModel window = new MinimalModel();
@@ -43,8 +44,159 @@ public class MinimalModel extends Graph<Integer>{
 					e.printStackTrace();
 				}
 			}
-		});
+		});*/
+		MinimalModel m = new MinimalModel();
+		m.readfile();
+		if(m.Modumin())
+		{
+			System.out.println("SAT The minimal model is: "+ m.DS.StringMinimalModel());
+			
+		}
+		else 
+		{
+			System.out.println("UNSAT");
+		}
 	}
+	
+	public void readfile()
+	{
+
+		Scanner sc;
+		int var ;
+		int index = 0;
+		int numOfRules;
+
+
+		try 
+		{
+
+			String Path = ".\\CnfFile.txt" ;
+			sc = new Scanner(new File(Path));//read file
+			numOfRules = sc.nextInt();
+			rulesNum=numOfRules;
+			DS = new RulesDataStructure(numOfRules);
+			while (sc.hasNextLine()) 
+			{
+				var = sc.nextInt();
+				if(var!=0)
+					DS.addToRulsArray(index, var);
+				else
+					index++;
+			}
+			System.out.println("File was read successfully");
+		}catch (FileNotFoundException ex)
+		{
+			// TODO Auto-generated catch block
+			//ex.printStackTrace();
+			System.out.println("Error on reading the file");
+
+
+		}
+
+	}
+	
+	public boolean Modumin()
+	{
+		int size = DS.SIZE;			
+		while(DS.SIZE!=0)
+		{
+
+//			System.out.println("Rules array SIZE  : " +DS.SIZE);
+//			DS.printRulesArray();
+//			//DS.checkForUnits();//remove empty sources
+			//TODO : print CC and see if I seperate them!!!!!!!
+			Graph<Integer> g = initGraph(DS, size);
+			LinkedList s = sourceOfGraph(g);
+			double temp=0.2*g.getAllVertex().size(),sSize=s.getSize();
+			if(sSize> temp)
+			{
+				
+				System.out.println("Dismantle the CC");
+				//get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS
+				int[] a=dismntleToArray(g,s); 
+				System.out.println(a.length+" - a length-------------------------------------------------------------------");
+				DS.splitConnectedComponent(a);
+				
+//					Graph<Integer> g2 = initGraph(DS, size);
+//			        List<Set<Vertex<Integer>>> result = scc.scc(g2);
+//			        System.out.println("------------------------------------------------------------------------------------------------------------------");
+//			        System.out.println("Here are the size of all the connected component in the graph after Dismantle the CC");
+//			        //print the result
+//			        result.forEach(set -> {
+//			        	System.out.println("sizeof :"+ set.size());
+//			           // set.forEach(v -> System.out.print(v.getId() + " "));
+//			            System.out.println();
+//			        });
+//			        System.out.println("------------------------------------------------------------------------------------------------------------------");
+
+					System.out.println("exit split connected component");
+				
+
+			}
+			else
+			{
+			
+				LinkedList Ts=DS.Ts(s);
+				//Ts.printList();	
+				if(!DS.FindMinimalModelForTs(Ts))
+				{
+					//				System.out.println("UNSAT");
+					//				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
+					return false;
+				}
+				DS.updateRuleDS();
+			}
+		}		
+//		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
+		return true;
+		//	DS.printValueOfVariables();
+	}
+	public boolean DP()
+	{
+		LinkedList Ts=new LinkedList();
+//		System.out.println(rulesNum);
+		for (int i = 0; i < rulesNum ; i++) {
+			Ts.addAtTail(i);
+		}
+		if(!DS.FindMinimalModelForTs(Ts))
+		{
+//			System.out.println("UNSAT");
+//			System.out.println("The amount of time we put value in a variable is : " + DS.counter);
+			return false;
+		}
+		DS.updateRuleDS();
+		return true;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	/**
 	 * Create the application.
@@ -305,6 +457,7 @@ public class MinimalModel extends Graph<Integer>{
 		//	DS.printValueOfVariables();
 	}
 	
+	/*
 	public static boolean DP(RulesDataStructure DS)
 	{
 		LinkedList Ts=new LinkedList();
@@ -321,7 +474,7 @@ public class MinimalModel extends Graph<Integer>{
 		DS.updateRuleDS();
 		return true;
 	}
-
+*/
 
 
 }
