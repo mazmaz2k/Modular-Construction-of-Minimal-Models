@@ -327,7 +327,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 		
  	  }
  	 
- 	  if(DLL(clauses)==true)
+ 	  if(DLL(clauses))
  	  {
  		  return true;
  	  }
@@ -362,12 +362,12 @@ public class RulesDataStructure extends DavisPutnamHelper
 				}
 				if(hasFalsehood(Clauses)) 
 				{
-				//	System.out.println("Falsehood detected. Returning false.");
+					System.out.println("Falsehood detected. Returning false.");
 					return false;
 				}
 				else if(hasEmptyClause(Clauses))
 				{
-				//	System.out.println("Empty clause detected. Returning false.");
+					System.out.println("Empty clause detected. Returning false.");
 					return false;
 				}
 			}
@@ -518,28 +518,24 @@ public class RulesDataStructure extends DavisPutnamHelper
     public boolean conflictExist(int var ,boolean val)
     {
     	LinkedList l = varHT.get(var);
-    	if(variableExist(var))
+    	Node n = l.head;
+    	while(n!=null)
     	{
-    		Node n = l.head;
-    		while(n!=null)
+    		int sizeOfBody, sizeOfHead;
+    		sizeOfBody = RulesArray[n.var].body.getSize();
+    		sizeOfHead = RulesArray[n.var].head.getSize();
+    		if( (existInBody(var,n.var )) && sizeOfBody==1 && val &&sizeOfHead==0)
     		{
-    			int sizeOfBody, sizeOfHead;
-    			sizeOfBody = RulesArray[n.var].body.getSize();
-    			sizeOfHead = RulesArray[n.var].head.getSize();
-    			if( (existInBody(var,n.var )) && sizeOfBody==1 && val &&sizeOfHead==0)
-    			{
     				return true;
-    			}
-    			else if((existInHead(var,n.var)) && sizeOfHead==1 && !val &&sizeOfBody==0)
-    			{
-    				return true;
-    			}
-    			else
-    			{
-    				return false;
-    			}
-    		}		
-    	}
+    		}
+    		else if((existInHead(var,n.var)) && sizeOfHead==1 && !val &&sizeOfBody==0)
+    		{
+    			return true;
+    		}
+    		
+    			n=n.next;
+    	}		
+    	
     	return false;   	
     }
     
