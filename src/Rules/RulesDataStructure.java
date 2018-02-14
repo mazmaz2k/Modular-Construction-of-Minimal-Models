@@ -362,12 +362,12 @@ public class RulesDataStructure extends DavisPutnamHelper
 				}
 				if(hasFalsehood(Clauses)) 
 				{
-					System.out.println("Falsehood detected. Returning false.");
+					//System.out.println("Falsehood detected. Returning false.");
 					return false;
 				}
 				else if(hasEmptyClause(Clauses))
 				{
-					System.out.println("Empty clause detected. Returning false.");
+					//System.out.println("Empty clause detected. Returning false.");
 					return false;
 				}
 			}
@@ -476,23 +476,23 @@ public class RulesDataStructure extends DavisPutnamHelper
     		{
     			deleteRule(n.var);
     			this.SIZE--;
- //   			System.out.println("DELETE RULE NUMBER " + n.var);
+    		//	System.out.println("DELETE RULE NUMBER " + n.var);
     		}
     		else if((existInBody(var, n.var)&& value))
     		{
     			deleteVarFromBody(var,n.var);
-//    			System.out.println( "DELETE VARIABLE " + var + " IN RULE " + n.var);
+    		//	System.out.println( "DELETE VARIABLE " + var + " IN RULE " + n.var);
     		}
     		else if(existInHead(var, n.var)&& value)
     		{
     			deleteRule(n.var);
     			this.SIZE--;
-//    			System.out.println("DELETE RULE NUMBER " + n.var);
+    		//	System.out.println("DELETE RULE NUMBER " + n.var);
     		}
     		else if (existInHead(var, n.var)&& !value)
     		{
     			deleteVarFromHead(var,n.var);
-//    			System.out.println("DELETE VARIABLE "+var+" IN RULE " + n.var);
+    	//		System.out.println("DELETE VARIABLE "+var+" IN RULE " + n.var);
     		}
     		
     		n=n.next;
@@ -673,9 +673,11 @@ public class RulesDataStructure extends DavisPutnamHelper
      ***/
     public void splitConnectedComponent(int[] v)
     {
-    	
+    	System.out.println("enter split");
+    	/*printRulesArray();
     	for (int i = 0; i < v.length; i++) 
     	{
+    		System.out.println("try to put false in " + v[i]);
     		if(!conflictExist(v[i], false))
     		{
     			ChangeDataStrucureByPlacingValueInVar(v[i], false);
@@ -683,15 +685,16 @@ public class RulesDataStructure extends DavisPutnamHelper
     		}
     		else
     		{
-    			System.out.println("conflict exist");
     			ChangeDataStrucureByPlacingValueInVar(v[i], true);
     			minModel.addAtTail(v[i]);
     			System.out.println(v[i]+" true");
 
     		}
 		}
+    	printRulesArray();
+*/
     	
-    	/*ArrayList<Clause> clauses = new ArrayList<>();
+    	ArrayList<Clause> clauses = new ArrayList<>();
     	for (int i = 0; i < RulesArray.length; i++) 
     	{
     		if(RulesArray[i]!=null)
@@ -757,16 +760,27 @@ public class RulesDataStructure extends DavisPutnamHelper
 			}
     		//check if sat
     		//System.out.println("check sat");
+    		printRulesArray();
     		if(DLL(copy))
     		{
+        		//literalMap.clear();
     			System.out.println("found and update . we found in index: "+ i);
-    			updateRuleDS();
-    			return true;
+    			for (int j = 0; j < size; j++) 
+    			{
+					System.out.println("index: "+ i + " var: " + v[j] +" val: " + binaryArray[j]);
+					ChangeDataStrucureByPlacingValueInVar(v[j], binaryArray[j]);
+				}
+    			//literalMap.clear();
+    			//updateRuleDS();
+    			System.out.println(literalMap.toString());
+    			literalMap.clear();
+    			return ;
     		}
     		//System.out.println(i);
+    		literalMap.clear();
     		
 		}
-    	return false;*/
+    	//return false;
     }
     /**return a binary value of the number 
      * ,the (base) last bits */
