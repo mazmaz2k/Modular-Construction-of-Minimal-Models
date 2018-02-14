@@ -327,7 +327,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 		
  	  }
  	 
- 	  if(DLL(clauses)==true)
+ 	  if(DLL(clauses))
  	  {
  		  return true;
  	  }
@@ -367,7 +367,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 				}
 				else if(hasEmptyClause(Clauses))
 				{
-				//	System.out.println("Empty clause detected. Returning false.");
+					System.out.println("Empty clause detected. Returning false.");
 					return false;
 				}
 			}
@@ -466,7 +466,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	if(!variableExist(var))
     	{
     		System.out.println("VARIABLE NOT EXIST");
-    		return ;
+//    		return ;
     	}
     	LinkedList l = varHT.get(var);
 	    Node n = l.head;
