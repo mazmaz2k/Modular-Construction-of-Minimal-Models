@@ -124,13 +124,15 @@ public class MinimalModel extends Graph<Integer>{
 		{
 
 //			System.out.println("Rules array SIZE  : " +DS.SIZE);
-//			DS.printRulesArray();
+			//DS.printRulesArray();
 //			//DS.checkForUnits();//remove empty sources
 			//TODO : print CC and see if I separate them!!!!!!!
 			Graph<Integer> g = initGraph(DS, size);
 			LinkedList s = sourceOfGraph(g);
+			System.out.println("s is: ");
+			s.printList();
 			double temp=0.2*g.getAllVertex().size(),sSize=s.getSize();
-			if(sSize> temp)
+			if(false)
 			{	
 //				System.out.println("Dismantle the CC");
 				//get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS
@@ -145,8 +147,12 @@ public class MinimalModel extends Graph<Integer>{
 			}
 			else
 			{
+<<<<<<< HEAD
+=======
+				System.out.println("Ts is: ");
+>>>>>>> af5a16e0e4ad3a4c40764fc302e5d3f2e8bf48bd
 				LinkedList Ts=DS.Ts(s);
-				//Ts.printList();	
+				Ts.printList();	
 				if(!DS.FindMinimalModelForTs(Ts))
 				{
 					return false;
