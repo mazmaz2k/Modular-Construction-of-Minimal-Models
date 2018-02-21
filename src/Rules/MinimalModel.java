@@ -47,7 +47,6 @@ public class MinimalModel extends Graph<Integer>{
 		});*/
 		MinimalModel m = new MinimalModel();
 		m.readfile();
-
 		LinkedList l= m.DS.checkFormat();
 		if(l.getSize()==0)
 		{
@@ -92,7 +91,7 @@ public class MinimalModel extends Graph<Integer>{
 		try 
 		{
 
-			String Path = ".\\CnfFile.txt" ;
+			String Path = ".//CnfFile.txt" ;
 			sc = new Scanner(new File(Path));//read file
 			numOfRules = sc.nextInt();
 			rulesNum=numOfRules;
@@ -123,7 +122,7 @@ public class MinimalModel extends Graph<Integer>{
 		while(DS.SIZE!=0)
 		{
 
-//			System.out.println("Rules array SIZE  : " +DS.SIZE);
+			System.out.println("Rules array SIZE  : " +DS.SIZE);
 			//DS.printRulesArray();
 //			//DS.checkForUnits();//remove empty sources
 			//TODO : print CC and see if I separate them!!!!!!!
@@ -132,7 +131,8 @@ public class MinimalModel extends Graph<Integer>{
 			System.out.println("s is: ");
 			s.printList();
 			double temp=0.2*g.getAllVertex().size(),sSize=s.getSize();
-			if(false)
+			System.out.println("vals : " + DS.literalMap.toString());
+			if(sSize>temp)
 			{	
 //				System.out.println("Dismantle the CC");
 				//get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS
@@ -147,16 +147,16 @@ public class MinimalModel extends Graph<Integer>{
 			}
 			else
 			{
-<<<<<<< HEAD
-=======
+
 				System.out.println("Ts is: ");
->>>>>>> af5a16e0e4ad3a4c40764fc302e5d3f2e8bf48bd
 				LinkedList Ts=DS.Ts(s);
 				Ts.printList();	
 				if(!DS.FindMinimalModelForTs(Ts))
 				{
+					DS.printRulesArray();
 					return false;
 				}
+				System.out.println("vals after : " + DS.literalMap.toString());
 				DS.updateRuleDS();
 				
 			}

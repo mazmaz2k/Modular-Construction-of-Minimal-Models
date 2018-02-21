@@ -10,7 +10,7 @@ public class Vertex<T> {
     private List<Edge<T>> edges = new ArrayList<>();
     private List<Vertex<T>> adjacentVertex = new ArrayList<>();
     private Set<Vertex<Integer>> CCList;
-    Vertex(long id){
+    public Vertex(long id){
         this.id = id;
     }
     
