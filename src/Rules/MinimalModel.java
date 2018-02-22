@@ -100,6 +100,31 @@ public class MinimalModel extends Graph<Integer>{
 		while(DS.SIZE!=0)
 		{
 
+			//create graph
+			Graph<Integer> g = initGraph(DS, size);
+			//find source
+			LinkedList s = sourceOfGraph(g);
+			//Find Ts
+			LinkedList Ts=DS.Ts(s);
+			//find minimal model for Ts
+			if(!DS.FindMinimalModelForTs(Ts))
+			{
+				return false;
+			}
+			DS.updateRuleDS();		
+		}	
+		
+//		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
+	//	DS.printValueOfVariables();
+		return true;
+	}
+	/*
+	public boolean Modumin()
+	{
+		int size = DS.SIZE;			
+		while(DS.SIZE!=0)
+		{
+
 			System.out.println("Rules array SIZE  : " +DS.SIZE);
 			//DS.printRulesArray();
 //			//DS.checkForUnits();//remove empty sources
@@ -142,6 +167,7 @@ public class MinimalModel extends Graph<Integer>{
 	//	DS.printValueOfVariables();
 		return true;
 	}
+	*/
 	public boolean DP()
 	{
 		LinkedList Ts=new LinkedList();
