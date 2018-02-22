@@ -466,7 +466,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	if(!variableExist(var))
     	{
     		System.out.println("VARIABLE NOT EXIST");
-    		return ;
+//    		return ;
     	}
     	LinkedList l = varHT.get(var);
 	    Node n = l.head;

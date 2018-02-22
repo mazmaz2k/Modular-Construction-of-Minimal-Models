@@ -487,7 +487,7 @@ public class Graph<T>{
 		ArrayList<Vertex<Integer>> arr= dismantlingStrongestCC(connectedComponentGraph,A);
 		int [] a=new int[arr.size()];
 		int i=0;
-		System.out.println("a:---------------------"+arr);
+		System.out.println("a:---"+arr);
 		for(Vertex<Integer> v: arr) {
 			a[i]=(int)v.getId();
 			i++;

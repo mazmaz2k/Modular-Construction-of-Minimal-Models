@@ -47,15 +47,37 @@ public class MinimalModel extends Graph<Integer>{
 		});*/
 		MinimalModel m = new MinimalModel();
 		m.readfile();
-	    if(m.Modumin())
+		LinkedList l= m.DS.checkFormat();
+		if(l.getSize()==0)
 		{
-			System.out.println("SAT The minimal model is: "+ m.DS.StringMinimalModel());
-			
+			if(m.Modumin())
+			{
+				System.out.println("SAT The minimal model is: "+ m.DS.StringMinimalModel());
+
+			}
+			else 
+			{
+				System.out.println("UNSAT");
+			}
 		}
-		else 
+		else
 		{
-			System.out.println("UNSAT");
+			System.out.println("Please correct lines: ");
+			l.printList();
+			System.out.println("Its not in the right format");
+			System.out.println("Can't be a clause where all litarals are negative");
 		}
+
+		
+//		if(m.Modumin())
+//		{
+//			System.out.println("SAT The minimal model is: "+ m.DS.StringMinimalModel());
+//			
+//		}
+//		else 
+//		{
+//			System.out.println("UNSAT");
+//		}
 	}
 	
 	public void readfile()
@@ -128,7 +150,7 @@ public class MinimalModel extends Graph<Integer>{
 			System.out.println("Rules array SIZE  : " +DS.SIZE);
 			//DS.printRulesArray();
 //			//DS.checkForUnits();//remove empty sources
-			//TODO : print CC and see if I seperate them!!!!!!!
+			//TODO : print CC and see if I separate them!!!!!!!
 			Graph<Integer> g = initGraph(DS, size);
 			LinkedList s = sourceOfGraph(g);
 			System.out.println("s is: ");
@@ -137,19 +159,20 @@ public class MinimalModel extends Graph<Integer>{
 			System.out.println("vals : " + DS.literalMap.toString());
 			if(sSize>temp)
 			{	
-				System.out.println("Dismantle the CC");
+//				System.out.println("Dismantle the CC");
 				//get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS
 				int[] a=dismntleToArray(g,s); 
-				System.out.println("print array");
-				for (int i = 0; i < a.length; i++)
-				{
-					System.out.println(a[i]);
-				}
+//				System.out.println("print array");
+//				for (int i = 0; i < a.length; i++)
+//				{
+//					System.out.println(a[i]);
+//				}
 				DS.splitConnectedComponent(a);
-				System.out.println("exit split connected component");
+//				System.out.println("exit split connected component");
 			}
 			else
 			{
+
 				System.out.println("Ts is: ");
 				LinkedList Ts=DS.Ts(s);
 				Ts.printList();	
@@ -160,11 +183,12 @@ public class MinimalModel extends Graph<Integer>{
 				}
 				System.out.println("vals after : " + DS.literalMap.toString());
 				DS.updateRuleDS();
+				
 			}
 		}	
 		
 //		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
-	//	DS.printValueOfVariables();
+//		DS.printValueOfVariables();
 		return true;
 	}
 	*/
@@ -456,7 +480,7 @@ public class MinimalModel extends Graph<Integer>{
 
 //			System.out.println("Rules array SIZE  : " +DS.SIZE);
 //			DS.printRulesArray();
-//			//DS.checkForUnits();//remove empty sources
+			//DS.checkForUnits();//remove empty sources
 			Graph<Integer> g = initGraph(DS, size);
 			LinkedList s = sourceOfGraph(g);
 			LinkedList Ts=DS.Ts(s);
