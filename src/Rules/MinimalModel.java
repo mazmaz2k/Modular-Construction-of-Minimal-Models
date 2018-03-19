@@ -7,8 +7,11 @@ import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.security.spec.DSAGenParameterSpec;
 import java.util.List;
 import java.util.Scanner;
@@ -46,8 +49,21 @@ public class MinimalModel extends Graph<Integer>{
 			}
 		});*/
 		MinimalModel m = new MinimalModel();
-		m.readfile();
-		LinkedList l= m.DS.checkFormat();
+		m.script();
+		
+//		m.readfile();
+//		if(m.Modumin())
+//		{
+//			System.out.println("SAT The minimal model is: "+ m.DS.StringMinimalModel());
+//			
+//		}
+//		else 
+//		{
+//			System.out.println("UNSAT");
+//		}
+		
+		
+		/*LinkedList l= m.DS.checkFormat();
 		if(l.getSize()==0)
 		{
 			if(m.Modumin())
@@ -66,18 +82,35 @@ public class MinimalModel extends Graph<Integer>{
 			l.printList();
 			System.out.println("Its not in the right format");
 			System.out.println("Can't be a clause where all litarals are negative");
-		}
+		}*/
 
 		
-//		if(m.Modumin())
-//		{
-//			System.out.println("SAT The minimal model is: "+ m.DS.StringMinimalModel());
-//			
-//		}
-//		else 
-//		{
-//			System.out.println("UNSAT");
-//		}
+		
+	}
+	
+	public void script()
+	{
+		String s ="python3 cnf2lparse.py ex | ./wasp --minimize-predicates=a --minimization-algorithm=guess-check-split --silent" ;
+
+		String[] cmd = {
+				"/bin/sh",
+				"-c",
+				s
+				};
+
+		String place = "/home/rachel/Desktop/alviano-wasp-f3fed39/build/release";
+		try {
+			Process p =Runtime.getRuntime().exec(cmd,null,new File(place));
+			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String line;
+			while((line = in.readLine())!=null)
+			{
+				System.out.println(line);
+			}
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void readfile()
@@ -244,164 +277,6 @@ public class MinimalModel extends Graph<Integer>{
 	 */
 	public MinimalModel() {
 		super(true);
-		init();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void init() {
-
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
-		JLabel lblPath = new JLabel("Path: ");
-		textField = new JTextField();
-		textField.setColumns(10);
-
-		textField.setText(".\\CnfFile.txt");
-
-
-
-		JButton btnReadFile = new JButton("Read File");
-		JLabel lblNewLabel_1 = new JLabel("");
-
-		btnReadFile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{
-				Scanner sc;
-				int var ;
-				int index = 0;
-				int numOfRules;
-
-
-				try 
-				{
-
-					String Path = textField.getText();
-					sc = new Scanner(new File(Path));//read file
-					numOfRules = sc.nextInt();
-					rulesNum=numOfRules;
-					DS = new RulesDataStructure(numOfRules);
-					lblNewLabel_1.setText("Please wait...");
-					while (sc.hasNextLine()) 
-					{
-						var = sc.nextInt();
-						if(var!=0)
-							DS.addToRulsArray(index, var);
-						else
-							index++;
-					}
-					lblNewLabel_1.setText("File was read successfully");
-					lblNewLabel_1.setForeground(Color.GREEN);
-					readFile = true;
-					//btnReadFile.setEnabled(false);
-				}catch (FileNotFoundException ex)
-				{
-					// TODO Auto-generated catch block
-					//ex.printStackTrace();
-					lblNewLabel_1.setText("Error on reading the file");
-					lblNewLabel_1.setForeground(Color.RED);
-
-
-				}
-
-			}
-		});
-
-		JLabel lblNewLabel = new JLabel("");
-		JButton btnFindMinimalModel = new JButton("Find Minimal Model");
-		JLabel lblNewLabel_2 = new JLabel("");
-
-		btnFindMinimalModel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{
-				if(readFile)
-				{
-					// btnFindMinimalModel.setEnabled(false);
-					lblNewLabel_2.setText("");
-					/*	LinkedList l=DS.checkFormat();
-						if(l.getSize()==0)
-						{*/
-					if(ModuMin(DS))
-					{
-						lblNewLabel.setText("SAT The minimal model is: " + DS.StringMinimalModel());
-						System.out.println(DS.StringMinimalModel());
-					}
-					else
-						lblNewLabel.setText(" UNSAT ");
-
-						//}
-					/*else
-					{
-						System.out.println("Please correct lines: ");
-						l.printList();
-						System.out.println("Its not in the right format");
-						System.out.println("Can't be a clause where all litarals are negative");
-					}*/
-				}
-				else
-				{
-					lblNewLabel_2.setText("Please read a file");
-					lblNewLabel_2.setForeground(Color.RED);
-					lblNewLabel_2.setHorizontalAlignment(JLabel.CENTER);
-					lblNewLabel_2.setVerticalAlignment(JLabel.CENTER);
-				}
-			}
-		});
-
-
-
-
-
-
-		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
-		groupLayout.setHorizontalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createSequentialGroup()
-										.addGap(77)
-										.addComponent(lblPath)
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(textField, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayout.createSequentialGroup()
-										.addGap(172)
-										.addComponent(btnReadFile)
-										.addGap(18)
-										.addComponent(lblNewLabel_1))
-								.addGroup(groupLayout.createSequentialGroup()
-										.addContainerGap()
-										.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE))
-								.addGroup(groupLayout.createSequentialGroup()
-										.addGap(156)
-										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-												.addComponent(lblNewLabel_2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-												.addComponent(btnFindMinimalModel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-						.addContainerGap())
-				);
-		groupLayout.setVerticalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblPath)
-								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnReadFile)
-								.addComponent(lblNewLabel_1))
-						.addGap(41)
-						.addComponent(btnFindMinimalModel)
-						.addGap(18)
-						.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
-						.addGap(11)
-						.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
-						.addContainerGap())
-				);
-		frame.getContentPane().setLayout(groupLayout);
 	}
 
 /*	public static boolean ModuMin(RulesDataStructure DS )
@@ -472,7 +347,7 @@ public class MinimalModel extends Graph<Integer>{
 		//	DS.printValueOfVariables();
 	} */
 	
-	public static boolean ModuMin(RulesDataStructure DS )
+/*	public static boolean ModuMin(RulesDataStructure DS )
 	{
 		int size = DS.SIZE;			
 		while(DS.SIZE!=0)
@@ -496,7 +371,7 @@ public class MinimalModel extends Graph<Integer>{
 //		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
 		return true;
 		//	DS.printValueOfVariables();
-	}
+	}*/
 	
 	/*
 	public static boolean DP(RulesDataStructure DS)
