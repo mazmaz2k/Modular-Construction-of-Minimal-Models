@@ -60,6 +60,8 @@ public class Vertex_size_10 {
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 //		System.out.println("A graph: ");
 //		System.out.println(A);
+		System.out.println("connected component BEFORE dismentle: ");
+
 		 StronglyConnectedComponent scc = new StronglyConnectedComponent();
 	        List<Set<Vertex<Integer>>> result = scc.scc(g);
 
@@ -74,6 +76,7 @@ public class Vertex_size_10 {
 		g=g.removeVertex(arr);
 //		System.out.println(g);
 //		 StronglyConnectedComponent scc = new StronglyConnectedComponent();
+		System.out.println("connected component After dismentle: ");
 		result = scc.scc(g);
 
 	        //print the result

@@ -414,6 +414,8 @@ public class Vertex_size_97 {
 		g=g.removeVertex(arr);
 //		System.out.println(g);
 //		 StronglyConnectedComponent scc = new StronglyConnectedComponent();
+		System.out.println("connected component After dismentle: ");
+
 		result = scc.scc(g);
 
 	        //print the result

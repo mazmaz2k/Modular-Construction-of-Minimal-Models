@@ -117,6 +117,8 @@ public class Vertex_size_25 {
 		//System.out.println(N);
 		g.constaruction(g,s,N,A);
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+		System.out.println("connected component BEFORE dismentle: ");
+
 //		System.out.println("A graph: ");
 //		System.out.println(A);
 		 StronglyConnectedComponent scc = new StronglyConnectedComponent();
@@ -133,6 +135,8 @@ public class Vertex_size_25 {
 		g=g.removeVertex(arr);
 //		System.out.println(g);
 //		 StronglyConnectedComponent scc = new StronglyConnectedComponent();
+		System.out.println("connected component After dismentle: ");
+
 		result = scc.scc(g);
 
 	        //print the result

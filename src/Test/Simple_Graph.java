@@ -5,8 +5,11 @@ package Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 import Graph.Graph;
+import Graph.StronglyConnectedComponent;
 import Graph.Vertex;
 
 /**
@@ -44,6 +47,8 @@ public class Simple_Graph {
 		}
 
 		//System.out.println(N);
+		System.out.println("connected component BEFORE dismentle: ");
+
 		g.constaruction(g,s,N,A);
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 		System.out.println("A graph: ");
@@ -51,8 +56,18 @@ public class Simple_Graph {
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 		ArrayList<Vertex<Integer>> arr= g.dismantlingStrongestCC(g,A);
 		System.out.println("Vertex to remove: "+arr);
+		System.out.println("connected component After dismentle: ");
+		StronglyConnectedComponent scc = new StronglyConnectedComponent();
+	    List<Set<Vertex<Integer>>> result = scc.scc(g);
+
 		g=g.removeVertex(arr);
-		System.out.println(g);
+		result = scc.scc(g);
+
+        //print the result
+        result.forEach(set -> {
+            set.forEach(v -> System.out.print(v.getId() + " "));
+            System.out.println();
+        });
 
 
 	}

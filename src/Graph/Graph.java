@@ -407,7 +407,6 @@ public class Graph<T>{
 
 			t=0;
 		}
-	// TODO  t=Math.abs(e.getSSize()-(graph.getAllVertex().size()/2))          check    s+t <=0.5
 
 		Graph<Integer> uniqeGraph=uniqueGraphCreation(graph); // duplicate graph to change K-edge connected component to find vertex to remove
 
@@ -425,8 +424,8 @@ public class Graph<T>{
 //		System.out.println(" uniqe graph:------------------------------------------");
 //		System.out.println(uniqeGraph);
 //		System.out.println("-------------------------------------------------------");
-//		System.out.println("S of cut: "+S);
-//		System.out.println("T of cut: "+ T);
+		System.out.println("S of cut: "+S);
+		System.out.println("T of cut: "+ T);
 		for(Vertex<Integer> v: uniqeGraph.getAllVertex()) {
 			if(S.contains((int)v.getId())) {
 				for(Edge<Integer> e : v.getEdges()) {
@@ -442,7 +441,7 @@ public class Graph<T>{
 			if(!vertexsListToRemove.contains(e.getVertex1())) {
 				vertexsListToRemove.add(uniqeGraph.getVertex(Math.abs(e.getVertex1().getId())));
 			}
-			if(!vertexsListToRemove.contains(e.getVertex2())) {
+			else if(!vertexsListToRemove.contains(e.getVertex2())) {
 				vertexsListToRemove.add(uniqeGraph.getVertex(Math.abs(e.getVertex2().getId())));
 			}
 		}
