@@ -1,6 +1,6 @@
 package Rules;
 
-import java.io.ObjectOutputStream.PutField;
+import java.awt.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -16,7 +16,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 {
     public Rule[] RulesArray ;
     Hashtable<Integer, LinkedList> varHT ;
-    static HashMap<String, Boolean> literalMap;// We will store the value of literals in this structure as we go along
+    static HashMap<Integer, Boolean> literalMap;// We will store the value of literals in this structure as we go along
     public int counter = 0;
     public LinkedList minModel;
     int SIZE;
@@ -31,7 +31,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	
     	varHT = new Hashtable<Integer, LinkedList>();
     	
-    	literalMap = new HashMap<String,Boolean>();
+    	literalMap = new HashMap<Integer,Boolean>();
     	minModel = new LinkedList();
     }
    
@@ -213,8 +213,8 @@ public class RulesDataStructure extends DavisPutnamHelper
     public void printValueOfVariables()
     {
     	System.out.println("-------THE VALUE TABLE--------");
-    	Set<String> keys = literalMap.keySet();
-    	for(String key: keys)
+    	Set<Integer> keys = literalMap.keySet();
+    	for(int key: keys)
    	 	{
     		System.out.print("Value of " + key +" is ");
     		if(literalMap.get(key))
@@ -239,7 +239,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	boolean addToTs;
     	for (int i = 0; i < s.getSize() ; i++)
     	{
-    		literalMap.put(String.valueOf(Snode.var), false);//init all vars of s to false
+    		literalMap.put(Snode.var, false);//init all vars of s to false
     		LinkedList l = varHT.get(Snode.var);
     		if(l!=null)
     		{
@@ -434,18 +434,28 @@ public class RulesDataStructure extends DavisPutnamHelper
 		}
 	}
     
+    public void putMinModelInLiteralMap(LinkedList minmodel)
+    {
+    	Node n =minmodel.head;
+    	while(n!=null)
+    	{
+    		literalMap.put(n.var, true);
+    		n=n.next;
+    	}
+    }
+    
     public void updateRuleDS()
     {
-    	Set<String> keys = literalMap.keySet();
+    	Set<Integer> keys = literalMap.keySet();
     	//try {
-    		for(String key: keys)
+    		for(int key: keys)
     		{
     			//System.out.println("key: "+ Integer.parseInt(key) + " value:  "+literalMap.get(key) );
     			if(literalMap.get(key))
     			{
-    				minModel.addAtTail(Integer.parseInt(key));
+    				minModel.addAtTail(key);
     			}
-    			ChangeDataStrucureByPlacingValueInVar(Integer.parseInt(key), literalMap.get(key));
+    			ChangeDataStrucureByPlacingValueInVar(key, literalMap.get(key));
     		//	literalMap.remove(key);
     			//System.out.println("remove key  " + key);
     		}

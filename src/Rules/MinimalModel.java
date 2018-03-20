@@ -8,11 +8,14 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.security.spec.DSAGenParameterSpec;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -22,9 +25,12 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.xml.soap.Node;
+
 import Graph.Graph;
 import Graph.StronglyConnectedComponent;
 import Graph.Vertex;
+
 
 public class MinimalModel extends Graph<Integer>{
 
@@ -49,18 +55,23 @@ public class MinimalModel extends Graph<Integer>{
 			}
 		});*/
 		MinimalModel m = new MinimalModel();
-		m.script();
-		
+		m.readfile();
+		if(m.Modumin())
+		{
+			System.out.println("SAT The minimal model is: "+ m.DS.StringMinimalModel());		
+		}
+		else 
+		{
+			System.out.println("UNSAT");
+		}
+		//m.script();
+//		LinkedList l = new LinkedList();
+//		l.addAtTail(0);
+//		l.addAtTail(1);
+//		l.addAtTail(2);
+//		m.writeToFile(l);
 //		m.readfile();
-//		if(m.Modumin())
-//		{
-//			System.out.println("SAT The minimal model is: "+ m.DS.StringMinimalModel());
-//			
-//		}
-//		else 
-//		{
-//			System.out.println("UNSAT");
-//		}
+//		
 		
 		
 		/*LinkedList l= m.DS.checkFormat();
@@ -88,7 +99,7 @@ public class MinimalModel extends Graph<Integer>{
 		
 	}
 	
-	public void script()
+	public LinkedList MinimalModelFromScript()
 	{
 		String s ="python3 cnf2lparse.py ex | ./wasp --minimize-predicates=a --minimization-algorithm=guess-check-split --silent" ;
 
@@ -99,18 +110,42 @@ public class MinimalModel extends Graph<Integer>{
 				};
 
 		String place = "/home/rachel/Desktop/alviano-wasp-f3fed39/build/release";
+		LinkedList list = new LinkedList();
 		try {
 			Process p =Runtime.getRuntime().exec(cmd,null,new File(place));
 			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			String line;
-			while((line = in.readLine())!=null)
+			
+		//	String line;
+			//System.out.println(in.readLine());
+			String line = in.readLine();
+			if(line.equals("{}"))
 			{
-				System.out.println(line);
+				return list;
 			}
+			if(line.equals("INCOHERENT"))
+			{
+				list.addAtTail(-1);
+				return list;
+			}
+			String[] str = line.split(" ");
+			for (int i = 0; i < str.length; i++) {
+				str[i]=str[i].replace("a", "");
+				str[i]=str[i].replace("{", "");
+				str[i]=str[i].replace("}", "");
+				str[i]=str[i].replace("(", "");
+				str[i]=str[i].replace(")", "");
+				str[i]=str[i].replace(",", "");
+			}
+			for (int j = 0; j < str.length; j++) 
+			{				
+				list.addAtTail(Integer.parseInt(str[j]));
+			}
+		
 		}
 		catch(IOException e) {
 			e.printStackTrace();
 		}
+		return list;
 	}
 	
 	public void readfile()
@@ -151,28 +186,128 @@ public class MinimalModel extends Graph<Integer>{
 	
 	public boolean Modumin()
 	{
-		int size = DS.SIZE;			
+		int size = DS.SIZE;		
+		Graph<Integer> g;
+		LinkedList source ,Ts, minmodel;
 		while(DS.SIZE!=0)
 		{
 
-			//create graph
-			Graph<Integer> g = initGraph(DS, size);
-			//find source
-			LinkedList s = sourceOfGraph(g);
-			//Find Ts
-			LinkedList Ts=DS.Ts(s);
-			//find minimal model for Ts
-			if(!DS.FindMinimalModelForTs(Ts))
+			/**create graph*/
+			 g = initGraph(DS, size);
+			/**find source*/
+			source = sourceOfGraph(g);
+			/**Find Ts*/
+			Ts=DS.Ts(source);
+			if(Ts.getSize()>0)
 			{
-				return false;
-			}
+				/**Write cnf to file */
+				writeToFile(Ts);			
+				/**find minimal model for Ts*/
+				minmodel = MinimalModelFromScript();
+				if(minmodel.head!=null)
+				{
+					if(minmodel.head.var==-1)//unsat
+						return false;
+					/**put the minimal model  the literal map*/
+					DS.putMinModelInLiteralMap(minmodel);
+
+				}
+			
+			}		
+			/**Update the rules data structure*/
 			DS.updateRuleDS();		
-		}	
-		
-//		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
-	//	DS.printValueOfVariables();
+		}
 		return true;
 	}
+	
+	public void writeToFile(LinkedList Ts)
+	{
+		BufferedWriter bw = null;
+		FileWriter fw = null;
+		String FILENAME="/home/rachel/Desktop/alviano-wasp-f3fed39/build/release/ex";
+		String[] cnfContent=getCnfContent(Ts);	
+		
+		try
+		{
+			fw = new FileWriter(FILENAME);
+			bw = new BufferedWriter(fw);
+			for (int i = 0; i < cnfContent.length; i++) 
+			{
+				bw.write(cnfContent[i]);
+				bw.newLine();
+			}
+
+		}
+		catch (IOException e ) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		finally {
+
+			try {
+
+				if (bw != null)
+					bw.close();
+
+				if (fw != null)
+					fw.close();
+
+			} catch (IOException ex) {
+
+				ex.printStackTrace();
+
+			}
+
+		}
+
+	}
+	
+	public String[] getCnfContent(LinkedList Ts)
+	{
+		int size = Ts.getSize();
+		String[] toReturn= new String[size];
+		Rules.LinkedList.Node nTs ;
+		Rules.LinkedList.Node nBody;
+		Rules.LinkedList.Node nHead;
+
+		nTs=Ts.head;
+		for (int i = 0; i < size; i++) 
+		{
+			String oneRule="";
+			nBody=DS.RulesArray[nTs.var].body.head;
+			while(nBody!=null)
+			{
+				oneRule+="-"+nBody.var+" ";
+				nBody=nBody.next;
+			}
+			nHead=DS.RulesArray[nTs.var].head.head;
+			while(nHead!=null)
+			{
+				oneRule+=nHead.var+" ";
+				nHead=nHead.next;
+			}
+			oneRule+="0";
+			toReturn[i]=oneRule;
+			nTs=nTs.next;
+		}
+	
+		
+		return toReturn;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/*
 	public boolean Modumin()
 	{

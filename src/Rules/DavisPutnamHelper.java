@@ -129,7 +129,7 @@ public class DavisPutnamHelper
 	/*	This function finds a single literal.
 	 * (To be optimized by finding the single literal with most occurrences).	 *
 	 */
-	public static String searchSingleLiteral(ArrayList<Clause> Clauses, HashMap<String,Boolean> literalMap )
+	public static String searchSingleLiteral(ArrayList<Clause> Clauses, HashMap<Integer,Boolean> literalMap )
 	{
 		String literalToRemove = "NotFoundYet";
 		for(Clause c: Clauses)
@@ -139,11 +139,11 @@ public class DavisPutnamHelper
 				literalToRemove = c.literals.get(0);
 				if(literalToRemove.startsWith("-"))
 				{
-					literalMap.put(literalToRemove.substring(1),false);
+					literalMap.put(Integer.parseInt(literalToRemove.substring(1)),false);
 				}
 				else
 				{
-					literalMap.put(literalToRemove,true);
+					literalMap.put(Integer.parseInt(literalToRemove),true);
 				}
 				break;
 			}
