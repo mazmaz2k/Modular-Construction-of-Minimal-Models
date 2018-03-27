@@ -32,16 +32,15 @@ public class graphTests {
 
 				while (sc.hasNextLine()) 
 				{
-					System.out.println("idx is: "+idx);
+//					System.out.println("idx is: "+idx);
 					//v1 = sc.nextInt(); 
 					st = new StringTokenizer(sc.nextLine()," ");
-//					while(sc.hasNext())
-//					{
-//						v2 = sc.nextInt();
-//						graph.addEdge(v1, v2);
-//						
-//					}
-					v1 = Integer.parseInt(st.nextToken());
+					try {
+						v1 = Integer.parseInt(st.nextToken());
+
+					}catch (Exception e) {
+						continue;
+					}
 					while(st.hasMoreTokens())
 					{
 						
@@ -53,7 +52,6 @@ public class graphTests {
 				System.out.println("File was read successfully");
 			}catch (FileNotFoundException ex)
 			{
-				// TODO Auto-generated catch block
 				ex.printStackTrace();
 				System.out.println("Error on reading the file");
 
