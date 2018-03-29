@@ -1,14 +1,11 @@
 package Graph;
 
-import java.util.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
+
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,6 +28,7 @@ public class Graph<T>{
 		addEdge(id1,id2,0);
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	public boolean hasEdge(Vertex<T> v1 ,Vertex<T> v2) {
 		if(v1.getEdges().contains(v2)) {
 			return true;
@@ -149,6 +147,11 @@ public class Graph<T>{
 //					System.out.println("v1:" +e.getVertex1().getId()+" v2: "+e.getVertex2().getId());
 					newGraph.addEdge(e.getVertex1().getId(), e.getVertex2().getId(),1);
 //					System.out.println("end test ------------------------------------------");
+				}else if(vertexsListToRemove.contains(e.getVertex1()) && !vertexsListToRemove.contains(e.getVertex2())){
+					newGraph.addSingleVertex(e.getVertex2().getId());
+				}else if(!vertexsListToRemove.contains(e.getVertex1()) && vertexsListToRemove.contains(e.getVertex2())){
+					newGraph.addSingleVertex(e.getVertex1().getId());
+
 				}
 			}
 

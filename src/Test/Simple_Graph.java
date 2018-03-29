@@ -47,21 +47,25 @@ public class Simple_Graph {
 		}
 
 		//System.out.println(N);
-		System.out.println("connected component BEFORE dismentle: ");
 
-		g.constaruction(g,s,N,A);
+		Graph.constaruction(g,s,N,A);
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 		System.out.println("A graph: ");
 		System.out.println(A);
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
-		ArrayList<Vertex<Integer>> arr= g.dismantlingStrongestCC(g,A);
-		System.out.println("Vertex to remove: "+arr);
-		System.out.println("connected component After dismentle: ");
+		ArrayList<Vertex<Integer>> arr= Graph.dismantlingStrongestCC(g,A);
 		StronglyConnectedComponent scc = new StronglyConnectedComponent();
 	    List<Set<Vertex<Integer>>> result = scc.scc(g);
+		System.out.println("connected component BEFORE dismentle: ");
 
+	    result.forEach(set -> {
+            set.forEach(v -> System.out.print(v.getId() + " "));
+            System.out.println();
+        });
+		System.out.println("Vertex to remove: "+arr);
 		g=g.removeVertex(arr);
 		result = scc.scc(g);
+		System.out.println("connected component After dismentle: ");
 
         //print the result
         result.forEach(set -> {

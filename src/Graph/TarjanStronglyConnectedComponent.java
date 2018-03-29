@@ -66,7 +66,7 @@ public class TarjanStronglyConnectedComponent {
         stack.addFirst(vertex);
         onStack.add(vertex);
 
-        for (Vertex child : vertex.getAdjacentVertexes()) {
+        for (Vertex<Integer> child : vertex.getAdjacentVertexes()) {
             //if child is not visited then visit it and see if it has link back to vertex's ancestor. In that case update
             //low time to ancestor's visit time
             if (!visited.contains(child)) {
@@ -88,7 +88,7 @@ public class TarjanStronglyConnectedComponent {
         //connected component.
         if (visitedTime.get(vertex) == lowTime.get(vertex)) {
             Set<Vertex<Integer>> stronglyConnectedComponenet = new HashSet<>();
-            Vertex v;
+            Vertex<Integer> v;
             do {
                 v = stack.pollFirst();
                 onStack.remove(v);

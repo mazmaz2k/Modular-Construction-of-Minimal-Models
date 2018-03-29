@@ -72,7 +72,8 @@ public class Vertex<T> {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Vertex other = (Vertex) obj;
+        @SuppressWarnings("unchecked")
+		Vertex<T> other = (Vertex<T> ) obj;
         if (id != other.id)
             return false;
         return true;

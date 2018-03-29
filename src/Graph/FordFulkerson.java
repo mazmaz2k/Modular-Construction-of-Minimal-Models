@@ -88,14 +88,14 @@ public class FordFulkerson {
 			}
 		}
 
-		for(ListNode pNode : resArray) {
-			//			System.out.println("I "+ pNode.indexI);
-			System.out.print("I: "+ pNode.indexI+" J: ");
-			for(Node node :pNode.getList()) {
-				System.out.print( node.indexJ+" ");	
-			}
-			System.out.println();
-		}
+//		for(ListNode pNode : resArray) {
+//			//			System.out.println("I "+ pNode.indexI);
+//			System.out.print("I: "+ pNode.indexI+" J: ");
+//			for(Node node :pNode.getList()) {
+//				System.out.print( node.indexJ+" ");	
+//			}
+//			System.out.println();
+//		}
 
 	}
 
@@ -223,8 +223,8 @@ public class FordFulkerson {
 				v = u;
 			}
 			augmentedPath.add(source);
-			System.out.println(augmentedPath);
-			System.out.println("source " +source);
+//			System.out.println(augmentedPath);
+//			System.out.println("source " +source);
 
 			Collections.reverse(augmentedPath);
 			augmentedPaths.add(augmentedPath);
@@ -260,7 +260,7 @@ public class FordFulkerson {
 		//       System.out.println("S is: "+S);
 		//       System.out.println();
 
-		printAugmentedPaths(augmentedPaths,maxFlow);
+//		printAugmentedPaths(augmentedPaths,maxFlow);
 		this.maxFlow=maxFlow;
 		return maxFlow;
 	}
@@ -294,7 +294,7 @@ public class FordFulkerson {
 		visited.add(source);
 		boolean foundAugmentedPath = false;
 		//see if we can find augmented path from source to sink
-		System.out.println(queue);
+//		System.out.println(queue);
 		while(!queue.isEmpty()){
 
 			int u = queue.poll();

@@ -33,15 +33,13 @@ public class graphTests {
 				while (sc.hasNextLine()) 
 				{
 					System.out.println("idx is: "+idx);
-					//v1 = sc.nextInt(); 
 					st = new StringTokenizer(sc.nextLine()," ");
-//					while(sc.hasNext())
-//					{
-//						v2 = sc.nextInt();
-//						graph.addEdge(v1, v2);
-//						
-//					}
+					if(!st.hasMoreTokens())
+					{
+						continue;
+					}
 					v1 = Integer.parseInt(st.nextToken());
+					graph.addSingleVertex(v1);
 					while(st.hasMoreTokens())
 					{
 						
