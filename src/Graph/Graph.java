@@ -124,13 +124,13 @@ public class Graph<T>{
 		}
 	}
 	public void removeEdge(Edge<T> edge) {
-		 List<Edge<T>> newEdgeList= new ArrayList<Edge<T>>();
-		 for(Edge<T> e: getAllEdges()) {
-			 if(!e.equals(edge)) {
-				 newEdgeList.add(e);
-			 }
-		 }
-		 this.allEdges=newEdgeList;
+		List<Edge<T>> newEdgeList= new ArrayList<Edge<T>>();
+		for(Edge<T> e: getAllEdges()) {
+			if(!e.equals(edge)) {
+				newEdgeList.add(e);
+			}
+		}
+		this.allEdges=newEdgeList;
 	}
 	/**
 	 * Remove the vertex v from the graph.
@@ -140,13 +140,13 @@ public class Graph<T>{
 	public Graph<Integer> removeVertex(ArrayList<Vertex<Integer>> vertexsListToRemove) {
 		Graph<Integer> newGraph= new Graph<Integer>(isDirected); 
 		try {
-//			System.out.println(" test:::------------------------------------------------------");
+			//			System.out.println(" test:::------------------------------------------------------");
 			for (Edge<T> e: getAllEdges()) {
 				if(!vertexsListToRemove.contains(e.getVertex1()) && !vertexsListToRemove.contains(e.getVertex2())) {
 					//getAllEdges().remove(e);
-//					System.out.println("v1:" +e.getVertex1().getId()+" v2: "+e.getVertex2().getId());
+					//					System.out.println("v1:" +e.getVertex1().getId()+" v2: "+e.getVertex2().getId());
 					newGraph.addEdge(e.getVertex1().getId(), e.getVertex2().getId(),1);
-//					System.out.println("end test ------------------------------------------");
+					//					System.out.println("end test ------------------------------------------");
 				}else if(vertexsListToRemove.contains(e.getVertex1()) && !vertexsListToRemove.contains(e.getVertex2())){
 					newGraph.addSingleVertex(e.getVertex2().getId());
 				}else if(!vertexsListToRemove.contains(e.getVertex1()) && vertexsListToRemove.contains(e.getVertex2())){
@@ -174,9 +174,54 @@ public class Graph<T>{
 		return buffer.toString();
 	}
 
+	public static ArrayList<Vertex<Integer>> vertexSeperator(Set<Vertex<Integer>> allVertex){
+		ArrayList<Vertex<Integer>> returnVertexes = new ArrayList<>();
+		ArrayList<Vertex<Integer>> W_vertexList = new ArrayList<>();
+		ArrayList<Vertex<Integer>> A_vertexList = new ArrayList<>();
+		ArrayList<Vertex<Integer>> B_vertexList = new ArrayList<>();
 
+		for(Vertex<Integer> vertex : allVertex) {
+			if(Math.random()<0.1) {
+				W_vertexList.add(vertex);
+			}
+		}
+		do {
+			if(A_vertexList!=null || B_vertexList!=null) {
+				A_vertexList.clear();;
+				B_vertexList.clear();
+			}
+			for(Vertex<Integer> vertex :W_vertexList) {
+				if(Math.random() < 0.5) {
+					A_vertexList.add(vertex);
+				}else {
+					B_vertexList.add(vertex);
+				}
+			}
+			
+		}while(Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size()>0.2 || checkIfHasEdges(A_vertexList,B_vertexList));
 
+		//TODO: continue working!! create flow net graph!!!
+		// create edge to S T from A and B with weight |v|
+		// Separate a to a1 and a2 to all vertex beside S A T B
+		//weight between a1 and a2 is 1 
+		//all other weights are |V|
+		return returnVertexes;
+	}
+	
+	public static boolean checkIfHasEdges(ArrayList<Vertex<Integer>> A ,ArrayList<Vertex<Integer>> B) {
+		for(Vertex<Integer> v1: A) {
+			
+			for(Vertex<Integer> v2: B)
+			{
+				if(v1.getAdjacentVertexes().contains(v2)) {
+					return true;
+				}
 
+			}
+		}
+		return false;
+	} 
+	
 	/**	find cut from two set of vertexes id's collection
 	 * **/
 	public static Collection<Integer> cutLinkList(Collection<Integer> A,Collection<Integer> B){
@@ -203,16 +248,16 @@ public class Graph<T>{
 		{
 			s.addAtTail((int)vertex.getId());	//add to source arrayList 
 		}
-		
-//    System.out.println("------------------------------------------------------------------------------------------------------------------");
-//    System.out.println("Here are the size of all the connected component in the graph");
-//    //print the result
-//    result.forEach(set -> {
-//    	System.out.println("sizeof :"+ set.size());
-//       // set.forEach(v -> System.out.print(v.getId() + " "));
-//        System.out.println();
-//    });
-//    System.out.println("------------------------------------------------------------------------------------------------------------------");
+
+		//    System.out.println("------------------------------------------------------------------------------------------------------------------");
+		//    System.out.println("Here are the size of all the connected component in the graph");
+		//    //print the result
+		//    result.forEach(set -> {
+		//    	System.out.println("sizeof :"+ set.size());
+		//       // set.forEach(v -> System.out.print(v.getId() + " "));
+		//        System.out.println();
+		//    });
+		//    System.out.println("------------------------------------------------------------------------------------------------------------------");
 		return s;
 	}
 
@@ -260,8 +305,8 @@ public class Graph<T>{
 
 
 		}
-//		System.out.println("This is the Graph:");
-//		System.out.println(graph);
+		//		System.out.println("This is the Graph:");
+		//		System.out.println(graph);
 
 
 		return graph;	
@@ -277,7 +322,7 @@ public class Graph<T>{
 				newGraph.addSingleVertex(n.var);
 			}
 			for(Edge<Integer> e : oldGraph.getAllEdges()) {
-				
+
 				if( n.var==e.getVertex1().getId() && setOfVertex.contains((int)e.getVertex2().getId())) {
 					newGraph.addEdge(n.var, e.getVertex2().getId(),e.getWeight());
 					//System.out.println("v1: "+v.getId()+" v2: "+e.getVertex2().getId());
@@ -303,7 +348,7 @@ public class Graph<T>{
 		}
 
 		if(N.contains((int) s.getId()) && N.size()==1) { // exit condition from recursive 
-//			System.out.println("Exit recursion");
+			//			System.out.println("Exit recursion");
 			return;
 		}
 		int t=-1;
@@ -314,22 +359,22 @@ public class Graph<T>{
 		}
 		if(t==-1) { //check t is in N- if not there is problem in recursive
 			System.out.println("Error:  N is Empty");
-		
+
 		}
-//		System.out.println("s is : "+s.getId()+" t is: "+t);
+		//		System.out.println("s is : "+s.getId()+" t is: "+t);
 		FordFulkerson f1=new FordFulkerson(graph);	//find flow from s to t
 		FordFulkerson f2=new FordFulkerson(graph);  //finf flow from t to s
 		Vertex<Integer> tVertex=new Vertex<Integer>(t);
 		int x1=f1.maxFlow(f1.findVertexIndex(s), f1.findVertexIndex(tVertex));
-//		System.out.println("max flow x1: " +x1);
+		//		System.out.println("max flow x1: " +x1);
 		for(Edge<Integer> e: graph.getAllEdges()) {
 			if(f1.getT().contains((int)e.getVertex2().getId())&& f1.getS().contains((int) tVertex.getId())) {
 				e.setSizeOfS(f1.getS().size()); //save size of S to all cut edges!
-				
+
 			}
 		}
 		int x2= f2.maxFlow( f2.findVertexIndex(tVertex),f2.findVertexIndex(s));
-//		System.out.println("max flow x2: " +x2);
+		//		System.out.println("max flow x2: " +x2);
 		Collection<Integer> S =f1.getS(); //find S- set of vertex in front the cut
 		// remove matrix
 		//Convert N S T  to Arrays
@@ -338,9 +383,9 @@ public class Graph<T>{
 			x1=x2;
 			S=f2.getT();
 			T=f2.getS();
-			
+
 		}
-		
+
 		//		//may need to add edge from t to s also!!
 		//System.out.println("------------s is : "+s.getId()+" t is: "+ t);
 		auxiliaryGraph.addEdge(s.getId(), t, x1,S.size());
@@ -350,7 +395,7 @@ public class Graph<T>{
 		constaruction(graph,s,N_S,auxiliaryGraph);
 
 		Collection<Integer> N_T=cutLinkList(N,T);
-//		System.out.println("the N_T Cut is: "+N_T);
+		//		System.out.println("the N_T Cut is: "+N_T);
 
 		constaruction(graph,tVertex, N_T,auxiliaryGraph);
 	}
@@ -365,9 +410,9 @@ public class Graph<T>{
 			//			uniqueGraph.addSingleVertex(v.getId()*(-1));
 			uniqueGraph.addEdge(v.getId()*(-1), v.getId(), 1);
 			for(Edge<Integer> e: v.getEdges()) {
-//				if(e.getVertex2().equals(v)) {
-					uniqueGraph.addEdge(v.getId(),e.getVertex2().getId()*(-1), 1,e.getSSize());
-//				}
+				//				if(e.getVertex2().equals(v)) {
+				uniqueGraph.addEdge(v.getId(),e.getVertex2().getId()*(-1), 1,e.getSSize());
+				//				}
 			}
 		}
 		//		System.out.println("-------------------real Graph-----------------");
@@ -385,16 +430,16 @@ public class Graph<T>{
 	 * return array of vertex which will be put in rules array**/
 	public static ArrayList<Vertex<Integer>> dismantlingStrongestCC(Graph<Integer> graph,Graph<Integer> auxiliaryGraph) {
 		//int[] vertexArray=new int[auxiliaryGraph.allVertex.size()]; //array of vertex id's so return to Rules Data structure 
-		
+
 		int min=Integer.MAX_VALUE;
 		Vertex<Integer> a=null,b = null;
-//		System.out.println("A graph is:");
-//		System.out.println(auxiliaryGraph);
-//		System.out.println("end of A graph ");
+		//		System.out.println("A graph is:");
+		//		System.out.println(auxiliaryGraph);
+		//		System.out.println("end of A graph ");
 		int t=0;
 		for(Edge<Integer> e: auxiliaryGraph.getAllEdges()) { //find smallest K+t
 			t=Math.abs(e.getSSize()-(auxiliaryGraph.getAllVertex().size()/2)) ;
-//			System.out.println("t is: "+t +", k is:"+e.getWeight() );
+			//			System.out.println("t is: "+t +", k is:"+e.getWeight() );
 
 			if(e.getWeight()+t<min ) {
 				//				a=(int)e.getVertex1().getId();
@@ -402,11 +447,11 @@ public class Graph<T>{
 				a=e.getVertex1();
 				b=e.getVertex2();
 				min=e.getWeight()+t;
-//				System.out.println("min t is: "+t+" k is: "+ e.getWeight());
-//				System.out.println(e.getSSize()+"-"+(auxiliaryGraph.getAllVertex().size()/2));
-//				System.out.println(" finding min: a : "+a.getId()+" b:"+b.getId() );
+				//				System.out.println("min t is: "+t+" k is: "+ e.getWeight());
+				//				System.out.println(e.getSSize()+"-"+(auxiliaryGraph.getAllVertex().size()/2));
+				//				System.out.println(" finding min: a : "+a.getId()+" b:"+b.getId() );
 			}
-		//	System.out.println("e is: "+e+" t is: "+t+" minus "+auxiliaryGraph.getAllVertex().size());
+			//	System.out.println("e is: "+e+" t is: "+t+" minus "+auxiliaryGraph.getAllVertex().size());
 
 			t=0;
 		}
@@ -418,15 +463,15 @@ public class Graph<T>{
 		if(maxflow>min) {
 			maxflow=fordFulkerson.maxFlow(fordFulkerson.findVertexIndex(uniqeGraph.getVertex(Math.abs(b.getId()))), fordFulkerson.findVertexIndex(uniqeGraph.getVertex(-Math.abs(a.getId()))));
 		}
-//		System.out.println("a is: "+a.getId()+" b is: "+ b.getId()+"----------------------------------------------------------");
+		//		System.out.println("a is: "+a.getId()+" b is: "+ b.getId()+"----------------------------------------------------------");
 
 		Collection<Integer> S =fordFulkerson.getS(); // find S- set of vertex before the cut
 		Collection<Integer> T =fordFulkerson.getT(); // find T- set of vertex behind the cut
 		ArrayList<Edge<Integer>> edgeList=new ArrayList<>(); //array list to hold all the edges of the CUT !
 		ArrayList<Vertex<Integer>> vertexsListToRemove= new ArrayList<>();
-//		System.out.println(" uniqe graph:------------------------------------------");
-//		System.out.println(uniqeGraph);
-//		System.out.println("-------------------------------------------------------");
+		//		System.out.println(" uniqe graph:------------------------------------------");
+		//		System.out.println(uniqeGraph);
+		//		System.out.println("-------------------------------------------------------");
 		System.out.println("S of cut: "+S);
 		System.out.println("T of cut: "+ T);
 		for(Vertex<Integer> v: uniqeGraph.getAllVertex()) {
@@ -439,7 +484,7 @@ public class Graph<T>{
 			}
 
 		}
-//		System.out.println(edgeList);
+		//		System.out.println(edgeList);
 		for(Edge<Integer> e: edgeList) {
 			if(!vertexsListToRemove.contains(e.getVertex1())) {
 				vertexsListToRemove.add(uniqeGraph.getVertex(Math.abs(e.getVertex1().getId())));
@@ -451,7 +496,7 @@ public class Graph<T>{
 		return vertexsListToRemove;
 	}
 
-/***  unite all dismantle graph methodes 
+	/***  unite all dismantle graph methodes 
 	ALL OF THAT IN COPY GRAPH: change name of method copy graph to something else
 	receve a source
 	create graph from the sorce
@@ -472,8 +517,8 @@ public class Graph<T>{
 		}
 		s=new Vertex<Integer>(n.var);
 
-		
-		
+
+
 		Collection<Integer> N=new java.util.LinkedList<Integer>();
 		for(Vertex<Integer> v:connectedComponentGraph.getAllVertex()) 
 		{
@@ -498,58 +543,58 @@ public class Graph<T>{
 	}
 
 	public static void main(String args[]){
-//		Graph<Integer> graph = new Graph<>(true);
-//		graph.addEdge(0, 1);
-//		graph.addEdge(1, 2);
-//		graph.addEdge(2, 0);
-//		graph.addEdge(1, 3);
-//		graph.addEdge(3, 4);
-//		graph.addEdge(4, 19);
-//		graph.addEdge(19, 5);
-//		graph.addEdge(4, 5);
-//		graph.addEdge(9, 5);
-//		graph.addEdge(5, 1);
-//		graph.addEdge(0, 19);
-//		graph.addEdge(5, 5);
-//		graph.addEdge(5, 3);
-//		graph.addEdge(5, 6);
-//		SuperGraph sg=new SuperGraph(graph);
-//		System.out.println("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
-//		//System.out.println(sg.getSuperGraph());
-//		sg.printGraph();
-//		System.out.println("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
-//		StronglyConnectedComponent scc = new StronglyConnectedComponent();
-//		List< Set<Vertex<Integer>>> result = scc.scc(graph);
-//
-//		//print the result
-//		Set<Vertex<Integer>> vList= new HashSet<>();
-//		int max=0;
-//		for(Set<Vertex<Integer>> set: result ) {
-//			if(set.size()>max) {
-//				max=set.size();
-//			}
-//		}
-//
-//		for(Set<Vertex<Integer>> set: result ) {
-//			if(set.size()==max) {
-//				//				set.forEach(v->{
-//				//					vList.add(v.getId());
-//				//				});
-//				vList.addAll(set);
-//				break;
-//			}
-//
-//		}
-//		Graph<Integer> graphStrongestConnectedComponnent =copyGraph(vList,graph);
-//		System.out.println("\n Origunal graph : \n"+graph+"\n\n ");		
-//
-//		System.out.println("Strongest CC : " +vList);
-//		System.out.println("\n graph Strongest Connected Componnent: \n"+graphStrongestConnectedComponnent+"\n\n ");		
-//		result.forEach(set -> {
-//
-//			set.forEach(v -> System.out.print(v.getId() + "-> "));
-//			System.out.println();
-//		});
+		//		Graph<Integer> graph = new Graph<>(true);
+		//		graph.addEdge(0, 1);
+		//		graph.addEdge(1, 2);
+		//		graph.addEdge(2, 0);
+		//		graph.addEdge(1, 3);
+		//		graph.addEdge(3, 4);
+		//		graph.addEdge(4, 19);
+		//		graph.addEdge(19, 5);
+		//		graph.addEdge(4, 5);
+		//		graph.addEdge(9, 5);
+		//		graph.addEdge(5, 1);
+		//		graph.addEdge(0, 19);
+		//		graph.addEdge(5, 5);
+		//		graph.addEdge(5, 3);
+		//		graph.addEdge(5, 6);
+		//		SuperGraph sg=new SuperGraph(graph);
+		//		System.out.println("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
+		//		//System.out.println(sg.getSuperGraph());
+		//		sg.printGraph();
+		//		System.out.println("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
+		//		StronglyConnectedComponent scc = new StronglyConnectedComponent();
+		//		List< Set<Vertex<Integer>>> result = scc.scc(graph);
+		//
+		//		//print the result
+		//		Set<Vertex<Integer>> vList= new HashSet<>();
+		//		int max=0;
+		//		for(Set<Vertex<Integer>> set: result ) {
+		//			if(set.size()>max) {
+		//				max=set.size();
+		//			}
+		//		}
+		//
+		//		for(Set<Vertex<Integer>> set: result ) {
+		//			if(set.size()==max) {
+		//				//				set.forEach(v->{
+		//				//					vList.add(v.getId());
+		//				//				});
+		//				vList.addAll(set);
+		//				break;
+		//			}
+		//
+		//		}
+		//		Graph<Integer> graphStrongestConnectedComponnent =copyGraph(vList,graph);
+		//		System.out.println("\n Origunal graph : \n"+graph+"\n\n ");		
+		//
+		//		System.out.println("Strongest CC : " +vList);
+		//		System.out.println("\n graph Strongest Connected Componnent: \n"+graphStrongestConnectedComponnent+"\n\n ");		
+		//		result.forEach(set -> {
+		//
+		//			set.forEach(v -> System.out.print(v.getId() + "-> "));
+		//			System.out.println();
+		//		});
 		Graph<Integer> graphMaxFlow = new Graph<>(true);
 		graphMaxFlow.addEdge(10, 3, 1);
 		graphMaxFlow.addEdge(10, 4, 1);
@@ -564,59 +609,59 @@ public class Graph<T>{
 		graphMaxFlow.addEdge(5, 6, 1);
 		graphMaxFlow.addEdge(2, 6, 1);
 		graphMaxFlow.addEdge(5, 2, 1);
-//
-//		//create an Equivalent Array to represent the index for each vertex in graphWeightMatrix 2d array
-//		int[] arrayIndexEquivalents=new int[graphMaxFlow.getAllVertex().size()]; //= {2,9,7,5,3,12,1,99};
-//		int i=0;
-//		//		graphMaxFlow.getAllVertex().toArray();
-//		for(Vertex<Integer> c : graphMaxFlow.getAllVertex())
-//		{
-//			if(i<arrayIndexEquivalents.length) 
-//			{
-//				arrayIndexEquivalents[i]=(int)c.getId();
-//				//	System.out.println(arrayIndexEquivalents[i]);
-//				i++;
-//			}
-//
-//		}
+		//
+		//		//create an Equivalent Array to represent the index for each vertex in graphWeightMatrix 2d array
+		//		int[] arrayIndexEquivalents=new int[graphMaxFlow.getAllVertex().size()]; //= {2,9,7,5,3,12,1,99};
+		//		int i=0;
+		//		//		graphMaxFlow.getAllVertex().toArray();
+		//		for(Vertex<Integer> c : graphMaxFlow.getAllVertex())
+		//		{
+		//			if(i<arrayIndexEquivalents.length) 
+		//			{
+		//				arrayIndexEquivalents[i]=(int)c.getId();
+		//				//	System.out.println(arrayIndexEquivalents[i]);
+		//				i++;
+		//			}
+		//
+		//		}
 
 		// 2d representation of strongest connected component Edge weights  
-//		int graphWeightMatrix[][]=new int[graphMaxFlow.getAllVertex().size()][graphMaxFlow.getAllVertex().size()];
+		//		int graphWeightMatrix[][]=new int[graphMaxFlow.getAllVertex().size()][graphMaxFlow.getAllVertex().size()];
 		//		for (int j = 0; j < arrayIndexEquivalents.length-1; j++) {
 		//			for (int j2 = 0; j2 < arrayIndexEquivalents.length-1; j2++) {
 		//			}
 		//		}
 
-//		for (Edge<Integer> e : graphMaxFlow.getAllEdges()) {
-//			//		try {
-//			//System.out.println(e.toString());
-//			graphWeightMatrix[findInArray(arrayIndexEquivalents,e.getVertex1().getId())][findInArray(arrayIndexEquivalents,e.getVertex2().getId())]=e.getWeight();
-//			//			}catch (Exception e1) {
-//			//				System.err.println(e+"Error in array");
-//			//			}
-//		}
-//		System.out.println("\n");
-//
-//		for (int j = 0; j < arrayIndexEquivalents.length; j++) {
-//			if (j<arrayIndexEquivalents.length-1) {
-//				System.out.print(arrayIndexEquivalents[j]+", ");
-//
-//			}else {
-//				System.out.print(arrayIndexEquivalents[j]+" ");
-//			}
-//		}
-//		System.out.println("\n");
-//		for (int j = 0; j < graphWeightMatrix.length; j++) {
-//			for (int j2 = 0; j2 < graphWeightMatrix.length; j2++) {
-//				if (j2<graphWeightMatrix.length-1) {
-//					System.out.print(graphWeightMatrix[j][j2]+", ");
-//
-//				}else {
-//					System.out.print(graphWeightMatrix[j][j2]+" ");
-//				}
-//			}
-//			System.out.println();
-//		}
+		//		for (Edge<Integer> e : graphMaxFlow.getAllEdges()) {
+		//			//		try {
+		//			//System.out.println(e.toString());
+		//			graphWeightMatrix[findInArray(arrayIndexEquivalents,e.getVertex1().getId())][findInArray(arrayIndexEquivalents,e.getVertex2().getId())]=e.getWeight();
+		//			//			}catch (Exception e1) {
+		//			//				System.err.println(e+"Error in array");
+		//			//			}
+		//		}
+		//		System.out.println("\n");
+		//
+		//		for (int j = 0; j < arrayIndexEquivalents.length; j++) {
+		//			if (j<arrayIndexEquivalents.length-1) {
+		//				System.out.print(arrayIndexEquivalents[j]+", ");
+		//
+		//			}else {
+		//				System.out.print(arrayIndexEquivalents[j]+" ");
+		//			}
+		//		}
+		//		System.out.println("\n");
+		//		for (int j = 0; j < graphWeightMatrix.length; j++) {
+		//			for (int j2 = 0; j2 < graphWeightMatrix.length; j2++) {
+		//				if (j2<graphWeightMatrix.length-1) {
+		//					System.out.print(graphWeightMatrix[j][j2]+", ");
+		//
+		//				}else {
+		//					System.out.print(graphWeightMatrix[j][j2]+" ");
+		//				}
+		//			}
+		//			System.out.println();
+		//		}
 		//		int vertexS = 0;
 		//		int vertexT = graphMaxFlow.getAllVertex().size()-1;	//T is the last thing in the list
 		//		for(int i=0;i<arrayIndexEquivalents.length;i++) {
@@ -645,9 +690,9 @@ public class Graph<T>{
 		//			System.out.println();
 		//		}
 
-//		FordFulkerson maxFlowFinder = new FordFulkerson(graphMaxFlow);
-//		int vertexS = 0;   //S is the first thing in the list
-//		int vertexT = 6;	//T is the last thing in the list
+		//		FordFulkerson maxFlowFinder = new FordFulkerson(graphMaxFlow);
+		//		int vertexS = 0;   //S is the first thing in the list
+		//		int vertexT = 6;	//T is the last thing in the list
 		//		for(int i=0;i<arrayIndexEquivalents.length;i++) {
 		//			if(arrayIndexEquivalents[i]==9) {
 		//				vertexS=i;
@@ -658,9 +703,9 @@ public class Graph<T>{
 		//		}
 		//		
 
-//		System.out.println("\nBasic Ford Fulkerson Max Flow: " + maxFlowFinder.maxFlow( vertexS, vertexT));
-//
-//		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+		//		System.out.println("\nBasic Ford Fulkerson Max Flow: " + maxFlowFinder.maxFlow( vertexS, vertexT));
+		//
+		//		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 
 		Graph<Integer> A = new Graph<>(false);
 		Vertex<Integer> s=new Vertex<Integer>(10);
@@ -702,7 +747,7 @@ public class Graph<T>{
 		//			}
 		//		}
 		//		System.out.println("\nMaximum capacity " + ff.maxFlow(capacity, 0, 6));
-//		Graph<Integer> g=uniqueGraphCreation(graphMaxFlow);
+		//		Graph<Integer> g=uniqueGraphCreation(graphMaxFlow);
 		//		System.out.println(g.getAllVertex().size()+"->"+graphMaxFlow.getAllVertex().size());
 	}	
 	// find an vertex index in array of vertexes return -1 if not there
