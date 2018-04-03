@@ -161,13 +161,13 @@ public class FordFulkerson {
 	}
 
 	public int findVertexIndex(Vertex<Integer> v) {
-		int x=-1;
 		for(int i=0;i<vertexArray.length;i++) {
 			if(vertexArray[i]==v.getId()) {
+				System.out.println("v is: "+ v +" vertex Array" + vertexArray[i]+ " i is :" + i);
 				return i;
 			}
 		}
-		return x;
+		return -1;
 	}
 	public LinkedList<ListNode> copy2DList(LinkedList<ListNode> resList){
 		LinkedList<ListNode> list2D = new LinkedList<ListNode>(); 

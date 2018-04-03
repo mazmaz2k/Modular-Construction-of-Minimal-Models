@@ -4,7 +4,7 @@ package Graph;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,6 +12,7 @@ import java.util.Set;
 import Rules.RulesDataStructure;
 import Rules.LinkedList;
 import Rules.LinkedList.Node;
+import Test.graphTests;
 public class Graph<T>{
 
 	private List<Edge<T>> allEdges;
@@ -156,7 +157,6 @@ public class Graph<T>{
 			}
 
 		}catch (Exception e2) {
-			// TODO: handle exception
 			System.err.println("Remove Error: "+e2);
 		}
 
@@ -174,20 +174,33 @@ public class Graph<T>{
 		return buffer.toString();
 	}
 
-	public static ArrayList<Vertex<Integer>> vertexSeperator(Set<Vertex<Integer>> allVertex){
+	public static ArrayList<Vertex<Integer>> vertexSeperator(Set<Vertex<Integer>> allVertex , Graph<Integer> graph){
 		ArrayList<Vertex<Integer>> returnVertexes = new ArrayList<>();
 		ArrayList<Vertex<Integer>> W_vertexList = new ArrayList<>();
 		ArrayList<Vertex<Integer>> A_vertexList = new ArrayList<>();
 		ArrayList<Vertex<Integer>> B_vertexList = new ArrayList<>();
-
-		for(Vertex<Integer> vertex : allVertex) {
-			if(Math.random()<0.1) {
-				W_vertexList.add(vertex);
-			}
+		if(allVertex.isEmpty() || graph ==null) {
+			System.out.println("Graph.vertexSeperator() error graph is empty");
+			return null;
 		}
 		do {
+			for(Vertex<Integer> vertex : allVertex) {
+				if(Math.random() < 0.1) {
+
+					W_vertexList.add(vertex);
+				}
+			}
+			System.out.println("in first while");
+
+		}while(W_vertexList.size() == 0);
+
+
+		System.out.println("W size: " + W_vertexList.size());
+
+
+		do {
 			if(A_vertexList!=null || B_vertexList!=null) {
-				A_vertexList.clear();;
+				A_vertexList.clear();
 				B_vertexList.clear();
 			}
 			for(Vertex<Integer> vertex :W_vertexList) {
@@ -197,20 +210,89 @@ public class Graph<T>{
 					B_vertexList.add(vertex);
 				}
 			}
+			System.out.println("In second while");
 			
-		}while(Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size()>0.2 || checkIfHasEdges(A_vertexList,B_vertexList));
-
+		}while(Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size() > 0.2 || checkIfHasEdges(A_vertexList,B_vertexList));
+		System.out.println("Point B");
+		Graph<Integer> flowNetGraph = createFlowNetwork(graph, allVertex , A_vertexList,B_vertexList);
+		if(flowNetGraph ==null) {
+			System.err.println("error in flow nework some of the variables are NULL");
+			return null;
+		}
 		//TODO: continue working!! create flow net graph!!!
-		// create edge to S T from A and B with weight |v|
-		// Separate a to a1 and a2 to all vertex beside S A T B
-		//weight between a1 and a2 is 1 
-		//all other weights are |V|
+		// create edge to S T from A and B with weight |v|         V
+		// Separate a to a1 and a2 to all vertex beside S A T B    V
+		//weight between a1 and a2 is 1                            V
+		//all other weights are |V|                                V
+
+		FordFulkerson ff = new FordFulkerson(flowNetGraph);
+		int x1=0;
+		try {
+			x1=ff.maxFlow(ff.findVertexIndex(flowNetGraph.getVertex(Long.MAX_VALUE)), ff.findVertexIndex(flowNetGraph.getVertex(Long.MIN_VALUE)));//find max flow & min cut between S and T
+			//TODO: check what is the bud in find Vertex
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("max flow is: "+ x1);
+		//TODO:
+		/// find CUT and edges in the cut!
+		//return vertex that in the cut
+
 		return returnVertexes;
 	}
-	
+
+	private static Graph<Integer> createFlowNetwork(Graph<Integer> graph, Set<Vertex<Integer>> allVertex,
+			ArrayList<Vertex<Integer>> a_vertexList, ArrayList<Vertex<Integer>> b_vertexList) {
+		if(graph==null || allVertex==null ||a_vertexList==null||b_vertexList==null) {
+			return null;
+		}
+
+		graph.addSingleVertex(Long.MAX_VALUE);//This is "S" vertex
+		graph.addSingleVertex(Long.MIN_VALUE);//This is "T" vertex
+		for(Vertex<Integer> v : graph.getAllVertex()) {
+			if(a_vertexList.contains(v))
+			{
+				graph.addEdge(Long.MAX_VALUE, v.getId(), graph.getAllVertex().size()); // create edge between "S" to Vertex in A  with weight |v| 
+
+			}else if(b_vertexList.contains(v)) {
+				graph.addEdge(v.getId(), Long.MIN_VALUE, graph.getAllVertex().size()); // create edge between Vertex in B to "T" with weight |v| 
+
+			}
+
+		}
+		a_vertexList.add(graph.getVertex(Long.MAX_VALUE));	// add node S to A
+		b_vertexList.add(graph.getVertex(Long.MIN_VALUE));	// add vertex T to B
+
+		Set<Vertex<Integer>> vertexToDuplicate = new HashSet<>();
+		for(Vertex<Integer> v : graph.getAllVertex()) {
+			if(!a_vertexList.contains(v) && !b_vertexList.contains(v)) { // enter to array all node that not in A and B and not vertex T and vertex S
+				vertexToDuplicate.add(v);
+			}
+		}
+
+		graph=duplicateGraph(graph,vertexToDuplicate); // duplicate all vertex that not in A and B and not vertex T and vertex S
+		return graph;
+	}
+
+	private static Graph<Integer> duplicateGraph(Graph<Integer> graph, Set<Vertex<Integer>> allVertex) {
+		Graph<Integer> uniqueGraph=new Graph<Integer>(true);
+		int size = graph.getAllVertex().size(); // size of |v| to be on the weight of all edges beside between x1->x2  
+		for(Vertex<Integer> v: allVertex) {
+			uniqueGraph.addEdge(v.getId()*(-1), v.getId(), 1); // weight between duplicate node are 1
+			for(Edge<Integer> e: v.getEdges()) { //TODO: check if getAllEdge is working!!
+				uniqueGraph.addEdge(v.getId(),e.getVertex2().getId()*(-1), 1,size);
+			}
+		}
+
+		return uniqueGraph;		
+	}
+
+
+	/* check if 2 arrays of vertexes in graph have common edge between them
+	 * */
 	public static boolean checkIfHasEdges(ArrayList<Vertex<Integer>> A ,ArrayList<Vertex<Integer>> B) {
 		for(Vertex<Integer> v1: A) {
-			
+
 			for(Vertex<Integer> v2: B)
 			{
 				if(v1.getAdjacentVertexes().contains(v2)) {
@@ -221,7 +303,7 @@ public class Graph<T>{
 		}
 		return false;
 	} 
-	
+
 	/**	find cut from two set of vertexes id's collection
 	 * **/
 	public static Collection<Integer> cutLinkList(Collection<Integer> A,Collection<Integer> B){
@@ -248,7 +330,6 @@ public class Graph<T>{
 		{
 			s.addAtTail((int)vertex.getId());	//add to source arrayList 
 		}
-
 		//    System.out.println("------------------------------------------------------------------------------------------------------------------");
 		//    System.out.println("Here are the size of all the connected component in the graph");
 		//    //print the result
