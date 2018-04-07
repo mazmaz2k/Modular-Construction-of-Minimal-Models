@@ -315,7 +315,7 @@ public class Graph<T>{
 				}
 			}else { // if it NOT in A Or B
 				uniqueGraph.addEdge(v.getId()*(-1), v.getId(), 1); // weight between duplicate node are 1
-				for(Edge<Integer> e: v.getEdges()) { //TODO: check if getAllEdge is working!!
+				for(Edge<Integer> e: v.getEdges()) { 
 					if(vertexToDuplicate.contains(e.getVertex2())) {
 						uniqueGraph.addEdge(v.getId(),e.getVertex2().getId()*(-1), size);
 					}else {
