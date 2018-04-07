@@ -163,7 +163,7 @@ public class FordFulkerson {
 	public int findVertexIndex(Vertex<Integer> v) {
 		for(int i=0;i<vertexArray.length;i++) {
 			if(vertexArray[i]==v.getId()) {
-				System.out.println("v is: "+ v +" vertex Array" + vertexArray[i]+ " i is :" + i);
+				//System.out.println("v is: "+ v +" vertex Array" + vertexArray[i]+ " i is :" + i);
 				return i;
 			}
 		}

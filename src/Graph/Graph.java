@@ -174,7 +174,9 @@ public class Graph<T>{
 		return buffer.toString();
 	}
 
-	public static ArrayList<Vertex<Integer>> vertexSeperator(Set<Vertex<Integer>> allVertex , Graph<Integer> graph){
+	/**Vertex separator
+	 * */
+	public static ArrayList<Vertex<Integer>> vertexSeparator(Set<Vertex<Integer>> allVertex , Graph<Integer> graph){
 		ArrayList<Vertex<Integer>> returnVertexes = new ArrayList<>();
 		ArrayList<Vertex<Integer>> W_vertexList = new ArrayList<>();
 		ArrayList<Vertex<Integer>> A_vertexList = new ArrayList<>();
@@ -183,36 +185,49 @@ public class Graph<T>{
 			System.out.println("Graph.vertexSeperator() error graph is empty");
 			return null;
 		}
-		do {
-			for(Vertex<Integer> vertex : allVertex) {
-				if(Math.random() < 0.1) {
-
-					W_vertexList.add(vertex);
+		int counter=0;
+		boolean flag= true;
+		while(flag) {
+			do {
+				if(W_vertexList != null ) {
+					W_vertexList.clear();
 				}
-			}
-			System.out.println("in first while");
+				for(Vertex<Integer> vertex : allVertex) {
+					if(Math.random() < 0.1) {
 
-		}while(W_vertexList.size() == 0);
-
-
-		System.out.println("W size: " + W_vertexList.size());
-
-
-		do {
-			if(A_vertexList!=null || B_vertexList!=null) {
-				A_vertexList.clear();
-				B_vertexList.clear();
-			}
-			for(Vertex<Integer> vertex :W_vertexList) {
-				if(Math.random() < 0.5) {
-					A_vertexList.add(vertex);
-				}else {
-					B_vertexList.add(vertex);
+						W_vertexList.add(vertex);
+					}
 				}
+				System.out.println("in first while");
+
+			}while(W_vertexList.isEmpty() || W_vertexList.size() < 0.1);
+			System.out.println("W is:" + W_vertexList);
+			System.out.println("W size: " + W_vertexList.size());
+			do {
+				if(A_vertexList != null || B_vertexList != null) {
+					A_vertexList.clear();
+					B_vertexList.clear();
+				}
+				for(Vertex<Integer> vertex :W_vertexList) {
+					if(Math.random() > 0.5) {
+						A_vertexList.add(vertex);
+					}else {
+						B_vertexList.add(vertex);
+					}
+				}
+				
+				System.out.println("In second while");
+				if(counter==20) {
+					counter=0;
+					break;
+				}
+				counter++;
+			}while(Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size() > 0.5 || checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty());
+			if ((Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size() <= 0.5) &&  !checkIfHasEdges(A_vertexList,B_vertexList) && !A_vertexList.isEmpty() && !B_vertexList.isEmpty()) {
+				 flag=false;		
 			}
-			System.out.println("In second while");
-			
-		}while(Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size() > 0.2 || checkIfHasEdges(A_vertexList,B_vertexList));
+		}
+		
 		System.out.println("Point B");
 		Graph<Integer> flowNetGraph = createFlowNetwork(graph, allVertex , A_vertexList,B_vertexList);
 		if(flowNetGraph ==null) {
@@ -228,12 +243,16 @@ public class Graph<T>{
 		FordFulkerson ff = new FordFulkerson(flowNetGraph);
 		int x1=0;
 		try {
-			x1=ff.maxFlow(ff.findVertexIndex(flowNetGraph.getVertex(Long.MAX_VALUE)), ff.findVertexIndex(flowNetGraph.getVertex(Long.MIN_VALUE)));//find max flow & min cut between S and T
+			//System.out.println("v1: "+ flowNetGraph.getVertex(Long.MAX_VALUE) +" v2: "+flowNetGraph.getVertex(Long.MIN_VALUE));
+			
+			System.out.println("V1 index:" +ff.findVertexIndex(flowNetGraph.getVertex(Long.MAX_VALUE))+ " V2 index: " + ff.findVertexIndex(flowNetGraph.getVertex(Long.MIN_VALUE)));
+			//x1=ff.maxFlow(ff.findVertexIndex(flowNetGraph.getVertex(Long.MAX_VALUE)), ff.findVertexIndex(flowNetGraph.getVertex(Long.MIN_VALUE)));//find max flow & min cut between S and T
 			//TODO: check what is the bud in find Vertex
+				
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("max flow is: "+ x1);
+//		System.out.println("max flow is: "+ x1);
 		//TODO:
 		/// find CUT and edges in the cut!
 		//return vertex that in the cut
@@ -263,25 +282,34 @@ public class Graph<T>{
 		a_vertexList.add(graph.getVertex(Long.MAX_VALUE));	// add node S to A
 		b_vertexList.add(graph.getVertex(Long.MIN_VALUE));	// add vertex T to B
 
+		System.out.println("A: " + a_vertexList);
+		System.out.println("B: " + b_vertexList);
 		Set<Vertex<Integer>> vertexToDuplicate = new HashSet<>();
 		for(Vertex<Integer> v : graph.getAllVertex()) {
 			if(!a_vertexList.contains(v) && !b_vertexList.contains(v)) { // enter to array all node that not in A and B and not vertex T and vertex S
 				vertexToDuplicate.add(v);
 			}
 		}
-
+//		System.out.println("duplicate " + vertexToDuplicate);
 		graph=duplicateGraph(graph,vertexToDuplicate); // duplicate all vertex that not in A and B and not vertex T and vertex S
+//		System.out.println("Graph-------------");
+//		System.out.println(graph);
 		return graph;
 	}
 
 	private static Graph<Integer> duplicateGraph(Graph<Integer> graph, Set<Vertex<Integer>> allVertex) {
 		Graph<Integer> uniqueGraph=new Graph<Integer>(true);
 		int size = graph.getAllVertex().size(); // size of |v| to be on the weight of all edges beside between x1->x2  
-		for(Vertex<Integer> v: allVertex) {
-			uniqueGraph.addEdge(v.getId()*(-1), v.getId(), 1); // weight between duplicate node are 1
-			for(Edge<Integer> e: v.getEdges()) { //TODO: check if getAllEdge is working!!
-				uniqueGraph.addEdge(v.getId(),e.getVertex2().getId()*(-1), 1,size);
-			}
+		for(Vertex<Integer> v: graph.getAllVertex()) {
+			if(!allVertex.contains(v)){
+				uniqueGraph.addVertex(v);
+			}else {
+				uniqueGraph.addEdge(v.getId()*(-1), v.getId(), 1); // weight between duplicate node are 1
+				for(Edge<Integer> e: v.getEdges()) { //TODO: check if getAllEdge is working!!
+					uniqueGraph.addEdge(v.getId(),e.getVertex2().getId()*(-1), 1,size);
+				}
+			}		
+			
 		}
 
 		return uniqueGraph;		

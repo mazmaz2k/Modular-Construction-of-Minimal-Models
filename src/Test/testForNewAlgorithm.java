@@ -36,10 +36,8 @@ public class testForNewAlgorithm {
 			System.out.println();
 		});
 		
-		ArrayList<Vertex<Integer>> vertexToremove = Graph.vertexSeperator(result.get(0), g);
+		ArrayList<Vertex<Integer>> vertexToremove = Graph.vertexSeparator(result.get(0), g);
 		System.out.println("Vertex to remove: " + vertexToremove);
-		System.out.println("Sssss");
-
 	}
 
 }
