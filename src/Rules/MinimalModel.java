@@ -1,12 +1,7 @@
 package Rules;
 
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.util.Set;
 
-import javax.swing.JFrame;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,64 +9,37 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.security.spec.DSAGenParameterSpec;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
-import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.xml.soap.Node;
 
 import Graph.Graph;
-import Graph.StronglyConnectedComponent;
-import Graph.Vertex;
+
 
 
 public class MinimalModel extends Graph<Integer>{
 
-	private JFrame frame;
-	private JTextField textField;
+	
 	RulesDataStructure DS ;
 	boolean readFile = false;
 	static int rulesNum;
-	/**
-	 * Launch the application.
-	 */
+	private static final long MEGABYTE = 1024L * 1024L;
+
+    public static long bytesToMegabytes(long bytes) {
+        return bytes / MEGABYTE;
+    }
 	public static void main(String[] args) 
 	{
-		/*EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MinimalModel window = new MinimalModel();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});*/
 		MinimalModel m = new MinimalModel();
 		m.readfile();
-		if(m.Modumin())
-		{
-			System.out.println("SAT The minimal model is: "+ m.DS.StringMinimalModel());		
-		}
-		else 
-		{
-			System.out.println("UNSAT");
-		}
-		//m.script();
-//		LinkedList l = new LinkedList();
-//		l.addAtTail(0);
-//		l.addAtTail(1);
-//		l.addAtTail(2);
-//		m.writeToFile(l);
-//		m.readfile();
-//		
+		m.WASP();
+//		if(m.Modumin())
+//		{
+//			System.out.println("SAT The minimal model is: "+ m.DS.StringMinimalModel());		
+//		}
+//		else 
+//		{
+//			System.out.println("UNSAT");
+//		}
+	
 		
 		
 		/*LinkedList l= m.DS.checkFormat();
@@ -94,13 +62,70 @@ public class MinimalModel extends Graph<Integer>{
 			System.out.println("Its not in the right format");
 			System.out.println("Can't be a clause where all litarals are negative");
 		}*/
+		 Runtime runtime = Runtime.getRuntime();
+	        // Run the garbage collector
+	        runtime.gc();
+	        // Calculate the used memory
+	        long memory = runtime.totalMemory() - runtime.freeMemory();
+	        System.out.println("Used memory is bytes: " + memory);
+	        System.out.println("Used memory is megabytes: "
+	                + bytesToMegabytes(memory));
 
 		
 		
 	}
+	public void WASP()
+	{
+		LinkedList Ts=new LinkedList();
+		for (int i = 0; i < rulesNum ; i++) {
+			Ts.addAtTail(i);
+		}
+		BufferedWriter bw = null;
+		FileWriter fw = null;
+		String FILENAME="/home/rachel/Desktop/alviano-wasp-f3fed39/build/release/ex";
+		String[] cnfContent=getCnfContent(Ts);	
+		
+		try
+		{
+			fw = new FileWriter(FILENAME);
+			bw = new BufferedWriter(fw);
+			for (int i = 0; i < cnfContent.length; i++) 
+			{
+				bw.write(cnfContent[i]);
+				bw.newLine();
+			}
+
+		}
+		catch (IOException e ) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		finally {
+
+			try {
+
+				if (bw != null)
+					bw.close();
+
+				if (fw != null)
+					fw.close();
+
+			} catch (IOException ex) {
+
+				ex.printStackTrace();
+
+			}
+
+		}
+		LinkedList minmodel = MinimalModelFromScript();
+		minmodel.printList();
+		System.out.println("size: "+minmodel.getSize());
+
+	}
 	
 	public LinkedList MinimalModelFromScript()
 	{
+		System.out.println("reading minimal model");
 		String s ="python3 cnf2lparse.py ex | ./wasp --minimize-predicates=a --minimization-algorithm=guess-check-split --silent" ;
 
 		String[] cmd = {
@@ -192,6 +217,8 @@ public class MinimalModel extends Graph<Integer>{
 		while(DS.SIZE!=0)
 		{
 
+			/**unity check*/
+			DS.checkForUnits();
 			/**create graph*/
 			 g = initGraph(DS, size);
 			/**find source*/
@@ -222,6 +249,7 @@ public class MinimalModel extends Graph<Integer>{
 	
 	public void writeToFile(LinkedList Ts)
 	{
+		System.out.println("writing to file");
 		BufferedWriter bw = null;
 		FileWriter fw = null;
 		String FILENAME="/home/rachel/Desktop/alviano-wasp-f3fed39/build/release/ex";

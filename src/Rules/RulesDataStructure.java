@@ -182,7 +182,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     
     
     
-  /* public void checkForUnits()
+   public void checkForUnits()
     {
     	
     	for (int i = 0; i < RulesArray.length; i++)
@@ -194,22 +194,20 @@ public class RulesDataStructure extends DavisPutnamHelper
 
     				if(RulesArray[i].body.getSize() ==1)//body size is 1 and head size is 0s
     				{
-    					literalMap.put(String.valueOf(RulesArray[i].body.head.var), false);
-    					ChangeDataStrucureByPlacingValueInVar(RulesArray[i].body.head.var, false);
+    					literalMap.put(RulesArray[i].body.head.var, false);
 
     				}
     				else//head size is 1 and body size is 0
     				{
-    					literalMap.put(String.valueOf(RulesArray[i].head.head.var), true);
-
-    					ChangeDataStrucureByPlacingValueInVar(RulesArray[i].head.head.var, true);
+    					literalMap.put(RulesArray[i].head.head.var, true);
     				}
     			}
     		}
 		}
+    	updateRuleDS();
     	System.out.println("Ufter unit check");
 
-    }*/
+    }
     public void printValueOfVariables()
     {
     	System.out.println("-------THE VALUE TABLE--------");
