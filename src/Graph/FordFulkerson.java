@@ -60,7 +60,6 @@ public class FordFulkerson {
 		vertexArray=new int[graph.getAllVertex().size()];
 		int i=0;
 		this.resArray = new LinkedList<ListNode>();
-//		this.c=new int[graph.getAllVertex().size()][graph.getAllVertex().size()];
 		for(Vertex<Integer> v: graph.getAllVertex()) {
 			vertexArray[i]=(int)v.getId();
 			i++;
@@ -74,11 +73,11 @@ public class FordFulkerson {
 				{						
 					if(findVertexIndex(v) != -1) {
 						Node n =new Node(findVertexIndex(e.getVertex2()), e.getWeight());
-						if(hasIndexInList(findVertexIndex(v))) {
-							setDataTolist(resArray,findVertexIndex(v),findVertexIndex(e.getVertex2()),e.getWeight());			
+						if(hasIndexInList((int)findVertexIndex(v))) {
+							setDataTolist( resArray,(int)findVertexIndex(v),(int) findVertexIndex(e.getVertex2()),e.getWeight());			
 						}else
 						{
-							ListNode list = new ListNode(findVertexIndex(v));
+							ListNode list = new ListNode((int) findVertexIndex(v));
 							list.listNode.add(n);
 							resArray.add(list);	
 						}
@@ -87,15 +86,16 @@ public class FordFulkerson {
 				}
 			}
 		}
-
-//		for(ListNode pNode : resArray) {
-//			//			System.out.println("I "+ pNode.indexI);
-//			System.out.print("I: "+ pNode.indexI+" J: ");
-//			for(Node node :pNode.getList()) {
-//				System.out.print( node.indexJ+" ");	
-//			}
-//			System.out.println();
-//		}
+		System.out.println("Linked list -----------------------");
+		for(ListNode pNode : resArray) {
+			//			System.out.println("I "+ pNode.indexI);
+			System.out.print("I: "+ pNode.indexI+" J: ");
+			for(Node node :pNode.getList()) {
+				System.out.print( node.indexJ+" ");	
+			}
+			System.out.println();
+		}
+		System.out.println("------------------------------");
 
 	}
 
@@ -185,15 +185,9 @@ public class FordFulkerson {
 	public int maxFlow( int source, int sink){
 		T.clear();
 		S.clear();
-		//    	int capacity[][]=this.c;
 
 		//declare and initialize residual capacity as total avaiable capacity initially.
-		//        int residualCapacity[][] = new int[capacity.length][capacity[0].length];
-		//        for (int i = 0; i < capacity.length; i++) {
-		//            for (int j = 0; j < capacity[0].length; j++) {
-		//                residualCapacity[i][j] = capacity[i][j];
-		//            }
-		//        }
+
 		LinkedList<ListNode> resCapacity =copy2DList(this.resArray);
 		//this is parent map for storing BFS parent
 		Map<Integer,Integer> parent = new HashMap<>();
@@ -260,7 +254,7 @@ public class FordFulkerson {
 		//       System.out.println("S is: "+S);
 		//       System.out.println();
 
-//		printAugmentedPaths(augmentedPaths,maxFlow);
+		printAugmentedPaths(augmentedPaths,maxFlow);
 		this.maxFlow=maxFlow;
 		return maxFlow;
 	}

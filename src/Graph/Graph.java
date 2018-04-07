@@ -18,6 +18,8 @@ public class Graph<T>{
 	private List<Edge<T>> allEdges;
 	private Map<Long,Vertex<T>> allVertex;
 	boolean isDirected = false;
+    private final static int T =Integer.MIN_VALUE;
+    private final static int S =Integer.MAX_VALUE;
 
 	public Graph(boolean isDirected){
 		allEdges = new ArrayList<Edge<T>>();
@@ -182,7 +184,7 @@ public class Graph<T>{
 		ArrayList<Vertex<Integer>> A_vertexList = new ArrayList<>();
 		ArrayList<Vertex<Integer>> B_vertexList = new ArrayList<>();
 		if(allVertex.isEmpty() || graph ==null) {
-			System.out.println("Graph.vertexSeperator() error graph is empty");
+			System.out.println("Graph.vertexSeperator() error graph is empty in vertexSeparator method");
 			return null;
 		}
 		int counter=0;
@@ -215,7 +217,7 @@ public class Graph<T>{
 						B_vertexList.add(vertex);
 					}
 				}
-				
+
 				System.out.println("In second while");
 				if(counter==20) {
 					counter=0;
@@ -224,10 +226,10 @@ public class Graph<T>{
 				counter++;
 			}while(Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size() > 0.5 || checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty());
 			if ((Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size() <= 0.5) &&  !checkIfHasEdges(A_vertexList,B_vertexList) && !A_vertexList.isEmpty() && !B_vertexList.isEmpty()) {
-				 flag=false;		
+				flag=false;		
 			}
 		}
-		
+
 		System.out.println("Point B");
 		Graph<Integer> flowNetGraph = createFlowNetwork(graph, allVertex , A_vertexList,B_vertexList);
 		if(flowNetGraph ==null) {
@@ -239,20 +241,21 @@ public class Graph<T>{
 		// Separate a to a1 and a2 to all vertex beside S A T B    V
 		//weight between a1 and a2 is 1                            V
 		//all other weights are |V|                                V
-
+		System.out.println("Flow Graph----------");
+		System.out.println(flowNetGraph);
 		FordFulkerson ff = new FordFulkerson(flowNetGraph);
 		int x1=0;
 		try {
 			//System.out.println("v1: "+ flowNetGraph.getVertex(Long.MAX_VALUE) +" v2: "+flowNetGraph.getVertex(Long.MIN_VALUE));
-			
-			System.out.println("V1 index:" +ff.findVertexIndex(flowNetGraph.getVertex(Long.MAX_VALUE))+ " V2 index: " + ff.findVertexIndex(flowNetGraph.getVertex(Long.MIN_VALUE)));
-			//x1=ff.maxFlow(ff.findVertexIndex(flowNetGraph.getVertex(Long.MAX_VALUE)), ff.findVertexIndex(flowNetGraph.getVertex(Long.MIN_VALUE)));//find max flow & min cut between S and T
-			//TODO: check what is the bud in find Vertex
-				
+			System.out.println("v1: "+flowNetGraph.getVertex(S));
+			System.out.println("v2: "+flowNetGraph.getVertex(T));
+			System.out.println("V1 index:" +ff.findVertexIndex(flowNetGraph.getVertex(S))+ " V2 index: " + ff.findVertexIndex(flowNetGraph.getVertex(T)));
+			x1=ff.maxFlow( ff.findVertexIndex(flowNetGraph.getVertex(S)),  ff.findVertexIndex(flowNetGraph.getVertex(T)));//find max flow & min cut between S and T
+			System.out.println("max flow is: "+ x1);
+
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-//		System.out.println("max flow is: "+ x1);
 		//TODO:
 		/// find CUT and edges in the cut!
 		//return vertex that in the cut
@@ -263,26 +266,24 @@ public class Graph<T>{
 	private static Graph<Integer> createFlowNetwork(Graph<Integer> graph, Set<Vertex<Integer>> allVertex,
 			ArrayList<Vertex<Integer>> a_vertexList, ArrayList<Vertex<Integer>> b_vertexList) {
 		if(graph==null || allVertex==null ||a_vertexList==null||b_vertexList==null) {
+			System.err.println(" graph / allVertex / are / a_vertexList / b_vertexList null in createFlowNetwork method");
 			return null;
 		}
 
-		graph.addSingleVertex(Long.MAX_VALUE);//This is "S" vertex
-		graph.addSingleVertex(Long.MIN_VALUE);//This is "T" vertex
+		graph.addSingleVertex(S);//This is "S" vertex
+		graph.addSingleVertex(T);//This is "T" vertex
 		for(Vertex<Integer> v : graph.getAllVertex()) {
 			if(a_vertexList.contains(v))
 			{
-				graph.addEdge(Long.MAX_VALUE, v.getId(), graph.getAllVertex().size()); // create edge between "S" to Vertex in A  with weight |v| 
-
+				graph.addEdge(S, v.getId(), graph.getAllVertex().size()); // create edge between "S" to Vertex in A  with weight |v| 
 			}else if(b_vertexList.contains(v)) {
-				graph.addEdge(v.getId(), Long.MIN_VALUE, graph.getAllVertex().size()); // create edge between Vertex in B to "T" with weight |v| 
-
+				graph.addEdge(v.getId(), T, graph.getAllVertex().size()); // create edge between Vertex in B to "T" with weight |v| 
 			}
 
 		}
-		a_vertexList.add(graph.getVertex(Long.MAX_VALUE));	// add node S to A
-		b_vertexList.add(graph.getVertex(Long.MIN_VALUE));	// add vertex T to B
-
-		System.out.println("A: " + a_vertexList);
+		a_vertexList.add(graph.getVertex(S));	// add node S to A
+		b_vertexList.add(graph.getVertex(T));	// add vertex T to B
+		System.out.println("A: " + a_vertexList );
 		System.out.println("B: " + b_vertexList);
 		Set<Vertex<Integer>> vertexToDuplicate = new HashSet<>();
 		for(Vertex<Integer> v : graph.getAllVertex()) {
@@ -290,26 +291,41 @@ public class Graph<T>{
 				vertexToDuplicate.add(v);
 			}
 		}
-//		System.out.println("duplicate " + vertexToDuplicate);
-		graph=duplicateGraph(graph,vertexToDuplicate); // duplicate all vertex that not in A and B and not vertex T and vertex S
-//		System.out.println("Graph-------------");
-//		System.out.println(graph);
-		return graph;
-	}
+		//		System.out.println("duplicate " + vertexToDuplicate);
 
-	private static Graph<Integer> duplicateGraph(Graph<Integer> graph, Set<Vertex<Integer>> allVertex) {
+		Graph<Integer> g=duplicateGraph(graph, vertexToDuplicate); // duplicate all vertex that not in A and B and not vertex T and vertex S
+		return g;
+	}
+	/*Duplicate a graph
+	 * when given set of vertex to duplicate them 
+	 * return a graph with duplicate JUST the necessary nodes 
+	 * **/
+	private static Graph<Integer> duplicateGraph(Graph<Integer> graph, Set<Vertex<Integer>> vertexToDuplicate) {
+		if(graph==null || vertexToDuplicate ==null) {
+			System.err.println(" graph / vertex to dupicate are null in duplicateGraph method");
+			return null;
+		}
 		Graph<Integer> uniqueGraph=new Graph<Integer>(true);
 		int size = graph.getAllVertex().size(); // size of |v| to be on the weight of all edges beside between x1->x2  
+//		System.out.println("vertexToDuplicate: " + vertexToDuplicate);
 		for(Vertex<Integer> v: graph.getAllVertex()) {
-			if(!allVertex.contains(v)){
-				uniqueGraph.addVertex(v);
-			}else {
+			if(!vertexToDuplicate.contains(v)) {
+				for(Edge<Integer> e : v.getEdges()) {
+					uniqueGraph.addEdge(e.getVertex1().getId(), e.getVertex2().getId(), size);
+				}
+			}else { // if it NOT in A Or B
 				uniqueGraph.addEdge(v.getId()*(-1), v.getId(), 1); // weight between duplicate node are 1
 				for(Edge<Integer> e: v.getEdges()) { //TODO: check if getAllEdge is working!!
-					uniqueGraph.addEdge(v.getId(),e.getVertex2().getId()*(-1), 1,size);
+					if(vertexToDuplicate.contains(e.getVertex2())) {
+						uniqueGraph.addEdge(v.getId(),e.getVertex2().getId()*(-1), size);
+					}else {
+						uniqueGraph.addEdge(v.getId(),e.getVertex2().getId(), size);
+					}
+
 				}
-			}		
-			
+
+			}
+
 		}
 
 		return uniqueGraph;		
@@ -474,7 +490,7 @@ public class Graph<T>{
 		FordFulkerson f1=new FordFulkerson(graph);	//find flow from s to t
 		FordFulkerson f2=new FordFulkerson(graph);  //finf flow from t to s
 		Vertex<Integer> tVertex=new Vertex<Integer>(t);
-		int x1=f1.maxFlow(f1.findVertexIndex(s), f1.findVertexIndex(tVertex));
+		int x1= f1.maxFlow(f1.findVertexIndex(s), f1.findVertexIndex(tVertex));
 		//		System.out.println("max flow x1: " +x1);
 		for(Edge<Integer> e: graph.getAllEdges()) {
 			if(f1.getT().contains((int)e.getVertex2().getId())&& f1.getS().contains((int) tVertex.getId())) {
@@ -482,7 +498,7 @@ public class Graph<T>{
 
 			}
 		}
-		int x2= f2.maxFlow( f2.findVertexIndex(tVertex),f2.findVertexIndex(s));
+		int x2= f2.maxFlow( f2.findVertexIndex(tVertex), f2.findVertexIndex(s));
 		//		System.out.println("max flow x2: " +x2);
 		Collection<Integer> S =f1.getS(); //find S- set of vertex in front the cut
 		// remove matrix
@@ -568,9 +584,9 @@ public class Graph<T>{
 		Graph<Integer> uniqeGraph=uniqueGraphCreation(graph); // duplicate graph to change K-edge connected component to find vertex to remove
 
 		FordFulkerson fordFulkerson= new FordFulkerson(uniqeGraph); //find cut between a an b  
-		int maxflow=fordFulkerson.maxFlow(fordFulkerson.findVertexIndex(uniqeGraph.getVertex(Math.abs(a.getId()))), fordFulkerson.findVertexIndex(uniqeGraph.getVertex(-Math.abs(b.getId()))));
+		int maxflow=fordFulkerson.maxFlow( fordFulkerson.findVertexIndex(uniqeGraph.getVertex(Math.abs(a.getId()))), fordFulkerson.findVertexIndex(uniqeGraph.getVertex(-Math.abs(b.getId()))));
 		if(maxflow>min) {
-			maxflow=fordFulkerson.maxFlow(fordFulkerson.findVertexIndex(uniqeGraph.getVertex(Math.abs(b.getId()))), fordFulkerson.findVertexIndex(uniqeGraph.getVertex(-Math.abs(a.getId()))));
+			maxflow=fordFulkerson.maxFlow( fordFulkerson.findVertexIndex(uniqeGraph.getVertex(Math.abs(b.getId()))), fordFulkerson.findVertexIndex(uniqeGraph.getVertex(-Math.abs(a.getId()))));
 		}
 		//		System.out.println("a is: "+a.getId()+" b is: "+ b.getId()+"----------------------------------------------------------");
 
