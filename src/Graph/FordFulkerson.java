@@ -95,7 +95,7 @@ public class FordFulkerson {
 			}
 			System.out.println();
 		}
-		System.out.println("------------------------------");
+		System.out.println("------------------------------\n");
 
 	}
 
@@ -143,8 +143,9 @@ public class FordFulkerson {
 		for(ListNode l: list) {
 			if(l.getindexI()==i) {
 				for(Node n: l.getList() ) {
-					if(n.indexJ==j)
+					if(n.indexJ==j) {
 						return n.wight;
+					}
 				}
 			}
 		}
@@ -217,8 +218,8 @@ public class FordFulkerson {
 				v = u;
 			}
 			augmentedPath.add(source);
-//			System.out.println(augmentedPath);
-//			System.out.println("source " +source);
+			//			System.out.println(augmentedPath);
+			//			System.out.println("source ----------------------------------" +source);
 
 			Collections.reverse(augmentedPath);
 			augmentedPaths.add(augmentedPath);
@@ -252,9 +253,11 @@ public class FordFulkerson {
 		//      System.out.println("T is:"+T);
 		//       System.out.println(T);
 		//       System.out.println("S is: "+S);
-		//       System.out.println();
+		System.out.println();
 
 		printAugmentedPaths(augmentedPaths,maxFlow);
+		System.out.println();
+
 		this.maxFlow=maxFlow;
 		return maxFlow;
 	}
@@ -280,7 +283,7 @@ public class FordFulkerson {
 	 */
 	private boolean BFS(LinkedList<ListNode> resList, Map<Integer,Integer> parent,
 			int source, int sink){
-		
+		//		System.out.println("In BFS---------------------------------");
 		Set<Integer> visited = new HashSet<>();
 		Queue<Integer> queue = new LinkedList<>();
 		parent.clear();
@@ -288,15 +291,34 @@ public class FordFulkerson {
 		visited.add(source);
 		boolean foundAugmentedPath = false;
 		//see if we can find augmented path from source to sink
-//		System.out.println(queue);
+		//		System.out.println(queue);
 		while(!queue.isEmpty()){
+			//			System.out.println("In BFS while---------------------------------");
 
 			int u = queue.poll();
-			for(ListNode list :resList) {
+			for(ListNode list : resList) {
 				//explore the vertex only if it is not visited and its residual capacity is
 				//greater than 0	
+				for(Node n: list.getList()) {
 
-				if(!visited.contains(list.getindexI()) && getWightFromList(resList, u, list.indexI)>0 ) {
+					if(!visited.contains(n.indexJ) && getWightFromList(resList, u, n.indexJ) > 0 ) {//TODO: fix return in this part!!
+						//add in parent map saying v got explored by u
+						parent.put(n.indexJ, u);
+						//add v to visited
+						visited.add(n.indexJ);
+						//add v to queue for BFS
+						queue.add(n.indexJ);
+						//if sink is found then augmented path is found
+						if ( n.indexJ == sink) { //TODO this is the problem
+							foundAugmentedPath = true;
+							System.out.println("IN J !!!!!!!!!!!!");
+							break;
+						}
+
+					}	
+
+				}
+				if(!visited.contains(list.getindexI()) && getWightFromList(resList, u, list.indexI) > 0 ) {//TODO: fix return in this part!!
 					//add in parent map saying v got explored by u
 					parent.put(list.getindexI(), u);
 					//add v to visited
@@ -304,19 +326,20 @@ public class FordFulkerson {
 					//add v to queue for BFS
 					queue.add(list.getindexI());
 					//if sink is found then augmented path is found
-					if ( list.getindexI() == sink) {
-//						System.out.println("index J "+list.indexI+" sink is: " +sink);
+					if ( list.getindexI() == sink) { //TODO this is the problem
 						foundAugmentedPath = true;
+						System.out.println("IN I @!!!!!!!!!!!!");
+
 						break;
 					}
-
 
 				}
 
 			}
-			
-			
+
+
 		}
+		//		System.out.println("BFS result: "+ foundAugmentedPath);
 		//        //returns if augmented path is found from source to sink or not
 		return foundAugmentedPath;
 	}
