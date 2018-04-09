@@ -147,7 +147,7 @@ public class FordFulkerson2 {
 				T.add(vertexArray[i]);
 			}
 		}
-        Vertex<Integer> v=new Vertex<Integer>(source);
+//        Vertex<Integer> v=new Vertex<Integer>(source);
 //      System.out.println(vertexArray[source]+"->>>>>>>"+ source);
         S.add(vertexArray[source]);
         T.remove(vertexArray[source]);

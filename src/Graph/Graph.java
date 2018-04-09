@@ -17,8 +17,8 @@ public class Graph<T>{
 	private List<Edge<T>> allEdges;
 	private Map<Long,Vertex<T>> allVertex;
 	boolean isDirected = false;
-    private final static int T =Integer.MIN_VALUE;
-    private final static int S =Integer.MAX_VALUE;
+	private final static int T =Integer.MIN_VALUE;
+	private final static int S =Integer.MAX_VALUE;
 
 	public Graph(boolean isDirected){
 		allEdges = new ArrayList<Edge<T>>();
@@ -244,17 +244,56 @@ public class Graph<T>{
 		System.out.println(flowNetGraph);
 		FordFulkerson ff = new FordFulkerson(flowNetGraph);
 		int x1=0;
+		Collection<Integer> collection_S = null,collection_T =null ;
 		try {
 			//System.out.println("v1: "+ flowNetGraph.getVertex(Long.MAX_VALUE) +" v2: "+flowNetGraph.getVertex(Long.MIN_VALUE));
 			System.out.println("v1: "+flowNetGraph.getVertex(S));
 			System.out.println("v2: "+flowNetGraph.getVertex(T));
 			System.out.println("V1 index:" +ff.findVertexIndex(flowNetGraph.getVertex(S))+ " V2 index: " + ff.findVertexIndex(flowNetGraph.getVertex(T)));
 			x1=ff.maxFlow( ff.findVertexIndex(flowNetGraph.getVertex(S)),  ff.findVertexIndex(flowNetGraph.getVertex(T)));//find max flow & min cut between S and T
-			System.out.println("max flow is: "+ x1);
 
+			collection_S= ff.getS();
+			collection_T = ff.getT();
+			System.out.println();
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		System.out.println("max flow is: "+ x1);
+		System.out.println("S (of vertexes) is" + collection_S);
+		System.out.println("T (of vertexes) is" + collection_T);
+
+		System.out.println();
+		if(collection_S ==null || collection_T ==null) {
+			System.err.println("error in flow nework Set S or Set T are NULL");
+			return null;		
+		}		
+		ArrayList<Edge<Integer>> edgeList=new ArrayList<>(); //array list to hold all the edges of the CUT !
+//		ArrayList<Vertex<Integer>> vertexsListToRemove= new ArrayList<>();
+
+		for(Vertex<Integer> v: flowNetGraph.getAllVertex()) {
+			if(collection_S.contains((int)v.getId())) {
+				for(Edge<Integer> e : v.getEdges()) {
+					if(collection_T.contains((int)e.getVertex2().getId())) {
+						edgeList.add(e); //add edge  of the cut 
+					}
+				}
+			}
+
+		}
+		//		System.out.println(edgeList);
+		for(Edge<Integer> e: edgeList) {
+			if(!returnVertexes.contains(e.getVertex1())) {
+				returnVertexes.add(flowNetGraph.getVertex(Math.abs(e.getVertex1().getId())));
+			}
+			else if(!returnVertexes.contains(e.getVertex2())) {
+				returnVertexes.add(flowNetGraph.getVertex(Math.abs(e.getVertex2().getId())));
+			}
+		}
+
+		
+		
+		
 		//TODO:
 		/// find CUT and edges in the cut!
 		//return vertex that in the cut
@@ -306,11 +345,17 @@ public class Graph<T>{
 		}
 		Graph<Integer> uniqueGraph=new Graph<Integer>(true);
 		int size = graph.getAllVertex().size(); // size of |v| to be on the weight of all edges beside between x1->x2  
-//		System.out.println("vertexToDuplicate: " + vertexToDuplicate);
+				System.out.println("vertexToDuplicate: " + vertexToDuplicate);
 		for(Vertex<Integer> v: graph.getAllVertex()) {
 			if(!vertexToDuplicate.contains(v)) {
 				for(Edge<Integer> e : v.getEdges()) {
-					uniqueGraph.addEdge(e.getVertex1().getId(), e.getVertex2().getId(), size);
+					
+					if(vertexToDuplicate.contains(e.getVertex2())) {
+						uniqueGraph.addEdge(v.getId(),e.getVertex2().getId()*(-1), size);
+					}else {
+						uniqueGraph.addEdge(v.getId(),e.getVertex2().getId(), size);
+					}
+
 				}
 			}else { // if it NOT in A Or B
 				uniqueGraph.addEdge(v.getId()*(-1), v.getId(), 1); // weight between duplicate node are 1

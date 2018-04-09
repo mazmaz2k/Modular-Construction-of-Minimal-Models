@@ -311,7 +311,7 @@ public class FordFulkerson {
 						//if sink is found then augmented path is found
 						if ( n.indexJ == sink) { //TODO this is the problem
 							foundAugmentedPath = true;
-							System.out.println("IN J !!!!!!!!!!!!");
+//							System.out.println("IN J !!!!!!!!!!!!");
 							break;
 						}
 
