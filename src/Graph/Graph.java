@@ -283,10 +283,10 @@ public class Graph<T>{
 		}
 		//		System.out.println(edgeList);
 		for(Edge<Integer> e: edgeList) {
-			if(!returnVertexes.contains(e.getVertex1())) {
+			if(!returnVertexes.contains(e.getVertex1()) && e.getVertex1().getId()!=S ) {
 				returnVertexes.add(flowNetGraph.getVertex(Math.abs(e.getVertex1().getId())));
 			}
-			else if(!returnVertexes.contains(e.getVertex2())) {
+			else if(!returnVertexes.contains(e.getVertex2()) && e.getVertex2().getId()!=T) {
 				returnVertexes.add(flowNetGraph.getVertex(Math.abs(e.getVertex2().getId())));
 			}
 		}

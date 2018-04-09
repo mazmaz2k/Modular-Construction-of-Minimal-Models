@@ -11,7 +11,7 @@ import Graph.Vertex;
 public class gridForNewAlgorithm {
 	public static void main(String[] args) {
 		Graph<Integer> g = new Graph<>(true);
-		
+
 		g.addEdge(1, 2, 1);
 		g.addEdge(1, 5, 1);
 
@@ -21,21 +21,21 @@ public class gridForNewAlgorithm {
 		g.addEdge(2, 6, 1);
 		g.addEdge(3, 5, 1);
 		g.addEdge(3, 7, 1);
-		
+
 		g.addEdge(4, 8, 1);
-		
+
 		g.addEdge(5, 6, 1);
 		g.addEdge(5, 9, 1);
-		
+
 		g.addEdge(6, 7, 1);
 		g.addEdge(6, 10, 1);
-		
+
 		g.addEdge(7, 8, 1);
 		g.addEdge(7, 11, 1);
 		g.addEdge(8, 12, 1);
-		
+
 		g.addEdge(9, 13, 1);
-		
+
 		g.addEdge(9, 10, 1);
 		g.addEdge(10, 11, 1);
 		g.addEdge(10, 14, 1);
@@ -48,8 +48,8 @@ public class gridForNewAlgorithm {
 		g.addEdge(14, 15, 1);
 
 		g.addEdge(15, 16, 1);
-////this is not connected component
-		
+		////this is not connected component
+
 		g.addEdge(2, 1, 1);
 		g.addEdge(5, 1, 1);
 
@@ -62,21 +62,21 @@ public class gridForNewAlgorithm {
 		g.addEdge(3, 4, 1);
 
 		g.addEdge(7, 3, 1);
-		
+
 		g.addEdge(8, 4, 1);
-		
+
 		g.addEdge(6, 5, 1);
 		g.addEdge(9, 5, 1);
-		
+
 		g.addEdge(7, 6, 1);
 		g.addEdge(10, 6, 1);
-		
+
 		g.addEdge(8, 7, 1);
 		g.addEdge(11, 7, 1);
 		g.addEdge(12, 8, 1);
-		
+
 		g.addEdge(13, 9, 1);
-		
+
 		g.addEdge(10, 9, 1);
 		g.addEdge(11, 10, 1);
 		g.addEdge(14, 10, 1);
@@ -100,9 +100,28 @@ public class gridForNewAlgorithm {
 			set.forEach(v -> System.out.print(v.getId() + " "));
 			System.out.println();
 		});
-		
+
 		ArrayList<Vertex<Integer>> vertexToremove = Graph.vertexSeparator(result.get(0), g);
 		System.out.println("Vertex to remove: " + vertexToremove);
+
+
+		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+
+
+		g=g.removeVertex(vertexToremove);
+		//		System.out.println(g);
+		//		 StronglyConnectedComponent scc = new StronglyConnectedComponent();
+		System.out.println("connected component After dismentle: ");
+		result = scc.scc(g);
+
+		//print the result
+		result.forEach(set -> {
+			set.forEach(v -> System.out.print(v.getId() + " "));
+			System.out.println();
+		});
+
+
+
 	}
 
 }

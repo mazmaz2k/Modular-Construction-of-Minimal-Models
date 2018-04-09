@@ -38,6 +38,22 @@ public class testForNewAlgorithm {
 		
 		ArrayList<Vertex<Integer>> vertexToremove = Graph.vertexSeparator(result.get(0), g);
 		System.out.println("Vertex to remove: " + vertexToremove);
+		
+		
+		g=g.removeVertex(vertexToremove);
+		//		System.out.println(g);
+		//		 StronglyConnectedComponent scc = new StronglyConnectedComponent();
+		System.out.println("connected component After dismentle: ");
+		result = scc.scc(g);
+
+		//print the result
+		result.forEach(set -> {
+			set.forEach(v -> System.out.print(v.getId() + " "));
+			System.out.println();
+		});
+
+
+
 	}
 
 }
