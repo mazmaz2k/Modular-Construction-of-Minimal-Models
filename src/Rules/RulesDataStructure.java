@@ -19,7 +19,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     static HashMap<Integer, Boolean> literalMap;// We will store the value of literals in this structure as we go along
     public int counter = 0;
     public LinkedList minModel;
-    int SIZE;
+    public int SIZE;
     public RulesDataStructure (int numOfRules)
     {
     	SIZE=numOfRules;
@@ -205,7 +205,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     		}
 		}
     	updateRuleDS();
-    	System.out.println("Ufter unit check");
+    	//System.out.println("after unit check");
 
     }
     public void printValueOfVariables()
@@ -233,12 +233,15 @@ public class RulesDataStructure extends DavisPutnamHelper
     	LinkedList Ts = new LinkedList();
     	
     	Node Snode =s.head;
+    	//System.out.println("xbncndsabnxsamnxsanm"+Snode.var);
     	DefaultHashMap<Integer, Boolean> map = new DefaultHashMap<Integer, Boolean>(false);//on default we did not check the rules
     	boolean addToTs;
     	for (int i = 0; i < s.getSize() ; i++)
     	{
     		literalMap.put(Snode.var, false);//init all vars of s to false
     		LinkedList l = varHT.get(Snode.var);
+    		//System.out.println("listtttttt");
+    		//l.printList();
     		if(l!=null)
     		{
     			Node n =l.head; 
@@ -464,45 +467,43 @@ public class RulesDataStructure extends DavisPutnamHelper
     		
     	}*/
     }
+    
+    public void checkTautology()
+    {
+    	
+    }
     public void ChangeDataStrucureByPlacingValueInVar(int var , boolean value)
     {
     	if(conflictExist(var, value))
     	{
-//    		System.out.println("CONFLICT");
+    		//System.out.println("CONFLICT");
     		return ;
     	}
     	if(!variableExist(var))
     	{
-    		System.out.println("VARIABLE NOT EXIST");
-//    		return ;
+    	//	System.out.println("VARIABLE NOT EXIST");
+    		return ;
     	}
     	LinkedList l = varHT.get(var);
 	    Node n = l.head;
     	while(n!=null)
     	{
-    		if(existInBody(var, n.var)&& !value)
+    		if((existInBody(var, n.var)&& !value)||(existInHead(var, n.var)&& value))
     		{
     			deleteRule(n.var);
     			this.SIZE--;
-    		//	System.out.println("DELETE RULE NUMBER " + n.var);
+    			//System.out.println("DELETE RULE NUMBER " + n.var);
     		}
     		else if((existInBody(var, n.var)&& value))
     		{
     			deleteVarFromBody(var,n.var);
-    		//	System.out.println( "DELETE VARIABLE " + var + " IN RULE " + n.var);
-    		}
-    		else if(existInHead(var, n.var)&& value)
-    		{
-    			deleteRule(n.var);
-    			this.SIZE--;
-    		//	System.out.println("DELETE RULE NUMBER " + n.var);
+    			//System.out.println( "DELETE VARIABLE " + var + " IN RULE " + n.var);
     		}
     		else if (existInHead(var, n.var)&& !value)
     		{
     			deleteVarFromHead(var,n.var);
-    	//		System.out.println("DELETE VARIABLE "+var+" IN RULE " + n.var);
-    		}
-    		
+    			//System.out.println("DELETE VARIABLE "+var+" IN RULE " + n.var);
+    		}	
     		n=n.next;
     		
     	}

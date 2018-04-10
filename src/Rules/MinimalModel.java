@@ -20,25 +20,53 @@ public class MinimalModel extends Graph<Integer>{
 	
 	RulesDataStructure DS ;
 	boolean readFile = false;
+	double avgSourceSize;
 	static int rulesNum;
-	private static final long MEGABYTE = 1024L * 1024L;
+	private static final double MEGABYTE = 1024L * 1024L;
 
-    public static long bytesToMegabytes(long bytes) {
+    public static double bytesToMegabytes(double bytes) {
         return bytes / MEGABYTE;
     }
 	public static void main(String[] args) 
 	{
+		//System.out.println("in main");
 		MinimalModel m = new MinimalModel();
-		m.readfile();
+		//String path=args[0];
+		String path=".//CnfFile.txt";
+		m.readfile(path);
+		//m.Modumin();
+		m.WASP();
+		//System.out.print(m.DS.StringMinimalModel());
 		//m.WASP();
-		if(m.Modumin())
-		{
-			System.out.println("SAT The minimal model is: "+ m.DS.StringMinimalModel());		
-		}
-		else 
-		{
-			System.out.println("UNSAT");
-		}
+		/*Runtime runtime = Runtime.getRuntime();
+        // Run the garbage collector
+        runtime.gc();
+        // Calculate the used memory
+        double memory = runtime.totalMemory() - runtime.freeMemory();
+       // System.out.println("Used memory is bytes: " + memory);
+      //  System.out.println("Used memory is megabytes: "
+        //        + bytesToMegabytes(memory));
+        System.out.print(bytesToMegabytes(memory));
+        System.out.print(",");
+        m.readfile(path);
+        m.Modumin();
+         runtime = Runtime.getRuntime();
+        // Run the garbage collector
+        runtime.gc();
+        // Calculate the used memory
+         memory = runtime.totalMemory() - runtime.freeMemory();
+       // System.out.println("Used memory is bytes: " + memory);
+      //  System.out.println("Used memory is megabytes: "
+        //        + bytesToMegabytes(memory));
+        System.out.print(bytesToMegabytes(memory));*/
+//		if(m.Modumin())
+//		{
+//			System.out.println("SAT The minimal model is: "+ m.DS.StringMinimalModel());		
+//		}
+//		else 
+//		{
+//			System.out.println("UNSAT");
+//		}
 	
 		
 		
@@ -62,15 +90,7 @@ public class MinimalModel extends Graph<Integer>{
 			System.out.println("Its not in the right format");
 			System.out.println("Can't be a clause where all litarals are negative");
 		}*/
-		 Runtime runtime = Runtime.getRuntime();
-	        // Run the garbage collector
-	        runtime.gc();
-	        // Calculate the used memory
-	        long memory = runtime.totalMemory() - runtime.freeMemory();
-	        System.out.println("Used memory is bytes: " + memory);
-	        System.out.println("Used memory is megabytes: "
-	                + bytesToMegabytes(memory));
-
+		 
 		
 		
 	}
@@ -118,14 +138,20 @@ public class MinimalModel extends Graph<Integer>{
 
 		}
 		LinkedList minmodel = MinimalModelFromScript();
+		if(minmodel.head!=null)
+		{
+			if(minmodel.head.var==-1)
+				System.out.println("unsatisfiable");
+		}
+		System.out.println(minmodel.getSize());
 		minmodel.printList();
-		System.out.println("size: "+minmodel.getSize());
+	//	System.out.println("size: "+minmodel.getSize());
 
 	}
 	
 	public LinkedList MinimalModelFromScript()
 	{
-		System.out.println("reading minimal model");
+		//System.out.println("reading minimal model");
 		String s ="python3 cnf2lparse.py ex | ./wasp --minimize-predicates=a --minimization-algorithm=guess-check-split --silent" ;
 
 		String[] cmd = {
@@ -134,10 +160,10 @@ public class MinimalModel extends Graph<Integer>{
 				s
 				};
 
-		String place = "/home/rachel/Desktop/alviano-wasp-f3fed39/build/release";
+		String path = "/home/rachel/Desktop/alviano-wasp-f3fed39/build/release";
 		LinkedList list = new LinkedList();
 		try {
-			Process p =Runtime.getRuntime().exec(cmd,null,new File(place));
+			Process p =Runtime.getRuntime().exec(cmd,null,new File(path));
 			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			
 		//	String line;
@@ -173,23 +199,24 @@ public class MinimalModel extends Graph<Integer>{
 		return list;
 	}
 	
-	public void readfile()
+	public void readfile(String path)
 	{
 
 		Scanner sc;
 		int var ;
 		int index = 0;
-		int numOfRules;
+		int numOfRules=0;
 
 		try 
 		{
 
-			String Path = ".//CnfFile.txt" ;
-			sc = new Scanner(new File(Path));//read file
-			numOfRules = sc.nextInt();
+			//String path = ".//CnfFile.txt" ;
+			sc = new Scanner(new File(path));//read file
+			if(sc.hasNext())
+				numOfRules = sc.nextInt();
 			rulesNum=numOfRules;
 			DS = new RulesDataStructure(numOfRules);
-			while (sc.hasNextLine()) 
+			while (sc.hasNext()) 
 			{
 				var = sc.nextInt();
 				if(var!=0)
@@ -197,14 +224,11 @@ public class MinimalModel extends Graph<Integer>{
 				else
 					index++;
 			}
-			System.out.println("File was read successfully");
+			//System.out.println("File was read successfully");
 		}catch (FileNotFoundException ex)
 		{
-			// TODO Auto-generated catch block
 			//ex.printStackTrace();
-			System.out.println("Error on reading the file");
-
-
+			//System.out.println("Error on reading the file");
 		}
 
 	}
@@ -214,15 +238,18 @@ public class MinimalModel extends Graph<Integer>{
 		int size = DS.SIZE;		
 		Graph<Integer> g;
 		LinkedList source ,Ts, minmodel;
+		double sumSorceSize=0.0;
+		double numOfSources=0.0;
 		while(DS.SIZE!=0)
 		{
-
 			/**unity check*/
 			DS.checkForUnits();
 			/**create graph*/
 			 g = initGraph(DS, size);
 			/**find source*/
 			source = sourceOfGraph(g);
+			numOfSources++;
+			sumSorceSize+=source.getSize();
 			/**Find Ts*/
 			Ts=DS.Ts(source);
 			if(Ts.getSize()>0)
@@ -235,21 +262,22 @@ public class MinimalModel extends Graph<Integer>{
 				{
 					if(minmodel.head.var==-1)//unsat
 						return false;
-					/**put the minimal model  the literal map*/
+					/**put the minimal model in the literal map*/
 					DS.putMinModelInLiteralMap(minmodel);
 
 				}
 			
 			}		
 			/**Update the rules data structure*/
-			DS.updateRuleDS();		
+			DS.updateRuleDS();	
 		}
+		this.avgSourceSize=sumSorceSize/numOfSources;
 		return true;
 	}
 	
 	public void writeToFile(LinkedList Ts)
 	{
-		System.out.println("writing to file");
+		//System.out.println("writing to file");
 		BufferedWriter bw = null;
 		FileWriter fw = null;
 		String FILENAME="/home/rachel/Desktop/alviano-wasp-f3fed39/build/release/ex";
