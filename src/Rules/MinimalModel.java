@@ -30,15 +30,15 @@ public class MinimalModel extends Graph<Integer>{
 	{
 		MinimalModel m = new MinimalModel();
 		m.readfile();
-		m.WASP();
-//		if(m.Modumin())
-//		{
-//			System.out.println("SAT The minimal model is: "+ m.DS.StringMinimalModel());		
-//		}
-//		else 
-//		{
-//			System.out.println("UNSAT");
-//		}
+		//m.WASP();
+		if(m.Modumin())
+		{
+			System.out.println("SAT The minimal model is: "+ m.DS.StringMinimalModel());		
+		}
+		else 
+		{
+			System.out.println("UNSAT");
+		}
 	
 		
 		
