@@ -456,6 +456,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     			{
     				minModel.addAtTail(key);
     			}
+    			//System.out.println("key is: " + key +"   value is: " + literalMap.get(key));
     			ChangeDataStrucureByPlacingValueInVar(key, literalMap.get(key));
     		//	literalMap.remove(key);
     			//System.out.println("remove key  " + key);
@@ -468,22 +469,19 @@ public class RulesDataStructure extends DavisPutnamHelper
     	}*/
     }
     
-    public void checkTautology()
-    {
-    	
-    }
+    
     public void ChangeDataStrucureByPlacingValueInVar(int var , boolean value)
     {
-    	if(conflictExist(var, value))
+    	/*if(conflictExist(var, value))
     	{
     		//System.out.println("CONFLICT");
     		return ;
     	}
     	if(!variableExist(var))
     	{
-    	//	System.out.println("VARIABLE NOT EXIST");
+    		//System.out.println("VARIABLE NOT EXIST");
     		return ;
-    	}
+    	}*/
     	LinkedList l = varHT.get(var);
 	    Node n = l.head;
     	while(n!=null)
@@ -492,17 +490,17 @@ public class RulesDataStructure extends DavisPutnamHelper
     		{
     			deleteRule(n.var);
     			this.SIZE--;
-    			System.out.println("DELETE RULE NUMBER " + n.var);
+    			//System.out.println("DELETE RULE NUMBER " + n.var);
     		}
     		else if((existInBody(var, n.var)&& value))
     		{
     			deleteVarFromBody(var,n.var);
-    			System.out.println( "DELETE VARIABLE " + var + " IN RULE " + n.var);
+    			//System.out.println( "DELETE VARIABLE FROM BODY" + var + " IN RULE " + n.var);
     		}
     		else if (existInHead(var, n.var)&& !value)
     		{
     			deleteVarFromHead(var,n.var);
-    			System.out.println("DELETE VARIABLE "+var+" IN RULE " + n.var);
+    			//System.out.println("DELETE VARIABLE FROM HEAD"+var+" IN RULE " + n.var);
     		}	
     		n=n.next;
     		
@@ -569,7 +567,8 @@ public class RulesDataStructure extends DavisPutnamHelper
     		if(n.var==var)
     		{
     			l.deleteAtIndex(index);
-    			break;
+    			index--;
+    			//break;
     		}
     		index++;
     		n=n.next;
@@ -587,7 +586,8 @@ public class RulesDataStructure extends DavisPutnamHelper
     		if(n.var==var)
     		{
     			l.deleteAtIndex(index);
-    			break;
+    			index--;
+    			//break;
     		}
     		index++;
     		n=n.next;

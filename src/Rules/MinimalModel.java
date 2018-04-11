@@ -270,9 +270,6 @@ public class MinimalModel extends Graph<Integer>{
 			
 			}		
 			/**Update the rules data structure*/
-			DS.printValueOfVariables();
-			DS.printHashTable();
-			DS.printRulesArray();
 			DS.updateRuleDS();	
 		}
 		this.avgSourceSize=sumSorceSize/numOfSources;
