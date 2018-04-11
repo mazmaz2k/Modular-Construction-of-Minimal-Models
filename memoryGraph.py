@@ -45,7 +45,6 @@ path="/home/rachel/Desktop/Modular-Construction-of-Minimal-Models/testFiles"
 #         myFile.write(line+"\n")
 
 def RandomPositiveCNF(L , M , K):
-  #  directory="/"+str(M)+"variables"
     filename="cnf_"+str(L)+"_"+str(M)
     filepath=os.path.join(path,filename)
     myFile=io.FileIO(filepath, "w") 
@@ -257,7 +256,7 @@ def checkModuMin():
         output=GetJavaOutput(path, filename)
         print("ratio "+ str(ratio) +"min model: " +output)
         
-checkModuMin()   
+#checkModuMin()   
 #RandomPositiveCNF(150, 50, 3)        
 #memoryTest()
 # RandomPositiveCNF(150, 50, 3)

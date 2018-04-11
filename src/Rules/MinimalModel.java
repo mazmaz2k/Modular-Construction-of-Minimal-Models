@@ -24,6 +24,10 @@ public class MinimalModel extends Graph<Integer>{
 	static int rulesNum;
 	private static final double MEGABYTE = 1024L * 1024L;
 
+	public MinimalModel() {
+		super(true);
+	}
+	
     public static double bytesToMegabytes(double bytes) {
         return bytes / MEGABYTE;
     }
@@ -464,12 +468,6 @@ public class MinimalModel extends Graph<Integer>{
 	
 	
 
-	/**
-	 * Create the application.
-	 */
-	public MinimalModel() {
-		super(true);
-	}
 
 /*	public static boolean ModuMin(RulesDataStructure DS )
 	{
