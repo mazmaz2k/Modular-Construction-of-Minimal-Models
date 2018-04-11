@@ -121,21 +121,20 @@ public class LinkedList
 		return numNodes==0;
 	}
 
-	
-/*	public static void main(String [] args)
+	/*
+	public static void main(String [] args)
 	{
 		System.out.println("/=/=/=/= TESTING /=/=/=/=");
 		LinkedList ll = new LinkedList();
 		ll.addAtTail(12);
 		ll.addAtTail(15);
-		ll.addAtTail(14);
-		ll.addAtHead(13);
+		ll.deleteAtIndex(1);
 		
 		
 		ll.printList();
 		
-	}
-	*/
+	}*/
+	
 	
 	
 }

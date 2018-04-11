@@ -492,17 +492,17 @@ public class RulesDataStructure extends DavisPutnamHelper
     		{
     			deleteRule(n.var);
     			this.SIZE--;
-    			//System.out.println("DELETE RULE NUMBER " + n.var);
+    			System.out.println("DELETE RULE NUMBER " + n.var);
     		}
     		else if((existInBody(var, n.var)&& value))
     		{
     			deleteVarFromBody(var,n.var);
-    			//System.out.println( "DELETE VARIABLE " + var + " IN RULE " + n.var);
+    			System.out.println( "DELETE VARIABLE " + var + " IN RULE " + n.var);
     		}
     		else if (existInHead(var, n.var)&& !value)
     		{
     			deleteVarFromHead(var,n.var);
-    			//System.out.println("DELETE VARIABLE "+var+" IN RULE " + n.var);
+    			System.out.println("DELETE VARIABLE "+var+" IN RULE " + n.var);
     		}	
     		n=n.next;
     		

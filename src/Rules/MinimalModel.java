@@ -34,9 +34,9 @@ public class MinimalModel extends Graph<Integer>{
 		//String path=args[0];
 		String path=".//CnfFile.txt";
 		m.readfile(path);
-		//m.Modumin();
-		m.WASP();
-		//System.out.print(m.DS.StringMinimalModel());
+		m.Modumin();
+		//m.WASP();
+		System.out.print(m.DS.StringMinimalModel());
 		//m.WASP();
 		/*Runtime runtime = Runtime.getRuntime();
         // Run the garbage collector
@@ -144,7 +144,7 @@ public class MinimalModel extends Graph<Integer>{
 				System.out.println("unsatisfiable");
 		}
 		System.out.println(minmodel.getSize());
-		minmodel.printList();
+		//minmodel.printList();
 	//	System.out.println("size: "+minmodel.getSize());
 
 	}
@@ -242,6 +242,7 @@ public class MinimalModel extends Graph<Integer>{
 		double numOfSources=0.0;
 		while(DS.SIZE!=0)
 		{
+			//DS.printRulesArray();
 			/**unity check*/
 			DS.checkForUnits();
 			/**create graph*/
@@ -269,6 +270,9 @@ public class MinimalModel extends Graph<Integer>{
 			
 			}		
 			/**Update the rules data structure*/
+			DS.printValueOfVariables();
+			DS.printHashTable();
+			DS.printRulesArray();
 			DS.updateRuleDS();	
 		}
 		this.avgSourceSize=sumSorceSize/numOfSources;

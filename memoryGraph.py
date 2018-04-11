@@ -250,7 +250,7 @@ def testEverage():
 def checkModuMin():
     K=3
     M=100
-    for ratio in frange(2,9,0.2):
+    for ratio in frange(1,20,0.2):
         L = int(ratio*M)
         myFile=RandomPositiveCNF(L, M, K)   
         filename="cnf_"+str(L)+"_"+str(M)
