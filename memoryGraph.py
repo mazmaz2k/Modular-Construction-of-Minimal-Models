@@ -124,66 +124,6 @@ def FindAVG(arr):
 
 
 
-def memoryTest():
-    K=3
-    M=5
-    avgListWASP=[]
-    avgListModuMin=[]
-    AxisX=[]
-    for ratio in frange(2,4,0.2):
-        print("ratio " , ratio)
-        WASPMemoryList=[]
-        MosuMinMemoryList=[]
-        AxisX.append(ratio)
-        L = int(ratio*M)
-        wasp_list=[]
-        modumin_list=[]
-        for i in range(0,1): 
-            print("i ",i)
-            RandomPositiveCNF(L, M, K)
-            filename="cnf_"+str(L)+"_"+str(M)
-            memList=GetMemoryFromJava(path, filename).split(",")
-            print(memList)
-            WASPmemInMB=memList[0]
-            print(WASPmemInMB)
-            wasp_list.append(WASPmemInMB)
-            ModuMinmemInMB=memList[1]
-            print(ModuMinmemInMB)
-            modumin_list.append(ModuMinmemInMB)
-            os.remove(os.path.join(path,filename))
-        avgListWASP.append(FindAVG(wasp_list)) 
-        avgListModuMin.append(FindAVG(modumin_list))
-        print(avgListWASP)
-        print(avgListModuMin)
-#     trace1=go.Scatter(
-#         x=AxisX,
-#         y=avgListWASP,
-#         name="memory usage wasp",
-#         line=dict(
-#             color=('rgb(0,0,0)'),
-#             width=4,
-#             dash='dash'
-#             )
-#         )
-#     trace2=go.Scatter(
-#         x=AxisX,
-#         y=avgListWASP,
-#         name="memory usage modumin",
-#         line=dict(
-#             color=('rgb(0,0,0)'),
-#             width=4,
-#             dash='dot'
-#             )
-#         )
-#     data=[trace1,trace2]
-#     layout = dict(title = 'memory usage',
-#             xaxis = dict(title = 'Rules and variables ratio'),
-#             yaxis = dict(title = 'MemoryInMB'),
-#             )
-#     fig = dict(data=data, layout=layout)  
-#     py.plot(fig, filename='memory test') 
-    
-    
     
     
     
@@ -230,16 +170,113 @@ def testEverage():
     py.plot(fig, filename='averagesourcesize')    
     
     
+   
+def testDPcalls():
+    K=3
+    M=100
+    avgDP=[]
+    avgModuMin=[]
+    AxisX=[]
+    for ratio in frange(2,10,0.2):
+       # print("ratio " , ratio)
+        dpcalls_DP=[]
+        dpcalls_ModuMin=[]
+        AxisX.append(ratio)
+        L = int(ratio*M)
+        for i in range(0,80): 
+           # print("i ",i)
+            RandomPositiveCNF(L, M, K)
+            filename="cnf_"+str(L)+"_"+str(M)
+            output=GetJavaOutput(path, filename).split(",")
+           # print(output)
+            dpcalls_DP.append(output[1])
+            dpcalls_ModuMin.append(output[0])
+            os.remove(os.path.join(path,filename))
+        avgDP.append(FindAVG(dpcalls_DP)) 
+        avgModuMin.append(FindAVG(dpcalls_ModuMin))
+    trace1=go.Scatter(
+        x=AxisX,
+        y=avgDP,
+        name="only DP",
+        line=dict(
+            color=('rgb(0,0,0)'),
+            width=4,
+           # dash='dash'
+            )
+        )
+    trace2=go.Scatter(
+        x=AxisX,
+        y=avgModuMin,
+        name="modumin using DP",
+        line=dict(
+            color=('rgb(0,0,0)'),
+            width=4,
+            dash='dash'
+            )
+        )
+    data=[trace1,trace2]
+    layout = dict(title = 'Run time '+str(M)+" variables",
+            xaxis = dict(title = 'Rules and variables ratio'),
+            yaxis = dict(title = 'Average run time in miliseconds'),
+            )
+    fig = dict(data=data, layout=layout)  
+    py.plot(fig, filename='run time test') 
     
-#testEverage()   
-    
-    
-    
-    
-    
-    
-    
-    
+   
+   
+   
+def testMemUsage():
+    K=3
+    M=100
+    avgMemWASP=[]
+    avgModuMinUsingWASP=[]
+    AxisX=[]
+    for ratio in frange(2,10,0.2):
+       # print("ratio " , ratio)
+        mem_WASP=[]
+        mem_ModuMinUsingWASP=[]
+        AxisX.append(ratio)
+        L = int(ratio*M)
+        for i in range(0,80): 
+           # print("i ",i)
+            RandomPositiveCNF(L, M, K)
+            filename="cnf_"+str(L)+"_"+str(M)
+            output=GetJavaOutput(path, filename).split(",")
+           # print(output)
+            mem_WASP.append(output[0])
+            mem_ModuMinUsingWASP.append(output[1])
+            os.remove(os.path.join(path,filename))
+        avgMemWASP.append(FindAVG(mem_WASP)) 
+        avgModuMinUsingWASP.append(FindAVG(mem_ModuMinUsingWASP))
+    trace1=go.Scatter(
+        x=AxisX,
+        y=avgMemWASP,
+        name="WASP",
+        line=dict(
+            color=('rgb(0,0,0)'),
+            width=4,
+           # dash='dash'
+            )
+        )
+    trace2=go.Scatter(
+        x=AxisX,
+        y=avgModuMinUsingWASP,
+        name="ModuMin using wasp",
+        line=dict(
+            color=('rgb(0,0,0)'),
+            width=4,
+            dash='dash'
+            )
+        )
+    data=[trace1,trace2]
+    layout = dict(title = 'Memory usage in MB '+str(M)+" variables",
+            xaxis = dict(title = 'Rules and variables ratio'),
+            yaxis = dict(title = 'Memory usage in MB'),
+            )
+    fig = dict(data=data, layout=layout)  
+    py.plot(fig, filename='Memory usage test')  
+       
+testMemUsage() 
     
     
     
@@ -249,12 +286,12 @@ def testEverage():
 def checkModuMin():
     K=3
     M=100
-    for ratio in frange(1,20,0.2):
+    for ratio in frange(2,10,0.2):
         L = int(ratio*M)
         myFile=RandomPositiveCNF(L, M, K)   
         filename="cnf_"+str(L)+"_"+str(M)
         output=GetJavaOutput(path, filename)
-        print("ratio "+ str(ratio) +"min model: " +output)
+        print(output)
         
 #checkModuMin()   
 #RandomPositiveCNF(150, 50, 3)        

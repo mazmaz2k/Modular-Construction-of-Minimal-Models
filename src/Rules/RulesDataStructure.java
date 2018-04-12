@@ -1,6 +1,5 @@
 package Rules;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -17,7 +16,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     public Rule[] RulesArray ;
     Hashtable<Integer, LinkedList> varHT ;
     static HashMap<Integer, Boolean> literalMap;// We will store the value of literals in this structure as we go along
-    public int counter = 0;
+    public int dpCalls = 0;
     public LinkedList minModel;
     public int SIZE;
     public RulesDataStructure (int numOfRules)
@@ -266,10 +265,10 @@ public class RulesDataStructure extends DavisPutnamHelper
     		}
     		Snode= Snode.next;
 		}
-    	if(Ts.isEmpty())
-    	{
-    		this.counter+=s.getSize();//count how many times we put value in a variable
-    	}
+//    	if(Ts.isEmpty())
+//    	{
+//    		this.counter+=s.getSize();//count how many times we put value in a variable
+//    	}
     	return Ts;
     }
     private boolean allExistInList(int ruleNum , LinkedList l)//all vars in rule exist in List
@@ -327,7 +326,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 		 nTs=nTs.next;	
 		
  	  }
- 	 
+ 	// printClauses(clauses);
  	  if(DLL(clauses))
  	  {
  		  return true;
@@ -337,6 +336,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     }
     private boolean DLL(ArrayList<Clause> Clauses)
 	{
+		this.dpCalls++;//count how many times we called to DP
     	if(Clauses.size() == 0) 
 		{
 		//	System.out.println("T = {EMPTY}");
@@ -350,9 +350,6 @@ public class RulesDataStructure extends DavisPutnamHelper
 			{
 				//printClauses(Clauses);
 				//System.out.println("Performing unitary propagation with: "+literalToRemove);
-				this.counter++;//count how many times we put value in a variable
-//				printClauses(Clauses);
-//				System.out.println("Performing unitary propagation with: "+literalToRemove);
 				removeClauses(literalToRemove,Clauses);
 				cutClauses(literalToRemove,Clauses);
 				//printClauses(Clauses);
@@ -472,7 +469,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     
     public void ChangeDataStrucureByPlacingValueInVar(int var , boolean value)
     {
-    	/*if(conflictExist(var, value))
+    	if(conflictExist(var, value))
     	{
     		//System.out.println("CONFLICT");
     		return ;
@@ -481,7 +478,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	{
     		//System.out.println("VARIABLE NOT EXIST");
     		return ;
-    	}*/
+    	}
     	LinkedList l = varHT.get(var);
 	    Node n = l.head;
     	while(n!=null)
@@ -801,6 +798,53 @@ public class RulesDataStructure extends DavisPutnamHelper
         }
         return ret;
     }
+     
+     
+     public void removeDoubles()
+     {
+    	 for (int i = 0; i < RulesArray.length; i++) 
+    	 {
+    		 LinkedList body = RulesArray[i].body;
+    		 Node nBody =body.head;
+    		 while(nBody!=null)
+    		 {
+    			 int var =nBody.var;
+    			 Node nBody2=nBody.next;
+    			 int index=1;
+    			 while(nBody2!=null)
+    			 {
+    				 if(var==nBody2.var)
+    				 {
+    					 body.deleteAtIndex(index);
+    					 index--;
+    				 }
+    				 index++;
+    				 nBody2=nBody2.next;
+    			 }
+    			nBody=nBody.next;		
+    		 }
+    		 LinkedList head = RulesArray[i].head;
+    		 Node nHead =head.head;
+    		 while(nHead!=null)
+    		 {
+    			 int var =nHead.var;
+    			 Node nHead2=nHead.next;
+    			 int index=1;
+    			 while(nHead2!=null)
+    			 {
+    				 if(var==nHead2.var)
+    				 {
+    					 head.deleteAtIndex(index);
+    					 index--;
+    				 }
+    				 index++;
+    				 nHead2=nHead2.next;
+    			 }
+    			nHead=nHead.next;
+    		 }
+    		 
+    	 }
+     }
     /*public static void main(String[] args)
     {
     		boolean[] a = toBinary(15,8);

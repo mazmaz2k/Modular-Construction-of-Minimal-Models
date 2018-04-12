@@ -21,11 +21,13 @@ public class MinimalModel extends Graph<Integer>{
 	RulesDataStructure DS ;
 	boolean readFile = false;
 	double avgSourceSize;
+	int moduminDPcalls;
 	static int rulesNum;
 	private static final double MEGABYTE = 1024L * 1024L;
 
 	public MinimalModel() {
 		super(true);
+		moduminDPcalls=0;
 	}
 	
     public static double bytesToMegabytes(double bytes) {
@@ -33,28 +35,82 @@ public class MinimalModel extends Graph<Integer>{
     }
 	public static void main(String[] args) 
 	{
-		//System.out.println("in main");
 		MinimalModel m = new MinimalModel();
 		//String path=args[0];
 		String path=".//CnfFile.txt";
+		
 		m.readfile(path);
-		m.Modumin();
+		//m.ModuminUsingWASP();
+		//System.out.println(m.DS.StringMinimalModel());
+		m.WASP();
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		/***run time checking*/
+		/*long startTime,endTime,totalTime;//in mili sec
+		
+		startTime = System.currentTimeMillis();
+		 m.readfile(path);
+		 m.ModuMinUsingDP();
+
+		 endTime   = System.currentTimeMillis();
+		 totalTime = endTime - startTime;
+		 System.out.print(totalTime);
+		
+			System.out.print(",");
+
+			startTime = System.currentTimeMillis();
+			 m.readfile(path);
+			 m.DP();
+
+			 endTime   = System.currentTimeMillis();
+			 totalTime = endTime - startTime;
+			 System.out.print(totalTime);
+			 
+		 */
+		
+		 
+		 //System.out.println(",");
+
+		 
+		
+//		m.readfile(path);
+//		m.DP();
+//		System.out.print(m.DS.dpCalls);
+//		System.out.print(",");
+//		m.readfile(path);
+//		m.ModuMinUsingDP();
+//		System.out.print(m.moduminDPcalls);
+		//m.DP();
+		//System.out.println("dp calls: "+m.DS.dpCalls);
+		
+		
+		//m.Modumin();
 		//m.WASP();
-		System.out.print(m.DS.StringMinimalModel());
-		//m.WASP();
-		/*Runtime runtime = Runtime.getRuntime();
+		//System.out.print(m.DS.StringMinimalModel());
+		
+		/**memory usage checking**/
+	/*	m.readfile(path);
+		m.WASP();
+		Runtime runtime = Runtime.getRuntime();
         // Run the garbage collector
         runtime.gc();
         // Calculate the used memory
         double memory = runtime.totalMemory() - runtime.freeMemory();
-       // System.out.println("Used memory is bytes: " + memory);
-      //  System.out.println("Used memory is megabytes: "
-        //        + bytesToMegabytes(memory));
+       
         System.out.print(bytesToMegabytes(memory));
         System.out.print(",");
+        
         m.readfile(path);
-        m.Modumin();
-         runtime = Runtime.getRuntime();
+        m.ModuminUsingWASP();
+        runtime = Runtime.getRuntime();
         // Run the garbage collector
         runtime.gc();
         // Calculate the used memory
@@ -147,9 +203,8 @@ public class MinimalModel extends Graph<Integer>{
 			if(minmodel.head.var==-1)
 				System.out.println("unsatisfiable");
 		}
-		System.out.println(minmodel.getSize());
-		//minmodel.printList();
-	//	System.out.println("size: "+minmodel.getSize());
+		minmodel.printList();
+		System.out.println("size: "+minmodel.getSize());
 
 	}
 	
@@ -237,7 +292,7 @@ public class MinimalModel extends Graph<Integer>{
 
 	}
 	
-	public boolean Modumin()
+	public boolean ModuminUsingWASP()
 	{
 		int size = DS.SIZE;		
 		Graph<Integer> g;
@@ -421,8 +476,35 @@ public class MinimalModel extends Graph<Integer>{
 		return true;
 	}
 	*/
+	
+	
+	public boolean ModuMinUsingDP()
+	{
+		int size = DS.SIZE;	
+		DS.removeDoubles();
+		while(DS.SIZE!=0)
+		{
+			//DS.printRulesArray();
+			DS.checkForUnits();//remove empty sources
+			Graph<Integer> g = initGraph(DS, size);
+			LinkedList s = sourceOfGraph(g);
+			LinkedList Ts=DS.Ts(s);
+			if(!DS.FindMinimalModelForTs(Ts))
+			{
+//				System.out.println("UNSAT");
+//				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
+				return false;
+			}
+			this.moduminDPcalls+=DS.dpCalls;
+			//DS.printValueOfVariables();
+			DS.updateRuleDS();
+		}		
+//		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
+		return true;
+	}
 	public boolean DP()
 	{
+		DS.removeDoubles();
 		LinkedList Ts=new LinkedList();
 //		System.out.println(rulesNum);
 		for (int i = 0; i < rulesNum ; i++) {
