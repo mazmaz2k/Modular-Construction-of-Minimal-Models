@@ -36,13 +36,13 @@ public class MinimalModel extends Graph<Integer>{
 	public static void main(String[] args) 
 	{
 		MinimalModel m = new MinimalModel();
-		//String path=args[0];
-		String path=".//CnfFile.txt";
+		String path=args[0];
+		//String path=".//CnfFile.txt";
 		
 		m.readfile(path);
-		//m.ModuminUsingWASP();
+		m.ModuminUsingWASP();
 		//System.out.println(m.DS.StringMinimalModel());
-		m.WASP();
+		System.out.print(m.avgSourceSize);
 		
 		
 		
@@ -331,6 +331,7 @@ public class MinimalModel extends Graph<Integer>{
 			/**Update the rules data structure*/
 			DS.updateRuleDS();	
 		}
+		//System.out.println(numOfSources);
 		this.avgSourceSize=sumSorceSize/numOfSources;
 		return true;
 	}

@@ -81,54 +81,22 @@ def FindAVG(arr):
     avg=s/size
     return avg   
      
-# def memoryTest():
-#     K = 3 #K-SAT
-#     variableList=[20,40,50]
-#     data=[]
-#     for M in variableList:
-#         directory="/"+str(M)+"variables"
-#         filepath=os.path.join(path+directory)
-#         avgList=[]
-#         AxisX=[]
-#         ratio=2
-#         for ratio in frange(2,9,0.2):
-#             MemoryList=[]
-#             AxisX.append(ratio)
-#             L = int(ratio*M)
-#             for i in range(0,5):
-#                 RandomPositiveCNF(L, M, K)
-#                 filename="cnf_"+str(L)+"_"+str(M)
-#                 memInMB=GetMemoryFromJava(filepath, filename)
-#                 MemoryList.append(memInMB)
-#                 os.remove(os.path.join(filepath,filename))
-#             avg=FindAVG(MemoryList)
-#             avgList.append(avg) 
-#         #print(avgList)      
-#         trace = go.Scatter(
-#             x = AxisX,
-#             y = avgList,
-#             name = str(M)+"variables",
-#             line = dict(
-#                 color = ("rgb("+str(random.randint(1,256))+","+str(random.randint(1,256))+","+str(random.randint(1,256))+")"),
-#                 width = 4)
-#             )
-#         data.append(trace)   
-#     layout = dict(title = 'chart',
-#               xaxis = dict(title = 'Rules and variables ratio'),
-#               yaxis = dict(title = 'MemoryInMB'),
-#               )
-#  
-#     fig = dict(data=data, layout=layout)
-#     
-#     py.plot(fig, filename='waspAvgMem')     
-
-
-
-    
-    
-    
-    
-    
+        
+def FindMedian(arr):
+    median=0.0
+    size = len(arr)  
+    if size == 0:
+        return
+    arr.sort(cmp=None, key=None, reverse=False) 
+    if size%2 == 0:
+        num1=float(arr[(size-2)/2])
+        num2=float(arr[size/2])
+        median=(num1+num2)/2
+    else:
+        middle=(size-1)/2
+        median = arr[middle] 
+        
+    return median   
     
 def testEverage(): 
     K = 3 #K-SAT
@@ -275,8 +243,101 @@ def testMemUsage():
             )
     fig = dict(data=data, layout=layout)  
     py.plot(fig, filename='Memory usage test')  
-       
-testMemUsage() 
+   
+   
+   
+   
+   
+   
+def avgSource():
+    K=3
+    M=100
+    avgSourceSize=[]
+    medSourceSize=[]
+    AxisX=[]
+    for ratio in frange(2,10,0.2):
+        sourceSize=[]
+        AxisX.append(ratio)
+        L = int(ratio*M)
+        for i in range(0,3): 
+           # print("i ",i)
+            RandomPositiveCNF(L, M, K)
+            filename="cnf_"+str(L)+"_"+str(M)
+            output=GetJavaOutput(path, filename)
+            sourceSize.append(output)
+            os.remove(os.path.join(path,filename))
+        avgSourceSize.append(FindAVG(sourceSize)) 
+        medSourceSize.append(FindMedian(sourceSize))
+    trace1=go.Scatter(
+        x=AxisX,
+        y=avgSourceSize,
+        name="Average source size",
+        line=dict(
+            color=('rgb(0,0,0)'),
+            width=4,
+           # dash='dash'
+            )
+        )
+    trace2=go.Scatter(
+        x=AxisX,
+        y=medSourceSize,
+        name="median source size",
+        line=dict(
+            color=('rgb(0,0,0)'),
+            width=4,
+            dash='dash'
+            )
+        )
+    data=[trace1,trace2]
+    layout = dict(title = 'Average and median source size '+str(M)+" variables",
+            xaxis = dict(title = 'Rules and variables ratio'),
+            yaxis = dict(title = 'source size'),
+            )
+    fig = dict(data=data, layout=layout)  
+    py.plot(fig, filename='Source size test')    
+   
+   
+
+def avgSource2():
+    K=3
+    L=500
+    avgSourceSize=[]
+    medSourceSize=[]
+    AxisX=[]
+    for ratio in frange(2,10,0.2):
+        sourceSize=[]
+        AxisX.append(ratio)
+        M = int(L/ratio)
+        for i in range(0,300): 
+           # print("i ",i)
+            RandomPositiveCNF(L, M, K)
+            filename="cnf_"+str(L)+"_"+str(M)
+            output=GetJavaOutput(path, filename)
+            sourceSize.append(output)
+            os.remove(os.path.join(path,filename))
+        avgSourceSize.append(FindAVG(sourceSize)) 
+        medSourceSize.append(FindMedian(sourceSize))
+    trace1=go.Scatter(
+        x=AxisX,
+        y=avgSourceSize,
+        name="Average source size",
+        line=dict(
+            color=('rgb(0,0,0)'),
+            width=4,
+           # dash='dash'
+            )
+        )
+   
+    data=[trace1]
+    layout = dict(title = 'Average source size '+str(L)+" rules",
+            xaxis = dict(title = 'Rules and variables ratio'),
+            yaxis = dict(title = 'source size'),
+            )
+    fig = dict(data=data, layout=layout)  
+    py.plot(fig, filename='Source size test')    
+
+avgSource2()       
+#testMemUsage() 
     
     
     
