@@ -197,8 +197,12 @@ public class Graph<T>{
 			w_max=2;
 		}
 		int w = 2;
+		int a_b_count=0;
 		while(w_max >= w ) {
-			while(flag) {
+			
+			while(a_b_count>20) {
+			
+			while(flag ) {
 
 				do {
 					for(int i=0 ; i<3 ; i++) { //Lottery W 3 times !
@@ -234,7 +238,7 @@ public class Graph<T>{
 					}
 
 					//	System.out.println("In second while");
-					if(counter==40) {
+					if(counter==20) {
 						counter=0;
 						break;
 					}
@@ -268,7 +272,6 @@ public class Graph<T>{
 				//			System.out.println("v2: "+flowNetGraph.getVertex(T));
 				//			System.out.println("V1 index:" +ff.findVertexIndex(flowNetGraph.getVertex(S))+ " V2 index: " + ff.findVertexIndex(flowNetGraph.getVertex(T)));
 				x1=ff.maxFlow( ff.findVertexIndex(flowNetGraph.getVertex(S)),  ff.findVertexIndex(flowNetGraph.getVertex(T)));//find max flow & min cut between S and T
-
 				collection_S= ff.getS();
 				collection_T = ff.getT();
 			}catch (Exception e) {
@@ -332,6 +335,10 @@ public class Graph<T>{
 			w = w*2;
 			ff=null;
 			flowNetGraph= null;
+		
+			a_b_count++;
+			}
+		
 		}
 
 		//TODO:

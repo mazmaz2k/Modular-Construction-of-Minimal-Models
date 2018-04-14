@@ -62,7 +62,7 @@ public class readGraphFromFileNewAlgorithm {
 
 	public static void main(String[] args) {
 		Graph<Integer> g=readeGraphFromFile();
-		System.out.println(g);
+//		System.out.println(g);
 
 		Graph<Integer> A = new Graph<>(false);
 		Vertex<Integer> s= new Vertex<Integer>(1);

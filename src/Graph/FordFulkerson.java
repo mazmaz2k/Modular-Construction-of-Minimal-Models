@@ -162,9 +162,20 @@ public class FordFulkerson {
 	}
 
 	public int findVertexIndex(Vertex<Integer> v) {
+		if( v==null ) {
+//			return -1;
+		}
 		for(int i=0;i<vertexArray.length;i++) {
+//			try {
+//				v.getId();
+//			}catch (Exception e) {
+//				// TODO: handle exception
+//				System.out.println(v);
+//				
+//			}
+			
 			if(vertexArray[i]==v.getId()) {
-				//System.out.println("v is: "+ v +" vertex Array" + vertexArray[i]+ " i is :" + i);
+//				System.out.println("v is: "+ v +" vertex Array" + vertexArray[i]+ " i is :" + i);
 				return i;
 			}
 		}
@@ -254,8 +265,8 @@ public class FordFulkerson {
 		//       System.out.println(T);
 		//       System.out.println("S is: "+S);
 		System.out.println();
-
-		//printAugmentedPaths(augmentedPaths,maxFlow);
+		System.out.println("path: ");
+		printAugmentedPaths(augmentedPaths,maxFlow);
 		//System.out.println();
 
 		this.maxFlow=maxFlow;
