@@ -31,7 +31,7 @@ public class readGraphFromFileNewAlgorithm {
 
 			while (sc.hasNextLine()) 
 			{
-				System.out.println("idx is: "+idx);
+//				System.out.println("idx is: "+idx);
 				st = new StringTokenizer(sc.nextLine()," ");
 				if(!st.hasMoreTokens())
 				{
@@ -43,7 +43,7 @@ public class readGraphFromFileNewAlgorithm {
 				{
 
 					v2 = Integer.parseInt(st.nextToken());
-					graph.addEdge(v1, v2);
+					graph.addEdge(v1, v2, 1);
 				}
 				idx++;
 			}

@@ -17,7 +17,6 @@ public class Vertex_size_10 {
 		g.addEdge(1, 5, 1);
 		g.addEdge(1, 8, 1);
 
-
 		g.addEdge(2, 3, 1);
 
 		g.addEdge(3, 6, 1);

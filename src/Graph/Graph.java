@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import Rules.RulesDataStructure;
+import Test.graphTests;
 import Rules.LinkedList;
 import Rules.LinkedList.Node;
 public class Graph<T>{
@@ -188,45 +189,54 @@ public class Graph<T>{
 		}
 		int counter=0;
 		boolean flag= true;
+		int w_max = ((int) 0.1*graph.getAllVertex().size() );
+		if (w_max <2) {
+			w_max=2;
+		}
 		while(flag) {
-			do {
-				if(W_vertexList != null ) {
-					W_vertexList.clear();
-				}
-				for(Vertex<Integer> vertex : allVertex) {
-					if(Math.random() < 0.1) {
-
-						W_vertexList.add(vertex);
+			
+//			for(int w=2 ; w < w_max; w = w*2) {
+				do {
+					if(W_vertexList != null ) {
+						W_vertexList.clear();
 					}
-				}
-				System.out.println("in first while");
+					for(Vertex<Integer> vertex : allVertex) {
+						if(Math.random() < 0.1) {
 
-			}while(W_vertexList.isEmpty() || W_vertexList.size() < 0.1);
-			System.out.println("W is:" + W_vertexList);
-			System.out.println("W size: " + W_vertexList.size());
-			do {
-				if(A_vertexList != null || B_vertexList != null) {
-					A_vertexList.clear();
-					B_vertexList.clear();
-				}
-				for(Vertex<Integer> vertex :W_vertexList) {
-					if(Math.random() > 0.5) {
-						A_vertexList.add(vertex);
-					}else {
-						B_vertexList.add(vertex);
+							W_vertexList.add(vertex);
+						}
 					}
+					System.out.println("in first while");
+
+				}while(W_vertexList.isEmpty() || W_vertexList.size() <= 2);
+
+				System.out.println("W is:" + W_vertexList);
+				System.out.println("W size: " + W_vertexList.size());
+				do {
+					if(A_vertexList != null || B_vertexList != null) {
+						A_vertexList.clear();
+						B_vertexList.clear();
+					}
+					for(Vertex<Integer> vertex :W_vertexList) {
+						if(Math.random() > 0.5) {
+							A_vertexList.add(vertex);
+						}else {
+							B_vertexList.add(vertex);
+						}
+					}
+
+					System.out.println("In second while");
+					if(counter==20) {
+						counter=0;
+						break;
+					}
+					counter++;
+				}while(Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size() > 0.5 || checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty());
+				if ((Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size() <= 0.5) &&  !checkIfHasEdges(A_vertexList,B_vertexList) && !A_vertexList.isEmpty() && !B_vertexList.isEmpty()) {
+					flag=false;		
 				}
 
-				System.out.println("In second while");
-				if(counter==20) {
-					counter=0;
-					break;
-				}
-				counter++;
-			}while(Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size() > 0.5 || checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty());
-			if ((Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size() <= 0.5) &&  !checkIfHasEdges(A_vertexList,B_vertexList) && !A_vertexList.isEmpty() && !B_vertexList.isEmpty()) {
-				flag=false;		
-			}
+			//}
 		}
 
 		System.out.println("Point B");
@@ -269,7 +279,7 @@ public class Graph<T>{
 			return null;		
 		}		
 		ArrayList<Edge<Integer>> edgeList=new ArrayList<>(); //array list to hold all the edges of the CUT !
-//		ArrayList<Vertex<Integer>> vertexsListToRemove= new ArrayList<>();
+		//		ArrayList<Vertex<Integer>> vertexsListToRemove= new ArrayList<>();
 
 		for(Vertex<Integer> v: flowNetGraph.getAllVertex()) {
 			if(collection_S.contains((int)v.getId())) {
@@ -291,9 +301,9 @@ public class Graph<T>{
 			}
 		}
 
-		
-		
-		
+
+
+
 		//TODO:
 		/// find CUT and edges in the cut!
 		//return vertex that in the cut
@@ -345,11 +355,11 @@ public class Graph<T>{
 		}
 		Graph<Integer> uniqueGraph=new Graph<Integer>(true);
 		int size = graph.getAllVertex().size(); // size of |v| to be on the weight of all edges beside between x1->x2  
-				System.out.println("vertexToDuplicate: " + vertexToDuplicate);
+		System.out.println("vertexToDuplicate: " + vertexToDuplicate);
 		for(Vertex<Integer> v: graph.getAllVertex()) {
 			if(!vertexToDuplicate.contains(v)) {
 				for(Edge<Integer> e : v.getEdges()) {
-					
+
 					if(vertexToDuplicate.contains(e.getVertex2())) {
 						uniqueGraph.addEdge(v.getId(),e.getVertex2().getId()*(-1), size);
 					}else {
