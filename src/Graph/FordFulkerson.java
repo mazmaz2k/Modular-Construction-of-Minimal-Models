@@ -86,16 +86,16 @@ public class FordFulkerson {
 				}
 			}
 		}
-		System.out.println("Linked list -----------------------");
-		for(ListNode pNode : resArray) {
-			//			System.out.println("I "+ pNode.indexI);
-			System.out.print("I: "+ pNode.indexI+" J: ");
-			for(Node node :pNode.getList()) {
-				System.out.print( node.indexJ+" ");	
-			}
-			System.out.println();
-		}
-		System.out.println("------------------------------\n");
+//		System.out.println("Linked list -----------------------");
+//		for(ListNode pNode : resArray) {
+//			//			System.out.println("I "+ pNode.indexI);
+//			System.out.print("I: "+ pNode.indexI+" J: ");
+//			for(Node node :pNode.getList()) {
+//				System.out.print( node.indexJ+" ");	
+//			}
+//			System.out.println();
+//		}
+//		System.out.println("------------------------------\n");
 
 	}
 
@@ -255,8 +255,8 @@ public class FordFulkerson {
 		//       System.out.println("S is: "+S);
 		System.out.println();
 
-		printAugmentedPaths(augmentedPaths,maxFlow);
-		System.out.println();
+		//printAugmentedPaths(augmentedPaths,maxFlow);
+		//System.out.println();
 
 		this.maxFlow=maxFlow;
 		return maxFlow;
@@ -328,7 +328,7 @@ public class FordFulkerson {
 					//if sink is found then augmented path is found
 					if ( list.getindexI() == sink) { //TODO this is the problem
 						foundAugmentedPath = true;
-						System.out.println("IN I @!!!!!!!!!!!!");
+					//	System.out.println("IN I @!!!!!!!!!!!!");
 
 						break;
 					}

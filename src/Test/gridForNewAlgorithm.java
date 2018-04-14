@@ -94,23 +94,20 @@ public class gridForNewAlgorithm {
 
 		StronglyConnectedComponent scc = new StronglyConnectedComponent();
 		List<Set<Vertex<Integer>>> result = scc.scc(g);
-
-		//print the result
-		result.forEach(set -> {
-			set.forEach(v -> System.out.print(v.getId() + " "));
-			System.out.println();
-		});
+		//		System.out.println("Connected component in the graph:");
+		//		//print the result -connected component in the graph !
+		//		result.forEach(set -> {
+		//			set.forEach(v -> System.out.print(v.getId() + " "));
+		//			System.out.println();
+		//		});
 
 		ArrayList<Vertex<Integer>> vertexToremove = Graph.vertexSeparator(result.get(0), g);
-		System.out.println("Vertex to remove: " + vertexToremove);
-
 
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
-
-
 		g=g.removeVertex(vertexToremove);
 		//		System.out.println(g);
 		//		 StronglyConnectedComponent scc = new StronglyConnectedComponent();
+		System.out.println("Vertex to remove: " + vertexToremove);
 		System.out.println("connected component After dismentle: ");
 		result = scc.scc(g);
 

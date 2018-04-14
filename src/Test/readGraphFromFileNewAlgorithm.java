@@ -84,9 +84,9 @@ public class readGraphFromFileNewAlgorithm {
 		});
 		
 		ArrayList<Vertex<Integer>> vertexToremove = Graph.vertexSeparator(result.get(0), g);
-		System.out.println("Vertex to remove: " + vertexToremove);
 
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+		System.out.println("Vertex to remove: " + vertexToremove);
 		g=g.removeVertex(vertexToremove);
 		//		System.out.println(g);
 		//		 StronglyConnectedComponent scc = new StronglyConnectedComponent();
