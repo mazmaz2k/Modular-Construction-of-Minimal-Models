@@ -264,9 +264,9 @@ public class FordFulkerson {
 		//      System.out.println("T is:"+T);
 		//       System.out.println(T);
 		//       System.out.println("S is: "+S);
-		System.out.println();
-		System.out.println("path: ");
-		printAugmentedPaths(augmentedPaths,maxFlow);
+//		System.out.println();
+//		System.out.println("path: ");
+//		printAugmentedPaths(augmentedPaths,maxFlow);
 		//System.out.println();
 
 		this.maxFlow=maxFlow;

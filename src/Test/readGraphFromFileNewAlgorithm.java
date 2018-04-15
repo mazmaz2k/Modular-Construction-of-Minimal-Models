@@ -31,7 +31,7 @@ public class readGraphFromFileNewAlgorithm {
 
 			while (sc.hasNextLine()) 
 			{
-//				System.out.println("idx is: "+idx);
+				//				System.out.println("idx is: "+idx);
 				st = new StringTokenizer(sc.nextLine()," ");
 				if(!st.hasMoreTokens())
 				{
@@ -62,8 +62,28 @@ public class readGraphFromFileNewAlgorithm {
 
 	public static void main(String[] args) {
 		Graph<Integer> g=readeGraphFromFile();
-//		System.out.println(g);
+		//		System.out.println(g);
 
+		
+//		/**memory usage checking**/
+//		Runtime runtime = Runtime.getRuntime();
+//        // Run the garbage collector
+//        runtime.gc();
+//        // Calculate the used memory
+//        double memory = runtime.totalMemory() - runtime.freeMemory();
+//       
+
+		
+		
+		/***run time checking*/
+		long startTime,endTime,totalTime;//in mili sec
+		
+		startTime = System.currentTimeMillis();
+		//your program
+
+		
+			
+		
 		Graph<Integer> A = new Graph<>(false);
 		Vertex<Integer> s= new Vertex<Integer>(1);
 		Collection<Integer> N=new java.util.LinkedList<Integer>();
@@ -72,8 +92,8 @@ public class readGraphFromFileNewAlgorithm {
 			N.add((int) v.getId());
 
 		}
-		
-		
+
+
 		StronglyConnectedComponent scc = new StronglyConnectedComponent();
 		List<Set<Vertex<Integer>>> result = scc.scc(g);
 
@@ -82,7 +102,7 @@ public class readGraphFromFileNewAlgorithm {
 			set.forEach(v -> System.out.print(v.getId() + " "));
 			System.out.println();
 		});
-		
+
 		ArrayList<Vertex<Integer>> vertexToremove = Graph.vertexSeparator(result.get(0), g);
 
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
@@ -99,9 +119,16 @@ public class readGraphFromFileNewAlgorithm {
 			System.out.println();
 		});
 
+		/**memory usage checking**/
+		Runtime runtime = Runtime.getRuntime();
+        // Run the garbage collector
+        runtime.gc();
+        // Calculate the used memory
+        double memory = runtime.totalMemory() - runtime.freeMemory();
+       System.out.println("Memory usage: "+ memory/(1024*1024)+" MB");
 
-
-
-
+		 endTime   = System.currentTimeMillis();
+		 totalTime = endTime - startTime;
+		 System.out.print("Total Run Time in mili seconds: " + totalTime);
 	}
 }
