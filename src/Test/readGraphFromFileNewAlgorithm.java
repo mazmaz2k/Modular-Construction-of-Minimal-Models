@@ -14,24 +14,21 @@ import Graph.StronglyConnectedComponent;
 import Graph.Vertex;
 
 public class readGraphFromFileNewAlgorithm {
-	public static Graph<Integer> readeGraphFromFile(){
+	public static Graph<Integer> readeGraphFromFile(String path){
 
 
 		Scanner sc;
 		int v1,v2;
-		int idx=0;
 		//		String var="";
 		Graph<Integer> graph = new Graph<Integer>(true);
 		try 
 		{
 
-			String Path = ".//GraphFile.txt" ;
-			sc = new Scanner(new File(Path));//read file
+			sc = new Scanner(new File(path));//read file
 			StringTokenizer st = null;
 
 			while (sc.hasNextLine()) 
 			{
-				//				System.out.println("idx is: "+idx);
 				st = new StringTokenizer(sc.nextLine()," ");
 				if(!st.hasMoreTokens())
 				{
@@ -41,11 +38,14 @@ public class readGraphFromFileNewAlgorithm {
 				graph.addSingleVertex(v1);
 				while(st.hasMoreTokens())
 				{
+					
 
 					v2 = Integer.parseInt(st.nextToken());
+					if(v1 == v2) {
+						continue;
+					}
 					graph.addEdge(v1, v2, 1);
 				}
-				idx++;
 			}
 			System.out.println("File was read successfully");
 		}catch (FileNotFoundException ex)
@@ -61,7 +61,9 @@ public class readGraphFromFileNewAlgorithm {
 	} 
 
 	public static void main(String[] args) {
-		Graph<Integer> g=readeGraphFromFile();
+//		String path = ".//GraphFile.txt";
+		String path = args[0];
+		Graph<Integer> g=readeGraphFromFile(path);
 		//		System.out.println(g);
 
 		
@@ -81,21 +83,15 @@ public class readGraphFromFileNewAlgorithm {
 		startTime = System.currentTimeMillis();
 		//your program
 
-		
-			
-		
-		Graph<Integer> A = new Graph<>(false);
-		Vertex<Integer> s= new Vertex<Integer>(1);
-		Collection<Integer> N=new java.util.LinkedList<Integer>();
-		for(Vertex<Integer> v:g.getAllVertex()) 
-		{
-			N.add((int) v.getId());
 
-		}
 
 
 		StronglyConnectedComponent scc = new StronglyConnectedComponent();
 		List<Set<Vertex<Integer>>> result = scc.scc(g);
+		if(result.get(0).size()!=g.getAllVertex().size()) {
+			System.out.println("not cc");
+			return ;
+		}
 
 		//print the result
 		result.forEach(set -> {
@@ -103,7 +99,9 @@ public class readGraphFromFileNewAlgorithm {
 			System.out.println();
 		});
 
+
 		ArrayList<Vertex<Integer>> vertexToremove = Graph.vertexSeparator(result.get(0), g);
+		System.out.println("point 1");
 
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 		System.out.println("Vertex to remove: " + vertexToremove);
