@@ -3,6 +3,7 @@ package Graph;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -198,24 +199,27 @@ public class Graph<T>{
 			flag= true;
 			for(int w=2 ; w<=w_max; w=w*2) {
 				//			System.out.println("W max size is: "+ w_max);			
+				int count = 0;
 				do {
-
+//					if(W_vertexList != null ) {
+						W_vertexList.clear();
+//					}
 					for(int i=0 ; i<3 ; i++) { //Lottery W 3 times !
-						if(W_vertexList != null ) {
-							W_vertexList.clear();
-						}
 						for(Vertex<Integer> vertex : allVertex) {
-							if(Math.random() <= 0.5) {
-
+							if(Math.random() <= 0.1) {
+								
 								W_vertexList.add(vertex);
 							}
 						}
 
 					}
-//					System.out.println("in first while");
-
-				}while((W_vertexList.isEmpty() || W_vertexList.size() > w)  );	//we have W set
-
+					
+					System.out.println("in first while");
+					count++;
+				}while((W_vertexList.isEmpty() || W_vertexList.size() > w) && count <=200  );	//we have W set
+				if(count > 201) {
+					continue;
+				}
 
 				for(int count_a_b=0; count_a_b < 20 && flag ;count_a_b++) {	//for every w find 20 A and B sets
 					int counter=0;
@@ -223,21 +227,23 @@ public class Graph<T>{
 					
 							A_vertexList.clear();
 							B_vertexList.clear();
-						
+							double x = Math.random();
 						for(Vertex<Integer> vertex :W_vertexList) {
-							if(Math.random() > 0.5) {
+							if(x > 0.5) {
+								
 								A_vertexList.add(vertex);
 							}else {
 								B_vertexList.add(vertex);
 							}
+							x = Math.random();
 						}
 //						System.out.println("In second while");
 						counter++;
-					}while((Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size() > 0.5 || checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty()) && counter <= 100);
+					}while((Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size() > 0.5 || checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty()) && counter <= 200);
 
 					if((Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size() > 0.5) ||  checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty()) {
-						flag=false;
-						System.out.println("error to find W");
+//						flag=false;
+//						System.out.println("error to find W");
 						continue;
 					}		
 
@@ -336,8 +342,8 @@ public class Graph<T>{
 
 
 			}
-			if(returnVertexes.size()!=0) {
-				f=false;
+			if(/*returnVertexes.size() <= w_max &&*/ returnVertexes.size()>0) {
+				f =false;
 			}
 		}
 

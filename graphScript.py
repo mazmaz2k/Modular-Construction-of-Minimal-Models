@@ -6,20 +6,18 @@ import os
 import io
 import random
 
+path = "C:/Users\mazma\eclipse-workspace\Modular-Construction-of-Minimal-Models\\bin"
+pathToFile = "C:/Users\mazma\eclipse-workspace\Modular-Construction-of-Minimal-Models\\testFiles\graphTestFiles"
 
+def GetJavaOutput(filepath,filename):
+    command = "java -classpath "+path+" Test/readGraphFromFileNewAlgorithm " +filepath+"/"+filename
+    return os.popen(command).read()
 
-
-# def GetJavaOutput(filepath,filename):
-#     command = "java -classpath "+PATH_TO_MINIMAL_MODEL+" Rules/MinimalModel "+filepath+"/"+filename
-#     return os.popen(command).read()
-
-path = 'C:/Users/mazma/eclipse-workspace/Modular-Construction-of-Minimal-Models/'
 
 
 def RandomGraphMaker(M):
     filename = "graph_"+str(M)
-    filePath = os.path.join(path, filename)
-    # myFile = io.FileIO(filePath, 'r', encoding="utf-8")
+    filePath = os.path.join(pathToFile, filename)
     myFile = open(filePath+".txt", 'w', encoding="utf-8")
     line = ""
     for i in range(0, M):
@@ -33,9 +31,23 @@ def RandomGraphMaker(M):
     return myFile
 
 
+#
+# s = GetJavaOutput(pathToFile, filename)
+#
+# print(s)
+#fmyFile = RandomGraphMaker(13)
+#fmyFile.close()
 
 
-fmyFile = RandomGraphMaker(13)
-fmyFile.close()
+def X():
+    outList=[]
+    varList=[120]
+    for i in varList:
+        RandomGraphMaker(i)
+        filename="graph_"+str(i)+".txt"
+        out = GetJavaOutput(pathToFile,filename)
+       #os.remove(os.path.join(pathToFile, filename))
+        print(str(i)+" variables-----" + out)
 
 
+X()
