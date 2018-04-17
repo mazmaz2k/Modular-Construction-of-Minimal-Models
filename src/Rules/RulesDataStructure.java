@@ -16,8 +16,9 @@ public class RulesDataStructure extends DavisPutnamHelper
     public Rule[] RulesArray ;
     Hashtable<Integer, LinkedList> varHT ;
     static HashMap<Integer, Boolean> literalMap;// We will store the value of literals in this structure as we go along
-    public int dpCalls = 0;
+    public int dpCalls;
     public LinkedList minModel;
+    public int placedValueCounter;
     public int SIZE;
     public RulesDataStructure (int numOfRules)
     {
@@ -32,6 +33,8 @@ public class RulesDataStructure extends DavisPutnamHelper
     	
     	literalMap = new HashMap<Integer,Boolean>();
     	minModel = new LinkedList();
+    	dpCalls = 0;
+    	placedValueCounter=0;
     }
    
     public void addToRulsArray(int index , int var)
@@ -455,6 +458,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     			}
     			//System.out.println("key is: " + key +"   value is: " + literalMap.get(key));
     			ChangeDataStrucureByPlacingValueInVar(key, literalMap.get(key));
+    			this.placedValueCounter++;
     		//	literalMap.remove(key);
     			//System.out.println("remove key  " + key);
     		}

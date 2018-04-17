@@ -140,7 +140,7 @@ def testEverage():
    
 def testDPcalls():
     K=3
-    M=100
+    L=500
     avgDP=[]
     avgModuMin=[]
     AxisX=[]
@@ -149,15 +149,15 @@ def testDPcalls():
         dpcalls_DP=[]
         dpcalls_ModuMin=[]
         AxisX.append(ratio)
-        L = int(ratio*M)
-        for i in range(0,80): 
+        M = int(L/ratio)
+        for i in range(0,2): 
            # print("i ",i)
             RandomPositiveCNF(L, M, K)
             filename="cnf_"+str(L)+"_"+str(M)
             output=GetJavaOutput(path, filename).split(",")
            # print(output)
-            dpcalls_DP.append(output[1])
-            dpcalls_ModuMin.append(output[0])
+            dpcalls_DP.append(output[0])
+            dpcalls_ModuMin.append(output[1])
             os.remove(os.path.join(path,filename))
         avgDP.append(FindAVG(dpcalls_DP)) 
         avgModuMin.append(FindAVG(dpcalls_ModuMin))
@@ -182,15 +182,15 @@ def testDPcalls():
             )
         )
     data=[trace1,trace2]
-    layout = dict(title = 'Run time '+str(M)+" variables",
+    layout = dict(title = 'placing value in a variables '+str(M)+" variables",
             xaxis = dict(title = 'Rules and variables ratio'),
-            yaxis = dict(title = 'Average run time in miliseconds'),
+            yaxis = dict(title = 'Average placed values size '),
             )
     fig = dict(data=data, layout=layout)  
-    py.plot(fig, filename='run time test') 
+    py.plot(fig, filename='placed values') 
     
    
-   
+#testDPcalls()   
    
 def testMemUsage():
     K=3
@@ -299,11 +299,11 @@ def avgSource():
 
 def avgSource2():
     K=3
-    L=500
+    L=600
     avgSourceSize=[]
     medSourceSize=[]
     AxisX=[]
-    for ratio in frange(2,10,0.2):
+    for ratio in frange(1,25,0.2):
         sourceSize=[]
         AxisX.append(ratio)
         M = int(L/ratio)
@@ -337,11 +337,19 @@ def avgSource2():
 
 avgSource2()       
 #testMemUsage() 
+
+def printSources():
+    K=3
+    M=100
+    L=520
+    RandomPositiveCNF(L, M, K)
+    filename="cnf_"+str(L)+"_"+str(M)
+    output=GetJavaOutput(path, filename)
+    print(output)       
     
     
     
-    
-    
+#printSources()    
     
 def checkModuMin():
     K=3

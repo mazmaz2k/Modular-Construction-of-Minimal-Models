@@ -21,13 +21,11 @@ public class MinimalModel extends Graph<Integer>{
 	RulesDataStructure DS ;
 	boolean readFile = false;
 	double avgSourceSize;
-	int moduminDPcalls;
 	static int rulesNum;
 	private static final double MEGABYTE = 1024L * 1024L;
 
 	public MinimalModel() {
 		super(true);
-		moduminDPcalls=0;
 	}
 	
     public static double bytesToMegabytes(double bytes) {
@@ -41,8 +39,13 @@ public class MinimalModel extends Graph<Integer>{
 		
 		m.readfile(path);
 		m.ModuminUsingWASP();
-		//System.out.println(m.DS.StringMinimalModel());
 		System.out.print(m.avgSourceSize);
+//		System.out.print(",");
+//		m.readfile(path);
+//		m.ModuMinUsingDP();
+//		System.out.print(m.DS.placedValueCounter);
+		//System.out.println(m.DS.StringMinimalModel());
+		//System.out.print(m.avgSourceSize);
 		
 		
 		
@@ -308,6 +311,7 @@ public class MinimalModel extends Graph<Integer>{
 			 g = initGraph(DS, size);
 			/**find source*/
 			source = sourceOfGraph(g);
+			//System.out.println("ver size: "+g.getAllVertex().size()+ " source size; " +source.getSize());
 			numOfSources++;
 			sumSorceSize+=source.getSize();
 			/**Find Ts*/
@@ -496,7 +500,6 @@ public class MinimalModel extends Graph<Integer>{
 //				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
 				return false;
 			}
-			this.moduminDPcalls+=DS.dpCalls;
 			//DS.printValueOfVariables();
 			DS.updateRuleDS();
 		}		
