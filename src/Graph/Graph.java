@@ -214,7 +214,7 @@ public class Graph<T>{
 
 					}
 					
-					System.out.println("in first while");
+//					System.out.println("in first while");
 					count++;
 				}while((W_vertexList.isEmpty() || W_vertexList.size() > w) && count <=200  );	//we have W set
 				if(count > 201) {

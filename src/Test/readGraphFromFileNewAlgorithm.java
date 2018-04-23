@@ -61,8 +61,8 @@ public class readGraphFromFileNewAlgorithm {
 	} 
 
 	public static void main(String[] args) {
-//		String path = ".//GraphFile.txt";
-		String path = args[0];
+		String path = ".//GraphFile.txt";
+//		String path = args[0];
 		Graph<Integer> g=readeGraphFromFile(path);
 		//		System.out.println(g);
 

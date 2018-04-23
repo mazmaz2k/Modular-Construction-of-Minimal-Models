@@ -41,7 +41,7 @@ def RandomGraphMaker(M):
 
 def X():
     outList=[]
-    varList=[120]
+    varList=[200]
     for i in varList:
         RandomGraphMaker(i)
         filename="graph_"+str(i)+".txt"
