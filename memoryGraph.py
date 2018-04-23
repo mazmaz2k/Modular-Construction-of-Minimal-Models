@@ -140,7 +140,7 @@ def testEverage():
    
 def testDPcalls():
     K=3
-    L=500
+    M=100
     avgDP=[]
     avgModuMin=[]
     AxisX=[]
@@ -149,15 +149,15 @@ def testDPcalls():
         dpcalls_DP=[]
         dpcalls_ModuMin=[]
         AxisX.append(ratio)
-        M = int(L/ratio)
-        for i in range(0,2): 
+        L = int(M*ratio)
+        for i in range(0,300): 
            # print("i ",i)
             RandomPositiveCNF(L, M, K)
             filename="cnf_"+str(L)+"_"+str(M)
             output=GetJavaOutput(path, filename).split(",")
            # print(output)
-            dpcalls_DP.append(output[0])
-            dpcalls_ModuMin.append(output[1])
+            dpcalls_DP.append(output[1])
+            dpcalls_ModuMin.append(output[0])
             os.remove(os.path.join(path,filename))
         avgDP.append(FindAVG(dpcalls_DP)) 
         avgModuMin.append(FindAVG(dpcalls_ModuMin))
@@ -182,15 +182,15 @@ def testDPcalls():
             )
         )
     data=[trace1,trace2]
-    layout = dict(title = 'placing value in a variables '+str(M)+" variables",
+    layout = dict(title = 'run time '+str(M)+" variables",
             xaxis = dict(title = 'Rules and variables ratio'),
-            yaxis = dict(title = 'Average placed values size '),
+            yaxis = dict(title = 'Average run time '),
             )
     fig = dict(data=data, layout=layout)  
-    py.plot(fig, filename='placed values') 
+    py.plot(fig, filename='Run time test') 
     
    
-#testDPcalls()   
+testDPcalls()   
    
 def testMemUsage():
     K=3
@@ -335,7 +335,7 @@ def avgSource2():
     fig = dict(data=data, layout=layout)  
     py.plot(fig, filename='Source size test')    
 
-avgSource2()       
+#avgSource2()       
 #testMemUsage() 
 
 def printSources():
