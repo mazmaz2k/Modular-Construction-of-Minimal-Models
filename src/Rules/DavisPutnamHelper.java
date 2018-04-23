@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 public class DavisPutnamHelper
 {
+	
 
 	/*  Returns first literal found.
 	 * (To be improved by choosing literal with most ocurrences

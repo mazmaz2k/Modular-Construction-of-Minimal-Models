@@ -149,8 +149,8 @@ def testDPcalls():
         dpcalls_DP=[]
         dpcalls_ModuMin=[]
         AxisX.append(ratio)
-        L = int(ratio*M)
-        for i in range(0,80): 
+        L = int(M*ratio)
+        for i in range(0,300): 
            # print("i ",i)
             RandomPositiveCNF(L, M, K)
             filename="cnf_"+str(L)+"_"+str(M)
@@ -182,15 +182,15 @@ def testDPcalls():
             )
         )
     data=[trace1,trace2]
-    layout = dict(title = 'Run time '+str(M)+" variables",
+    layout = dict(title = 'run time '+str(M)+" variables",
             xaxis = dict(title = 'Rules and variables ratio'),
-            yaxis = dict(title = 'Average run time in miliseconds'),
+            yaxis = dict(title = 'Average run time '),
             )
     fig = dict(data=data, layout=layout)  
-    py.plot(fig, filename='run time test') 
+    py.plot(fig, filename='Run time test') 
     
    
-   
+testDPcalls()   
    
 def testMemUsage():
     K=3
@@ -299,11 +299,11 @@ def avgSource():
 
 def avgSource2():
     K=3
-    L=500
+    L=600
     avgSourceSize=[]
     medSourceSize=[]
     AxisX=[]
-    for ratio in frange(2,10,0.2):
+    for ratio in frange(1,25,0.2):
         sourceSize=[]
         AxisX.append(ratio)
         M = int(L/ratio)
@@ -335,13 +335,21 @@ def avgSource2():
     fig = dict(data=data, layout=layout)  
     py.plot(fig, filename='Source size test')    
 
-avgSource2()       
+#avgSource2()       
 #testMemUsage() 
+
+def printSources():
+    K=3
+    M=100
+    L=520
+    RandomPositiveCNF(L, M, K)
+    filename="cnf_"+str(L)+"_"+str(M)
+    output=GetJavaOutput(path, filename)
+    print(output)       
     
     
     
-    
-    
+#printSources()    
     
 def checkModuMin():
     K=3

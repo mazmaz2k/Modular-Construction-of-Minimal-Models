@@ -21,13 +21,11 @@ public class MinimalModel extends Graph<Integer>{
 	RulesDataStructure DS ;
 	boolean readFile = false;
 	double avgSourceSize;
-	int moduminDPcalls;
 	static int rulesNum;
 	private static final double MEGABYTE = 1024L * 1024L;
 
 	public MinimalModel() {
 		super(true);
-		moduminDPcalls=0;
 	}
 	
     public static double bytesToMegabytes(double bytes) {
@@ -36,13 +34,19 @@ public class MinimalModel extends Graph<Integer>{
 	public static void main(String[] args) 
 	{
 		MinimalModel m = new MinimalModel();
-		String path=args[0];
-		//String path=".//CnfFile.txt";
+		//String path=args[0];
+		String path=".//CnfFile.txt";
 		
-		m.readfile(path);
+    	m.readfile(path);
 		m.ModuminUsingWASP();
+		System.out.println(m.DS.StringMinimalModel());
+//		System.out.print(m.avgSourceSize);
+////		System.out.print(",");
+//		m.readfile(path);
+//		m.ModuMinUsingDP();
+//		System.out.print(m.DS.placedValueCounter);
 		//System.out.println(m.DS.StringMinimalModel());
-		System.out.print(m.avgSourceSize);
+		//System.out.print(m.avgSourceSize);
 		
 		
 		
@@ -52,9 +56,10 @@ public class MinimalModel extends Graph<Integer>{
 		
 		
 		
-		
+
 		/***run time checking*/
-		/*long startTime,endTime,totalTime;//in mili sec
+		/*	
+    	long startTime,endTime,totalTime;//in mili sec
 		
 		startTime = System.currentTimeMillis();
 		 m.readfile(path);
@@ -72,9 +77,9 @@ public class MinimalModel extends Graph<Integer>{
 
 			 endTime   = System.currentTimeMillis();
 			 totalTime = endTime - startTime;
-			 System.out.print(totalTime);
+			 System.out.print(totalTime);*/
 			 
-		 */
+		 
 		
 		 
 		 //System.out.println(",");
@@ -162,7 +167,7 @@ public class MinimalModel extends Graph<Integer>{
 		}
 		BufferedWriter bw = null;
 		FileWriter fw = null;
-		String FILENAME="/home/rachel/Desktop/alviano-wasp-f3fed39/build/release/ex";
+		String FILENAME=".//alviano-wasp-f3fed39/build/release/ex";
 		String[] cnfContent=getCnfContent(Ts);	
 		
 		try
@@ -219,7 +224,7 @@ public class MinimalModel extends Graph<Integer>{
 				s
 				};
 
-		String path = "/home/rachel/Desktop/alviano-wasp-f3fed39/build/release";
+		String path = ".//alviano-wasp-f3fed39/build/release";
 		LinkedList list = new LinkedList();
 		try {
 			Process p =Runtime.getRuntime().exec(cmd,null,new File(path));
@@ -308,6 +313,7 @@ public class MinimalModel extends Graph<Integer>{
 			 g = initGraph(DS, size);
 			/**find source*/
 			source = sourceOfGraph(g);
+			//System.out.println("ver size: "+g.getAllVertex().size()+ " source size; " +source.getSize());
 			numOfSources++;
 			sumSorceSize+=source.getSize();
 			/**Find Ts*/
@@ -341,7 +347,7 @@ public class MinimalModel extends Graph<Integer>{
 		//System.out.println("writing to file");
 		BufferedWriter bw = null;
 		FileWriter fw = null;
-		String FILENAME="/home/rachel/Desktop/alviano-wasp-f3fed39/build/release/ex";
+		String FILENAME=".//alviano-wasp-f3fed39/build/release/ex";
 		String[] cnfContent=getCnfContent(Ts);	
 		
 		try
@@ -496,7 +502,6 @@ public class MinimalModel extends Graph<Integer>{
 //				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
 				return false;
 			}
-			this.moduminDPcalls+=DS.dpCalls;
 			//DS.printValueOfVariables();
 			DS.updateRuleDS();
 		}		
