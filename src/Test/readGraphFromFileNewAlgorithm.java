@@ -100,7 +100,7 @@ public class readGraphFromFileNewAlgorithm {
 		});
 
 
-		ArrayList<Vertex<Integer>> vertexToremove = Graph.vertexSeparator(result.get(0), g);
+		ArrayList<Vertex<Integer>> vertexToremove = Graph.vertexSeparator(g);
 		System.out.println("point 1");
 
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");

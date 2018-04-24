@@ -176,15 +176,39 @@ public class Graph<T>{
 		}
 		return buffer.toString();
 	}
+	
+	
+	public static Graph<Integer>  createGraphFromSource(LinkedList s, Graph<Integer> graph){
+		Graph<Integer> graphToReturn = new Graph<Integer>(graph.isDirected);
+		for(Vertex<Integer> v: graph.getAllVertex()) {
+			if(s.contains((int)v.getId())) {
+				graphToReturn.addSingleVertex(v.getId());
+				for(Edge<Integer> e : v.getEdges()) {
+					if(s.contains((int) e.getVertex2().getId() )){
+						graphToReturn.addEdge(e.getVertex1().id, e.getVertex2().getId(), 1);
+					}
+				}
+			}
+			
+		}
+		return graphToReturn;
+	} 
+	
+	
+	
+	
+	
+	
+	
 
 	/**Vertex separator
 	 * */
-	public static ArrayList<Vertex<Integer>> vertexSeparator(Set<Vertex<Integer>> allVertex , Graph<Integer> graph){
+	public static ArrayList<Vertex<Integer>> vertexSeparator( Graph<Integer> graph){
 		ArrayList<Vertex<Integer>> returnVertexes = new ArrayList<>();
 		ArrayList<Vertex<Integer>> W_vertexList = new ArrayList<>();
 		ArrayList<Vertex<Integer>> A_vertexList = new ArrayList<>();
 		ArrayList<Vertex<Integer>> B_vertexList = new ArrayList<>();
-		if(allVertex.isEmpty() || graph ==null) {
+		if(graph ==null) {
 			System.out.println("Graph.vertexSeperator() error graph is empty in vertexSeparator method");
 			return null;
 		}
@@ -205,7 +229,7 @@ public class Graph<T>{
 						W_vertexList.clear();
 //					}
 					for(int i=0 ; i<3 ; i++) { //Lottery W 3 times !
-						for(Vertex<Integer> vertex : allVertex) {
+						for(Vertex<Integer> vertex : graph.getAllVertex()) {
 							if(Math.random() <= 0.1) {
 								
 								W_vertexList.add(vertex);
@@ -250,7 +274,7 @@ public class Graph<T>{
 
 
 //					System.out.println("Point B");
-					flowNetGraph = createFlowNetwork(graph, allVertex , A_vertexList,B_vertexList);
+					flowNetGraph = createFlowNetwork(graph, A_vertexList,B_vertexList);
 					if(flowNetGraph ==null) {
 						System.out.println("error in flow nework some of the variables are NULL");
 						continue;
@@ -499,9 +523,9 @@ public class Graph<T>{
 		return returnVertexes;
 	}
 
-	private static Graph<Integer> createFlowNetwork(Graph<Integer> graph, Set<Vertex<Integer>> allVertex,
+	private static Graph<Integer> createFlowNetwork(Graph<Integer> graph ,
 			ArrayList<Vertex<Integer>> a_vertexList, ArrayList<Vertex<Integer>> b_vertexList) {
-		if(graph==null || allVertex==null ||a_vertexList==null||b_vertexList==null) {
+		if(graph==null || a_vertexList==null||b_vertexList==null) {
 			System.err.println(" graph / allVertex / are / a_vertexList / b_vertexList null in createFlowNetwork method");
 			return null;
 		}

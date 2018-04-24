@@ -9,15 +9,17 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import Graph.Graph;
+import Graph.Vertex;
 
 
 
 public class MinimalModel extends Graph<Integer>{
 
-	
+
 	RulesDataStructure DS ;
 	boolean readFile = false;
 	double avgSourceSize;
@@ -27,40 +29,40 @@ public class MinimalModel extends Graph<Integer>{
 	public MinimalModel() {
 		super(true);
 	}
-	
-    public static double bytesToMegabytes(double bytes) {
-        return bytes / MEGABYTE;
-    }
+
+	public static double bytesToMegabytes(double bytes) {
+		return bytes / MEGABYTE;
+	}
 	public static void main(String[] args) 
 	{
 		MinimalModel m = new MinimalModel();
 		//String path=args[0];
 		String path=".//CnfFile.txt";
-		
-    	m.readfile(path);
+
+		m.readfile(path);
 		m.ModuminUsingWASP();
 		System.out.println(m.DS.StringMinimalModel());
-//		System.out.print(m.avgSourceSize);
-////		System.out.print(",");
-//		m.readfile(path);
-//		m.ModuMinUsingDP();
-//		System.out.print(m.DS.placedValueCounter);
+		//		System.out.print(m.avgSourceSize);
+		////		System.out.print(",");
+		//		m.readfile(path);
+		//		m.ModuMinUsingDP();
+		//		System.out.print(m.DS.placedValueCounter);
 		//System.out.println(m.DS.StringMinimalModel());
 		//System.out.print(m.avgSourceSize);
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
+
+
 
 		/***run time checking*/
 		/*	
     	long startTime,endTime,totalTime;//in mili sec
-		
+
 		startTime = System.currentTimeMillis();
 		 m.readfile(path);
 		 m.ModuMinUsingDP();
@@ -68,7 +70,7 @@ public class MinimalModel extends Graph<Integer>{
 		 endTime   = System.currentTimeMillis();
 		 totalTime = endTime - startTime;
 		 System.out.print(totalTime);
-		
+
 			System.out.print(",");
 
 			startTime = System.currentTimeMillis();
@@ -78,41 +80,41 @@ public class MinimalModel extends Graph<Integer>{
 			 endTime   = System.currentTimeMillis();
 			 totalTime = endTime - startTime;
 			 System.out.print(totalTime);*/
-			 
-		 
-		
-		 
-		 //System.out.println(",");
 
-		 
-		
-//		m.readfile(path);
-//		m.DP();
-//		System.out.print(m.DS.dpCalls);
-//		System.out.print(",");
-//		m.readfile(path);
-//		m.ModuMinUsingDP();
-//		System.out.print(m.moduminDPcalls);
+
+
+
+		//System.out.println(",");
+
+
+
+		//		m.readfile(path);
+		//		m.DP();
+		//		System.out.print(m.DS.dpCalls);
+		//		System.out.print(",");
+		//		m.readfile(path);
+		//		m.ModuMinUsingDP();
+		//		System.out.print(m.moduminDPcalls);
 		//m.DP();
 		//System.out.println("dp calls: "+m.DS.dpCalls);
-		
-		
+
+
 		//m.Modumin();
 		//m.WASP();
 		//System.out.print(m.DS.StringMinimalModel());
-		
+
 		/**memory usage checking**/
-	/*	m.readfile(path);
+		/*	m.readfile(path);
 		m.WASP();
 		Runtime runtime = Runtime.getRuntime();
         // Run the garbage collector
         runtime.gc();
         // Calculate the used memory
         double memory = runtime.totalMemory() - runtime.freeMemory();
-       
+
         System.out.print(bytesToMegabytes(memory));
         System.out.print(",");
-        
+
         m.readfile(path);
         m.ModuminUsingWASP();
         runtime = Runtime.getRuntime();
@@ -124,17 +126,17 @@ public class MinimalModel extends Graph<Integer>{
       //  System.out.println("Used memory is megabytes: "
         //        + bytesToMegabytes(memory));
         System.out.print(bytesToMegabytes(memory));*/
-//		if(m.Modumin())
-//		{
-//			System.out.println("SAT The minimal model is: "+ m.DS.StringMinimalModel());		
-//		}
-//		else 
-//		{
-//			System.out.println("UNSAT");
-//		}
-	
-		
-		
+		//		if(m.Modumin())
+		//		{
+		//			System.out.println("SAT The minimal model is: "+ m.DS.StringMinimalModel());		
+		//		}
+		//		else 
+		//		{
+		//			System.out.println("UNSAT");
+		//		}
+
+
+
 		/*LinkedList l= m.DS.checkFormat();
 		if(l.getSize()==0)
 		{
@@ -155,9 +157,9 @@ public class MinimalModel extends Graph<Integer>{
 			System.out.println("Its not in the right format");
 			System.out.println("Can't be a clause where all litarals are negative");
 		}*/
-		 
-		
-		
+
+
+
 	}
 	public void WASP()
 	{
@@ -169,7 +171,7 @@ public class MinimalModel extends Graph<Integer>{
 		FileWriter fw = null;
 		String FILENAME=".//alviano-wasp-f3fed39/build/release/ex";
 		String[] cnfContent=getCnfContent(Ts);	
-		
+
 		try
 		{
 			fw = new FileWriter(FILENAME);
@@ -212,7 +214,7 @@ public class MinimalModel extends Graph<Integer>{
 		System.out.println("size: "+minmodel.getSize());
 
 	}
-	
+
 	public LinkedList MinimalModelFromScript()
 	{
 		//System.out.println("reading minimal model");
@@ -222,15 +224,15 @@ public class MinimalModel extends Graph<Integer>{
 				"/bin/sh",
 				"-c",
 				s
-				};
+		};
 
 		String path = ".//alviano-wasp-f3fed39/build/release";
 		LinkedList list = new LinkedList();
 		try {
 			Process p =Runtime.getRuntime().exec(cmd,null,new File(path));
 			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			
-		//	String line;
+
+			//	String line;
 			//System.out.println(in.readLine());
 			String line = in.readLine();
 			if(line.equals("{}"))
@@ -255,14 +257,14 @@ public class MinimalModel extends Graph<Integer>{
 			{				
 				list.addAtTail(Integer.parseInt(str[j]));
 			}
-		
+
 		}
 		catch(IOException e) {
 			e.printStackTrace();
 		}
 		return list;
 	}
-	
+
 	public void readfile(String path)
 	{
 
@@ -296,7 +298,7 @@ public class MinimalModel extends Graph<Integer>{
 		}
 
 	}
-	
+
 	public boolean ModuminUsingWASP()
 	{
 		int size = DS.SIZE;		
@@ -310,7 +312,7 @@ public class MinimalModel extends Graph<Integer>{
 			/**unity check*/
 			DS.checkForUnits();
 			/**create graph*/
-			 g = initGraph(DS, size);
+			g = initGraph(DS, size);
 			/**find source*/
 			source = sourceOfGraph(g);
 			//System.out.println("ver size: "+g.getAllVertex().size()+ " source size; " +source.getSize());
@@ -332,7 +334,7 @@ public class MinimalModel extends Graph<Integer>{
 					DS.putMinModelInLiteralMap(minmodel);
 
 				}
-			
+
 			}		
 			/**Update the rules data structure*/
 			DS.updateRuleDS();	
@@ -341,7 +343,7 @@ public class MinimalModel extends Graph<Integer>{
 		this.avgSourceSize=sumSorceSize/numOfSources;
 		return true;
 	}
-	
+
 	public void writeToFile(LinkedList Ts)
 	{
 		//System.out.println("writing to file");
@@ -349,7 +351,7 @@ public class MinimalModel extends Graph<Integer>{
 		FileWriter fw = null;
 		String FILENAME=".//alviano-wasp-f3fed39/build/release/ex";
 		String[] cnfContent=getCnfContent(Ts);	
-		
+
 		try
 		{
 			fw = new FileWriter(FILENAME);
@@ -384,7 +386,7 @@ public class MinimalModel extends Graph<Integer>{
 		}
 
 	}
-	
+
 	public String[] getCnfContent(LinkedList Ts)
 	{
 		int size = Ts.getSize();
@@ -413,24 +415,24 @@ public class MinimalModel extends Graph<Integer>{
 			toReturn[i]=oneRule;
 			nTs=nTs.next;
 		}
-	
-		
+
+
 		return toReturn;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/*
 	public boolean Modumin()
 	{
@@ -474,17 +476,17 @@ public class MinimalModel extends Graph<Integer>{
 				}
 				System.out.println("vals after : " + DS.literalMap.toString());
 				DS.updateRuleDS();
-				
+
 			}
 		}	
-		
+
 //		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
 //		DS.printValueOfVariables();
 		return true;
 	}
-	*/
-	
-	
+	 */
+
+
 	public boolean ModuMinUsingDP()
 	{
 		int size = DS.SIZE;	
@@ -498,66 +500,74 @@ public class MinimalModel extends Graph<Integer>{
 			LinkedList Ts=DS.Ts(s);
 			if(!DS.FindMinimalModelForTs(Ts))
 			{
-//				System.out.println("UNSAT");
-//				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
+				//				System.out.println("UNSAT");
+				//				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
 				return false;
 			}
 			//DS.printValueOfVariables();
 			DS.updateRuleDS();
 		}		
-//		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
+		//		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
 		return true;
 	}
 	public boolean DP()
 	{
 		DS.removeDoubles();
 		LinkedList Ts=new LinkedList();
-//		System.out.println(rulesNum);
+		//		System.out.println(rulesNum);
 		for (int i = 0; i < rulesNum ; i++) {
 			Ts.addAtTail(i);
 		}
 		if(!DS.FindMinimalModelForTs(Ts))
 		{
-//			System.out.println("UNSAT");
-//			System.out.println("The amount of time we put value in a variable is : " + DS.counter);
+			//			System.out.println("UNSAT");
+			//			System.out.println("The amount of time we put value in a variable is : " + DS.counter);
 			return false;
 		}
 		DS.updateRuleDS();
 		return true;
 	}
+
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public boolean ModuMinUsingDP_AndSeperator()
+	{
+		int size = DS.SIZE;	
+		DS.removeDoubles();
+		while(DS.SIZE!=0)
+		{
+			//DS.printRulesArray();
+			DS.checkForUnits();//remove empty sources
+			Graph<Integer> g = initGraph(DS, size);
+			LinkedList s = sourceOfGraph(g);
+			
+			double ratio = s.getSize() / g.getAllVertex().size(); 
+			if(ratio > 0.2) {
+				Graph<Integer> graph = createGraphFromSource(s,g);
+				ArrayList<Vertex<Integer>> arrayToRemove = vertexSeparator(graph);
+				System.out.println("Array to remove $$$$$$$"+ arrayToRemove);
+				
+			}
+			
+			
+			
+			LinkedList Ts=DS.Ts(s);
+			if(!DS.FindMinimalModelForTs(Ts))
+			{
+				//				System.out.println("UNSAT");
+				//				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
+				return false;
+			}
+			//DS.printValueOfVariables();
+			DS.updateRuleDS();
+		}		
+		//		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
+		return true;
+	}
 	
 
 
-/*	public static boolean ModuMin(RulesDataStructure DS )
+
+	/*	public static boolean ModuMin(RulesDataStructure DS )
 	{
 		int size = DS.SIZE;			
 		while(DS.SIZE!=0)
@@ -591,7 +601,7 @@ public class MinimalModel extends Graph<Integer>{
 
 			if(sSize> temp)
 			{
-				
+
 				System.out.println("Dismantle the CC");
 				//get list of vertexes from graph and send it to spliteConnectedComponent on rulesDS
 				int[] a=dismntleToArray(g,s); 
@@ -608,7 +618,7 @@ public class MinimalModel extends Graph<Integer>{
 
 				LinkedList Ts=DS.Ts(s);
 				//Ts.printList();
-				
+
 				if(!DS.FindMinimalModelForTs(Ts))
 				{
 //					System.out.println("UNSAT");
@@ -618,14 +628,14 @@ public class MinimalModel extends Graph<Integer>{
 				DS.updateRuleDS();
 			}
 		}
-		
-		
+
+
 //		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
 		return true;
 		//	DS.printValueOfVariables();
 	} */
-	
-/*	public static boolean ModuMin(RulesDataStructure DS )
+
+	/*	public static boolean ModuMin(RulesDataStructure DS )
 	{
 		int size = DS.SIZE;			
 		while(DS.SIZE!=0)
@@ -650,7 +660,7 @@ public class MinimalModel extends Graph<Integer>{
 		return true;
 		//	DS.printValueOfVariables();
 	}*/
-	
+
 	/*
 	public static boolean DP(RulesDataStructure DS)
 	{
@@ -668,7 +678,7 @@ public class MinimalModel extends Graph<Integer>{
 		DS.updateRuleDS();
 		return true;
 	}
-*/
+	 */
 
 
 }
