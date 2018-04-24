@@ -101,7 +101,7 @@ public class gridForNewAlgorithm {
 		//			System.out.println();
 		//		});
 
-		ArrayList<Vertex<Integer>> vertexToremove = Graph.vertexSeparator(result.get(0), g);
+		ArrayList<Vertex<Integer>> vertexToremove = Graph.vertexSeparator( g);
 
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 		g=g.removeVertex(vertexToremove);
