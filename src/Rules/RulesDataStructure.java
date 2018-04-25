@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Set;
 
+import Graph.Vertex;
+
 //import Graph.LinkedList1;
 //import Graph.LinkedList1.Node;
 
@@ -681,7 +683,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     also checks if the values we put in the variables return SAT if so we change rules ds 
     by the values we found and if not we try different values for the variables
      ***/
-    public void splitConnectedComponent(int[] v)
+    public void splitConnectedComponent(ArrayList<Vertex<Integer>> v)
     {
     	System.out.println("enter split");
     	/*printRulesArray();
@@ -733,8 +735,8 @@ public class RulesDataStructure extends DavisPutnamHelper
 //    	System.out.println("print clauses");
     	//printClauses(clauses);
  //   	System.out.println("copy to array list");
-    	int size = v.length;
-    	System.out.println("size of array is: " + size);
+    	int size = v.size();
+    //	System.out.println("size of array is: " + size);
     	int N = (int)Math.pow(2,size); 
     	boolean[] binaryArray ;
 		String literal;
@@ -755,35 +757,41 @@ public class RulesDataStructure extends DavisPutnamHelper
     		binaryArray = toBinary(i,size);//returns array
     		for (int j = 0; j < size; j++) 
     		{
-    			clause= new Clause();
-				if(binaryArray[j])
-				{
-					literal = String.valueOf(v[j]);
-				}
-				else
-				{
-					literal = "-"+String.valueOf(v[j]);
-				}
-				clause.addLiteral(literal);
-				copy.add(clause);
-				System.out.println( "Adding clause: "+clause.printClause());		
+    			if(v.get(j).getId()>0 && v.get(j).getId()<1000)
+    			{
+    				clause= new Clause();
+    				if(binaryArray[j])
+    				{
+    					literal = String.valueOf(v.get(j).getId());
+    				}
+    				else
+    				{
+    					literal = "-"+String.valueOf(v.get(j).getId());
+    				}
+    				clause.addLiteral(literal);
+    				copy.add(clause);
+    				//System.out.println( "Adding clause: "+clause.printClause());	
+    			}
 			}
     		//check if sat
     		//System.out.println("check sat");
-    		printRulesArray();
+    		//printRulesArray();
     		if(DLL(copy))
     		{
         		//literalMap.clear();
-    			System.out.println("found and update . we found in index: "+ i);
+    			//System.out.println("found and update . we found in index: "+ i);
     			for (int j = 0; j < size; j++) 
     			{
-					System.out.println("index: "+ i + " var: " + v[j] +" val: " + binaryArray[j]);
-					ChangeDataStrucureByPlacingValueInVar(v[j], binaryArray[j]);
+    				if(v.get(j).getId()>0 && v.get(j).getId()<1000)
+    				{
+    					System.out.println("index: "+ i + " var: " + v.get(j).getId() +" val: " + binaryArray[j]);
+    					literalMap.put((int)v.get(j).getId(), binaryArray[j]);
+    				}
 				}
+    			updateRuleDS();
+    			
+    			//System.out.println(literalMap.toString());
     			//literalMap.clear();
-    			//updateRuleDS();
-    			System.out.println(literalMap.toString());
-    			literalMap.clear();
     			return ;
     		}
     		//System.out.println(i);

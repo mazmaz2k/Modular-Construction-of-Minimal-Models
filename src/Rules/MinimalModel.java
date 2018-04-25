@@ -40,7 +40,7 @@ public class MinimalModel extends Graph<Integer>{
 		String path=".//CnfFile.txt";
 
 		m.readfile(path);
-		m.ModuminUsingWASP();
+		m.ModuMinUsingDP_AndSeperator();
 		System.out.println(m.DS.StringMinimalModel());
 		//		System.out.print(m.avgSourceSize);
 		////		System.out.print(",");
@@ -532,33 +532,46 @@ public class MinimalModel extends Graph<Integer>{
 	public boolean ModuMinUsingDP_AndSeperator()
 	{
 		int size = DS.SIZE;	
+		int allVertexes=0;
+		boolean first =true;
 		DS.removeDoubles();
 		while(DS.SIZE!=0)
 		{
-			//DS.printRulesArray();
 			DS.checkForUnits();//remove empty sources
 			Graph<Integer> g = initGraph(DS, size);
+			if(first)
+			{
+				allVertexes=g.getAllVertex().size();
+				//System.out.println("alllllllllllll vertexessssssss : "+ allVertexes);
+				first= false;
+			}
 			LinkedList s = sourceOfGraph(g);
-			
-			double ratio = s.getSize() / g.getAllVertex().size(); 
+			double ratio = (double)s.getSize() / allVertexes;
 			if(ratio > 0.2) {
 				Graph<Integer> graph = createGraphFromSource(s,g);
 				ArrayList<Vertex<Integer>> arrayToRemove = vertexSeparator(graph);
-				System.out.println("Array to remove $$$$$$$"+ arrayToRemove);
+				System.out.println(arrayToRemove);
+				DS.splitConnectedComponent(arrayToRemove);
+				//System.out.println("Array to remove $$$$$$$"+ arrayToRemove);
+				
 				
 			}
-			
-			
-			
-			LinkedList Ts=DS.Ts(s);
-			if(!DS.FindMinimalModelForTs(Ts))
+			else
 			{
-				//				System.out.println("UNSAT");
-				//				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
-				return false;
+				LinkedList Ts=DS.Ts(s);
+				if(!DS.FindMinimalModelForTs(Ts))
+				{
+					//				System.out.println("UNSAT");
+					//				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
+					return false;
+				}
+				//DS.printValueOfVariables();
+				DS.updateRuleDS();
 			}
-			//DS.printValueOfVariables();
-			DS.updateRuleDS();
+			
+			
+			
+			
 		}		
 		//		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
 		return true;
