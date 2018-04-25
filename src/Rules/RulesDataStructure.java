@@ -3,6 +3,7 @@ package Rules;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Set;
 
 import Graph.Vertex;
@@ -188,15 +189,16 @@ public class RulesDataStructure extends DavisPutnamHelper
     
    public void checkForUnits()
     {
-    	
+    	Rule r;
     	for (int i = 0; i < RulesArray.length; i++)
     	{
-    		if(RulesArray[i]!=null)
+    		r=RulesArray[i];
+    		if(r!=null)
     		{
-    			if((RulesArray[i].body.getSize() + RulesArray[i].head.getSize())==1)
+    			if(r.getSize()==1)
     			{
 
-    				if(RulesArray[i].body.getSize() ==1)//body size is 1 and head size is 0s
+    				if(r.body.getSize() ==1)//body size is 1 and head size is 0s
     				{
     					literalMap.put(RulesArray[i].body.head.var, false);
 
@@ -475,7 +477,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     
     public void ChangeDataStrucureByPlacingValueInVar(int var , boolean value)
     {
-    	if(conflictExist(var, value))
+    	if(conflictWithAssignment(var, value))
     	{
     		//System.out.println("CONFLICT");
     		return ;
@@ -525,7 +527,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     
     /**check if we return false if we put value inside the variable
      * by the rules of logic*/
-    public boolean conflictExist(int var ,boolean val)
+    public boolean conflictWithAssignment(int var ,boolean val)
     {
     	LinkedList l = varHT.get(var);
     	Node n = l.head;
@@ -547,6 +549,57 @@ public class RulesDataStructure extends DavisPutnamHelper
     	}		
     	
     	return false;   	
+    }
+    
+    
+    /**
+     * Check if there is conflict in the theory . 
+     * for example " a and not a "
+     * */
+    public boolean isConflict()
+    {
+    	Rule r1,r2;
+    	for (int i = 0; i < RulesArray.length; i++) 
+    	{
+    		r1=RulesArray[i];
+    		if(r1!=null&&r1.getSize()==1)
+    		{
+    			boolean isPositive;
+    			int var;
+    			if(r1.body.getSize()==1)
+    			{
+    				isPositive=false;
+    				var=r1.body.head.var;
+    			}
+    			else
+    			{
+    				isPositive=true;
+    				var=r1.head.head.var;
+    			}
+    			
+    			for(int j=i+1;j<RulesArray.length;j++)
+    			{
+    				r2=RulesArray[j];
+    				if(r2!=null&&r2.getSize()==1)
+    				{
+    					if(r2.body.getSize()==1)
+    					{
+    						if(var==r2.body.head.var && isPositive)
+    							return true;//conflict exist
+    					}
+    					else
+    					{
+    						if(var==r2.head.head.var && !isPositive)
+    							return true; //conflict exist
+    					}
+    				}		
+    			}
+    			
+    		}
+			
+		}
+    	
+    	return false;
     }
     
     /**receive a rule number an delete the rule from rules array*/
@@ -686,26 +739,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     public void splitConnectedComponent(ArrayList<Vertex<Integer>> v)
     {
     	System.out.println("enter split");
-    	/*printRulesArray();
-    	for (int i = 0; i < v.length; i++) 
-    	{
-    		System.out.println("try to put false in " + v[i]);
-    		if(!conflictExist(v[i], false))
-    		{
-    			ChangeDataStrucureByPlacingValueInVar(v[i], false);
-    			System.out.println(v[i]+" false");
-    		}
-    		else
-    		{
-    			ChangeDataStrucureByPlacingValueInVar(v[i], true);
-    			minModel.addAtTail(v[i]);
-    			System.out.println(v[i]+" true");
 
-    		}
-		}
-    	printRulesArray();
-*/
-    	
     	ArrayList<Clause> clauses = new ArrayList<>();
     	for (int i = 0; i < RulesArray.length; i++) 
     	{
@@ -798,8 +832,25 @@ public class RulesDataStructure extends DavisPutnamHelper
     		literalMap.clear();
     		
 		}
-    	//return false;
+    	
     }
+    
+   /* public void splitConnectedComponent2(ArrayList<Vertex<Integer>> array)
+    {
+    	
+    	for(Vertex<Integer> v : array)
+    	{
+    		int var=(int)v.getId();
+    		if(!conflictWithAssignment(var, false))
+    		{
+    			
+    		}
+    	}
+  
+    	
+    }*/
+    
+    
     /**return a binary value of the number 
      * ,the (base) last bits */
      private boolean[] toBinary(int number, int base)

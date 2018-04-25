@@ -40,8 +40,9 @@ public class MinimalModel extends Graph<Integer>{
 		String path=".//CnfFile.txt";
 
 		m.readfile(path);
-		m.ModuMinUsingDP_AndSeperator();
-		System.out.println(m.DS.StringMinimalModel());
+		System.out.println(m.DS.isConflict());
+		//m.ModuMinUsingDP_AndSeperator();
+		//System.out.println(m.DS.StringMinimalModel());
 		//		System.out.print(m.avgSourceSize);
 		////		System.out.print(",");
 		//		m.readfile(path);

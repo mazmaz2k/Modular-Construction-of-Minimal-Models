@@ -22,4 +22,8 @@ public class Rule
 	{
 		head.addAtTail(num);
 	}
+	protected int getSize()
+	{
+		return body.getSize()+head.getSize();
+	}
 }
