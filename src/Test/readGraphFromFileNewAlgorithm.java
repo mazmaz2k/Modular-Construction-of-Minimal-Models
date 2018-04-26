@@ -104,7 +104,7 @@ public class readGraphFromFileNewAlgorithm {
 		System.out.println("point 1");
 
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
-		System.out.println("Vertex to remove: " + vertexToremove);
+		System.out.println("Vertex to remove: " + vertexToremove + " Size of the Seperator: "+ vertexToremove.size());
 		g=g.removeVertex(vertexToremove);
 		//		System.out.println(g);
 		//		 StronglyConnectedComponent scc = new StronglyConnectedComponent();

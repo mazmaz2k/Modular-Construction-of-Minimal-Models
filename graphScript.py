@@ -25,8 +25,8 @@ def RandomGraphMaker(M):
         k = random.randint(2, M)
         for j in range(0, k):
             n = random.randint(0, j)
-            if(n != i):
-                line += str(j) + " "
+            if n != i:
+                line += str(n) + " "
         myFile.write(line + "\n")
     return myFile
 
@@ -41,7 +41,7 @@ def RandomGraphMaker(M):
 
 def X():
     outList=[]
-    varList=[200]
+    varList=[130]
     for i in varList:
         RandomGraphMaker(i)
         filename="graph_"+str(i)+".txt"
