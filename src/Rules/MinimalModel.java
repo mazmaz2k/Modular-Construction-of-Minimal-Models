@@ -10,9 +10,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import Graph.Graph;
+import Graph.StronglyConnectedComponent;
 import Graph.Vertex;
 
 
@@ -40,9 +43,9 @@ public class MinimalModel extends Graph<Integer>{
 		String path=".//CnfFile.txt";
 
 		m.readfile(path);
-		System.out.println(m.DS.isConflict());
-		//m.ModuMinUsingDP_AndSeperator();
-		//System.out.println(m.DS.StringMinimalModel());
+		//System.out.println(m.DS.isConflict());
+		m.ModuMinUsingDP_AndSeperator();
+		System.out.println(m.DS.StringMinimalModel());
 		//		System.out.print(m.avgSourceSize);
 		////		System.out.print(",");
 		//		m.readfile(path);
@@ -535,11 +538,12 @@ public class MinimalModel extends Graph<Integer>{
 		int size = DS.SIZE;	
 		int allVertexes=0;
 		boolean first =true;
+		Graph<Integer> g = null ;
 		DS.removeDoubles();
 		while(DS.SIZE!=0)
 		{
 			DS.checkForUnits();//remove empty sources
-			Graph<Integer> g = initGraph(DS, size);
+			g = initGraph(DS, size);
 			if(first)
 			{
 				allVertexes=g.getAllVertex().size();
@@ -549,16 +553,23 @@ public class MinimalModel extends Graph<Integer>{
 			LinkedList s = sourceOfGraph(g);
 			double ratio = (double)s.getSize() / allVertexes;
 			if(ratio > 0.2) {
+				System.out.println(s.getSize());
 				Graph<Integer> graph = createGraphFromSource(s,g);
+		
 				ArrayList<Vertex<Integer>> arrayToRemove = vertexSeparator(graph);
+
 				System.out.println(arrayToRemove);
 				DS.splitConnectedComponent(arrayToRemove);
+				
+				
 				//System.out.println("Array to remove $$$$$$$"+ arrayToRemove);
 				
 				
 			}
+			
 			else
 			{
+				System.out.println("out " + s.getSize());
 				LinkedList Ts=DS.Ts(s);
 				if(!DS.FindMinimalModelForTs(Ts))
 				{

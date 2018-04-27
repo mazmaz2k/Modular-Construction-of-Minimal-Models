@@ -738,7 +738,7 @@ public class RulesDataStructure extends DavisPutnamHelper
      ***/
     public void splitConnectedComponent(ArrayList<Vertex<Integer>> v)
     {
-    	System.out.println("enter split");
+    	//System.out.println("enter split");
 
     	ArrayList<Clause> clauses = new ArrayList<>();
     	for (int i = 0; i < RulesArray.length; i++) 
@@ -766,7 +766,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     			clauses.add(clause);
     		}
     	}
-//    	System.out.println("print clauses");
+    	//System.out.println("print clauses");
     	//printClauses(clauses);
  //   	System.out.println("copy to array list");
     	int size = v.size();
@@ -791,41 +791,33 @@ public class RulesDataStructure extends DavisPutnamHelper
     		binaryArray = toBinary(i,size);//returns array
     		for (int j = 0; j < size; j++) 
     		{
-    			if(v.get(j).getId()>0 && v.get(j).getId()<1000)
+    			
+    			clause= new Clause();
+    			if(binaryArray[j])
     			{
-    				clause= new Clause();
-    				if(binaryArray[j])
-    				{
-    					literal = String.valueOf(v.get(j).getId());
-    				}
-    				else
-    				{
-    					literal = "-"+String.valueOf(v.get(j).getId());
-    				}
-    				clause.addLiteral(literal);
-    				copy.add(clause);
-    				//System.out.println( "Adding clause: "+clause.printClause());	
+    				literal = String.valueOf(v.get(j).getId());
     			}
+    			else
+    			{
+    				literal = "-"+String.valueOf(v.get(j).getId());
+    			}
+    			clause.addLiteral(literal);
+    			copy.add(clause);
+    			//System.out.println( "Adding clause: "+clause.printClause());	
 			}
     		//check if sat
     		//System.out.println("check sat");
     		//printRulesArray();
     		if(DLL(copy))
     		{
-        		//literalMap.clear();
+        		literalMap.clear();
     			//System.out.println("found and update . we found in index: "+ i);
     			for (int j = 0; j < size; j++) 
     			{
-    				if(v.get(j).getId()>0 && v.get(j).getId()<1000)
-    				{
-    					System.out.println("index: "+ i + " var: " + v.get(j).getId() +" val: " + binaryArray[j]);
-    					literalMap.put((int)v.get(j).getId(), binaryArray[j]);
-    				}
+    				System.out.println("index: "+ i + " var: " + v.get(j).getId() +" val: " + binaryArray[j]);
+    				literalMap.put((int)v.get(j).getId(), binaryArray[j]);
 				}
     			updateRuleDS();
-    			
-    			//System.out.println(literalMap.toString());
-    			//literalMap.clear();
     			return ;
     		}
     		//System.out.println(i);

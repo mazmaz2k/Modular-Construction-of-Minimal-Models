@@ -317,14 +317,14 @@ public class Graph<T>{
 						continue;
 					}
 //					System.out.println("Point D");
-					System.out.println("i is:" + count_a_b);
-					System.out.println("max flow is: "+ x1);
-					System.out.println("W is:" + W_vertexList+" W size: " + W_vertexList.size()+ " W max size: "+ w_max);
-					System.out.println("A is:" + A_vertexList);
-					System.out.println("B is:"+ B_vertexList);
-					System.out.println("S (of vertexes) is" + collection_S + " Balance " +s_balance);
-					System.out.println("T (of vertexes) is" + collection_T + " Balance " +t_balance);
-					System.out.println();
+//					System.out.println("i is:" + count_a_b);
+//					System.out.println("max flow is: "+ x1);
+//					System.out.println("W is:" + W_vertexList+" W size: " + W_vertexList.size()+ " W max size: "+ w_max);
+//					System.out.println("A is:" + A_vertexList);
+//					System.out.println("B is:"+ B_vertexList);
+//					System.out.println("S (of vertexes) is" + collection_S + " Balance " +s_balance);
+//					System.out.println("T (of vertexes) is" + collection_T + " Balance " +t_balance);
+//					System.out.println();
 					//			if(collection_S ==null || collection_T ==null) {
 					//				System.err.println("error in flow nework Set S or Set T are NULL");
 					//				return null;		
@@ -348,17 +348,20 @@ public class Graph<T>{
 						returnVertexes.clear();;
 					}
 					for(Edge<Integer> e: edgeList) {
-						if(!returnVertexes.contains(e.getVertex1()) && e.getVertex1().getId()!=S ) {
-							returnVertexes.add(flowNetGraph.getVertex(Math.abs(e.getVertex1().getId())));
-						}
-						else if(!returnVertexes.contains(e.getVertex2()) && e.getVertex2().getId()!=T) {
-							returnVertexes.add(flowNetGraph.getVertex(Math.abs(e.getVertex2().getId())));
+						if(returnVertexes.size() <= w_max)
+						{
+							if(!returnVertexes.contains(e.getVertex1()) && e.getVertex1().getId()!=S ) {
+								returnVertexes.add(flowNetGraph.getVertex(Math.abs(e.getVertex1().getId())));
+							}
+							else if(!returnVertexes.contains(e.getVertex2()) && e.getVertex2().getId()!=T) {
+								returnVertexes.add(flowNetGraph.getVertex(Math.abs(e.getVertex2().getId())));
+							}
 						}
 					}
 					//returnVertexes.add(graph.getVertex(Integer.MAX_VALUE));
 					//returnVertexes.add(graph.getVertex(Integer.MIN_VALUE));
-					System.out.println("Return vertex to remove"+ returnVertexes);
-					System.out.println("-----------------------------------------------------------------------");	
+					//System.out.println("Return vertex to remove"+ returnVertexes);
+					//System.out.println("-----------------------------------------------------------------------");	
 					ff=null;
 					flowNetGraph= null;
 
