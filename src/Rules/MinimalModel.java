@@ -44,6 +44,7 @@ public class MinimalModel extends Graph<Integer>{
 
 		m.readfile(path);
 		//System.out.println(m.DS.isConflict());
+		//m.DS.checkFormat().printList();
 		m.ModuMinUsingDP_AndSeperator();
 		System.out.println(m.DS.StringMinimalModel());
 		//		System.out.print(m.avgSourceSize);
