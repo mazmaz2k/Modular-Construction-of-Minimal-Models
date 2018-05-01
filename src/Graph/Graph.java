@@ -290,17 +290,21 @@ public class Graph<T>{
 					int x1=0;
 					Collection<Integer> collection_S = null,collection_T =null ;
 					try {
-						//System.out.println("v1: "+ flowNetGraph.getVertex(Long.MAX_VALUE) +" v2: "+flowNetGraph.getVertex(Long.MIN_VALUE));
-						//			System.out.println("v1: "+flowNetGraph.getVertex(S));
-						//			System.out.println("v2: "+flowNetGraph.getVertex(T));
-						//			System.out.println("V1 index:" +ff.findVertexIndex(flowNetGraph.getVertex(S))+ " V2 index: " + ff.findVertexIndex(flowNetGraph.getVertex(T)));
+//						System.out.println("v1: "+ flowNetGraph.getVertex(Long.MAX_VALUE) +" v2: "+flowNetGraph.getVertex(Long.MIN_VALUE));
+//						System.out.println("v1: "+flowNetGraph.getVertex(S));
+//						System.out.println("v2: "+flowNetGraph.getVertex(T));
+//						System.out.println("V1 index:" +ff.findVertexIndex(flowNetGraph.getVertex(S))+ " V2 index: " + ff.findVertexIndex(flowNetGraph.getVertex(T)));
 						x1=ff.maxFlow( ff.findVertexIndex(flowNetGraph.getVertex(S)),  ff.findVertexIndex(flowNetGraph.getVertex(T)));//find max flow & min cut between S and T
 						collection_S= ff.getS();
 						collection_T = ff.getT();
 					}catch (Exception e) {
+//						System.out.println("v1: "+ flowNetGraph.getVertex(Long.MAX_VALUE) +" v2: "+flowNetGraph.getVertex(Long.MIN_VALUE));
+//						System.out.println("v1: "+flowNetGraph.getVertex(S));
+//						System.out.println("v2: "+flowNetGraph.getVertex(T));
+//						System.out.println("V1 index:" +ff.findVertexIndex(flowNetGraph.getVertex(S))+ " V2 index: " + ff.findVertexIndex(flowNetGraph.getVertex(T)));
 						e.printStackTrace();
 					}
-					if(x1==0 || collection_S ==null || collection_T ==null) {
+					if(x1<=0 || collection_S ==null || collection_T ==null) {
 						ff=null;
 						flowNetGraph = null;
 						continue;

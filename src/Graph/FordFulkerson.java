@@ -163,7 +163,7 @@ public class FordFulkerson {
 
 	public int findVertexIndex(Vertex<Integer> v) {
 		if( v==null ) {
-//			return -1;
+			return -1;
 		}
 		for(int i=0;i<vertexArray.length;i++) {
 //			try {
@@ -173,11 +173,18 @@ public class FordFulkerson {
 //				System.out.println(v);
 //				
 //			}
-			
-			if(vertexArray[i]==v.getId()) {
-//				System.out.println("v is: "+ v +" vertex Array" + vertexArray[i]+ " i is :" + i);
-				return i;
-			}
+			try {
+				if(vertexArray[i]==v.getId()) {
+					return i;
+				}
+			}catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("v is: "+ v +" vertex Array" + vertexArray[i]+ " i is :" + i);
+
+				e.printStackTrace();
+
+			}		
+
 		}
 		return -1;
 	}
@@ -197,7 +204,9 @@ public class FordFulkerson {
 	public int maxFlow( int source, int sink){
 		T.clear();
 		S.clear();
-
+		if(source==-1 || sink==-1) {
+			return -1;
+		}
 		//declare and initialize residual capacity as total avaiable capacity initially.
 
 		LinkedList<ListNode> resCapacity =copy2DList(this.resArray);
