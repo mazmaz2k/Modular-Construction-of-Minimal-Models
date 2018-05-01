@@ -89,11 +89,15 @@ public class LinkedList
 	public void printList()
 	{
 		Node temp = head;
+		System.out.print("[");
 		while(temp != null)
 		{
-			System.out.println(temp.var);
+			System.out.print(temp.var);
+			if(temp.next!=null)
+				System.out.print(", ");
 			temp = temp.next;
 		}
+		System.out.println("]");
 	}
 	public void deleteList()
 	{

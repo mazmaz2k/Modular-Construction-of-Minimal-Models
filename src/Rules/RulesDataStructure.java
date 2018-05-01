@@ -17,6 +17,7 @@ import Rules.LinkedList.Node;
 public class RulesDataStructure extends DavisPutnamHelper
 {
     public Rule[] RulesArray ;
+    public int rulesNum;
     Hashtable<Integer, LinkedList> varHT ;
     static HashMap<Integer, Boolean> literalMap;// We will store the value of literals in this structure as we go along
     public int dpCalls;
@@ -25,6 +26,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     public int SIZE;
     public RulesDataStructure (int numOfRules)
     {
+    	this.rulesNum=numOfRules;
     	SIZE=numOfRules;
     	RulesArray = new Rule[numOfRules];
     	for (int i = 0; i < RulesArray.length; i++)
@@ -624,7 +626,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     		{
     			l.deleteAtIndex(index);
     			index--;
-    			//break;
+    			break;
     		}
     		index++;
     		n=n.next;
@@ -643,7 +645,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     		{
     			l.deleteAtIndex(index);
     			index--;
-    			//break;
+    			break;
     		}
     		index++;
     		n=n.next;
@@ -827,21 +829,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	
     }
     
-   /* public void splitConnectedComponent2(ArrayList<Vertex<Integer>> array)
-    {
-    	
-    	for(Vertex<Integer> v : array)
-    	{
-    		int var=(int)v.getId();
-    		if(!conflictWithAssignment(var, false))
-    		{
-    			
-    		}
-    	}
-  
-    	
-    }*/
-    
+   
     
     /**return a binary value of the number 
      * ,the (base) last bits */
@@ -900,347 +888,370 @@ public class RulesDataStructure extends DavisPutnamHelper
     		 
     	 }
      }
-    /*public static void main(String[] args)
-    {
-    		boolean[] a = toBinary(15,8);
-    		for (int i = 0; i < a.length; i++) {
-				System.out.print(" "+a[i]);
-			}
-    }*/
-   /* private int N_OVER_K(int n ,int k)
-    {
-    	return (int)(getFactorial(n)/(getFactorial(k)*getFactorial(n-k)));
-    }
-    private long getFactorial(int number) 
-    {
-        long factorial = 1;
-        for (int i = 1; i <= number; ++i) 
-        {
-            factorial *= i;
-        }
-        return factorial;
-    }*/
-   /* public static void main(String[] args) 
-    {
-    	System.out.println(getFactorial(20));
-    	System.out.println(N_OVER_K(10,5));
-    }*/
+     
+     
+     
+     
+     
+     
+     
+     
+     //*************************check copy************************************//
+     
+     
+     
+     
+     
+     
+     
+     public void splitConnectedComponent2(ArrayList<Vertex<Integer>> VertexSeperatorArray)
+     {
+     	System.out.println("enter split 2");
+     	int size = VertexSeperatorArray.size();
+         System.out.println("size of array is: " + size);
+         int N = (int)Math.pow(2,size); 
+         boolean[] binaryArray ;
+     	
+         for (int i = 0; i < N; i++) 
+         {
+        	System.out.println("copy the DS");
+        	Rule[] copy = copyRulesDS();
+            boolean conflict=false;
+         	binaryArray = toBinary(i,size);//returns array
+ 			System.out.println("INDEX "+i);
+         	
+         	for(int j =0;j<size;j++)
+         	{
+         		System.out.println("check conflict with assigment " +(int)VertexSeperatorArray.get(j).getId()+"  "+ binaryArray[j]);
+         		if(conflictWithAssignment2(copy,(int)VertexSeperatorArray.get(j).getId(), binaryArray[j]))
+         		{
+         			conflict = true;
+         			System.out.println("found conflict.  another try");
+         			break;
+         		}
+         		else
+         		{
+         			System.out.println("not found conflict");
+         			ChangeDataStrucureByPlacingValueInVar2(copy,(int)VertexSeperatorArray.get(j).getId(), binaryArray[j]);
+         			if(isConflict2(copy))
+         			{
+         				conflict=true;
+         				System.out.println("dsm cms");
+         				break;
+         			}
+         			checkForUnits2(copy);
+         		}
+         	}
+         	if(!conflict)
+         	{
+         		System.out.println("we found one in index: "+ i);
+         		for (int j = 0; j < size; j++)
+         		{
+         			System.out.println("change DS variable: "+(int)VertexSeperatorArray.get(j).getId()+" value: "+binaryArray[j]);
+         			ChangeDataStrucureByPlacingValueInVar((int)VertexSeperatorArray.get(j).getId(), binaryArray[j]);
+				}
+         		return;
+         	}
+ 		}
+   
+     	
+     }
+     
+     public Rule[] copyRulesDS()
+     {
+     	Rule[] rules = new Rule[rulesNum];
+     	for (int i = 0; i < rulesNum; i++)
+     	{
+     		rules[i]= new Rule();
+ 		}
+     	for (int i = 0; i < RulesArray.length; i++) 
+     	{
+ 			if(RulesArray[i]==null)
+ 			{
+ 				rules[i]=null;
+ 			}
+ 			else
+ 			{
+ 				Node nBody=RulesArray[i].body.head;
+ 				Node nHead=RulesArray[i].head.head;
+ 				rules[i].body=new LinkedList();
+ 				rules[i].head= new LinkedList();
+ 				while(nBody!=null)
+ 				{
+ 					rules[i].body.addAtTail(nBody.var);
+ 					nBody=nBody.next;
+ 				}
+ 				while(nHead!=null)
+ 				{
+ 					rules[i].head.addAtTail(nHead.var);
+ 					nHead=nHead.next;
+ 				}
+ 			}
+ 		}
+     	return rules;
+     }
+     public void print(Rule[] array)
+     {
+
+     	int i;
+     	Node tempBody;
+     	Node tempHead;
+     	for (i = 0; i < array.length; i++)
+     	{
+     		if(array[i]!=null)
+     		{
+     			System.out.println("RULE NUMBER " + i);
+     			System.out.print("\t Body Of Rule : ");
+     			tempBody = array[i].body.head;
+     			tempHead =array[i].head.head;
+     			while(tempBody!=null)
+     			{
+     				System.out.print(tempBody.var);
+     				if(tempBody.next!=null)
+     					System.out.print(" --> ");
+     				tempBody=tempBody.next;
+     			}
+     			System.out.println("\n");
+     			System.out.print("\t Head Of Rule : ");
+     			while(tempHead!=null)
+     			{
+     				System.out.print(tempHead.var);
+     				if(tempHead.next!=null)
+     					System.out.print(" --> ");
+     				tempHead=tempHead.next;
+     			}
+     			System.out.println("\n");
+     		}
+
+ 		}
+     }
+     public boolean conflictWithAssignment2(Rule[] array, int var ,boolean val)
+     {
+     	LinkedList l = varHT.get(var);
+     	Node n = l.head;
+     	while(n!=null)
+     	{
+     		int sizeOfBody, sizeOfHead;
+     		if(array[n.var]!=null)
+     		{
+     			sizeOfBody = array[n.var].body.getSize();
+     			sizeOfHead = array[n.var].head.getSize();
+     			if( sizeOfBody==1  && array[n.var].body.head.var==var  && val &&sizeOfHead==0)
+     			{
+     				return true;
+     			}
+     			else if(sizeOfHead==1 && array[n.var].head.head.var==var && !val &&sizeOfBody==0)
+     			{
+     				return true;
+     			}
+     		}
+     		
+     			n=n.next;
+     	}		
+     	
+     	return false;   	
+     }
+     public void ChangeDataStrucureByPlacingValueInVar2(Rule[] array, int var , boolean value)
+     {
+    	 
+     	LinkedList l = varHT.get(var);
+ 	    Node n = l.head;
+     	while(n!=null)
+     	{
+     		if((existInBody(var, n.var)&& !value)||(existInHead(var, n.var)&& value))
+     		{
+     			deleteRule2(array,n.var);
+     			//System.out.println("DELETE RULE NUMBER " + n.var);
+     		}
+     		else if((existInBody2(array, var, n.var)&& value))
+     		{
+     			deleteVarFromBody2(array,var,n.var);
+     			//System.out.println( "DELETE VARIABLE FROM BODY" + var + " IN RULE " + n.var);
+     		}
+     		else if (existInHead2(array, var, n.var)&& !value)
+     		{
+     			deleteVarFromHead2(array, var,n.var);
+     			//System.out.println("DELETE VARIABLE FROM HEAD"+var+" IN RULE " + n.var);
+     		}	
+     		n=n.next;
+     		
+     	}
+     	return;
+     	
+     }
+     
+     private void deleteRule2(Rule[] array, int ruleNum)
+     {
+    	 if(array[ruleNum]==null)
+    		 return;
+     	array[ruleNum].body.deleteList();
+     	array[ruleNum].head.deleteList();
+     	array[ruleNum]=null;
+     }
+     
+     /**delete variable from body inside rules array */
+     private void deleteVarFromBody2(Rule[] array, int var, int ruleNum)
+     {
+     	LinkedList l = array[ruleNum].body;
+     	int index = 0;
+     	Node n = l.head;
+     	while(n!=null)
+     	{
+     		if(n.var==var)
+     		{
+     			l.deleteAtIndex(index);
+     			index--;
+     			break;
+     		}
+     		index++;
+     		n=n.next;
+     	}
+     }
+     /**delete variable from head inside rules array*/
+     private void deleteVarFromHead2(Rule[] array, int var, int ruleNum)
+     {
+     	LinkedList l = array[ruleNum].head;
+     	int index = 0;
+     	Node n = l.head;
+     	while(n!=null)
+     	{
+     		if(n.var==var)
+     		{
+     			l.deleteAtIndex(index);
+     			index--;
+     			break;
+     		}
+     		index++;
+     		n=n.next;
+     	}
+     }
+     
+     private boolean existInBody2(Rule[] array, int var, int ruleNum)
+     {
+     	if(array[ruleNum]==null)
+     	{
+     		return false;
+     	}
+     	Node n;
+     	n = array[ruleNum].body.head;
+     	while(n!=null)
+     	{
+     		if(n.var == var)
+     			return true;
+     		n=n.next;
+     	}
+     	return false;
+     }
+     
+     private boolean existInHead2(Rule[] array, int var , int ruleNum)
+     {
+    	 if(array[ruleNum]==null)
+      	{
+      		return false;
+      	}
+     	Node n;
+     	n = array[ruleNum].head.head;
+     	while(n!=null)
+     	{
+     		if(n.var == var)
+     			return true;
+     		n=n.next;
+     	}
+     	return false;
+     }
+     
+     public boolean isConflict2(Rule[] array)
+     {
+     	Rule r1,r2;
+     	for (int i = 0; i < array.length; i++) 
+     	{
+     		r1=array[i];
+     		if(r1!=null&&r1.getSize()==1)
+     		{
+     			boolean isPositive;
+     			int var;
+     			if(r1.body.getSize()==1)
+     			{
+     				isPositive=false;
+     				var=r1.body.head.var;
+     			}
+     			else
+     			{
+     				isPositive=true;
+     				var=r1.head.head.var;
+     			}
+     			
+     			for(int j=i+1;j<array.length;j++)
+     			{
+     				r2=array[j];
+     				if(r2!=null&&r2.getSize()==1)
+     				{
+     					if(r2.body.getSize()==1)
+     					{
+     						if(var==r2.body.head.var && isPositive)
+     							return true;//conflict exist
+     					}
+     					else
+     					{
+     						if(var==r2.head.head.var && !isPositive)
+     							return true; //conflict exist
+     					}
+     				}		
+     			}
+     			
+     		}
+ 			
+ 		}
+     	
+     	return false;
+     }
+     
+     public void checkForUnits2(Rule[] array)
+     {
+     	Rule r;
+     	for (int i = 0; i < array.length; i++)
+     	{
+     		r=array[i];
+     		if(r!=null)
+     		{
+     			if(r.getSize()==1)
+     			{
+
+     				if(r.body.getSize() ==1)//body size is 1 and head size is 0s
+     				{
+     					ChangeDataStrucureByPlacingValueInVar2(array, array[i].body.head.var, false);
+
+     				}
+     				else//head size is 1 and body size is 0
+     				{
+     					ChangeDataStrucureByPlacingValueInVar2(array, array[i].head.head.var, false);
+     				}
+     			}
+     		}
+ 		}
+     	//System.out.println("after unit check");
+
+     }
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
     
-  /*  public LinkedList remainingVars()
-    {
-    	LinkedList s = new LinkedList();
-    	for (int i = 0; i < RulesArray.length; i++) 
-    	{
-			if(RulesArray[i]!=null)
-			{
-				Node nB = RulesArray[i].body.head;
-				while(nB!=null)
-				{
-					s.addAtTail(nB.var);
-					nB=nB.next;				}
-				Node nH = RulesArray[i].head.head;
-				while(nH!=null)
-				{
-					s.addAtTail(nH.var);
-					nH=nH.next;	
-				}
-			}
-		}
-    		return s;
-    }*/
-    
-    ////////////////////////////////////////////////////////////////////////////////////
- /*  public void ModuMin(LinkedList Ts)
-   {
-	  // checkForUnits();//maybe Ts as param
-	   Rule[] TsClauses = new Rule[SIZE];
-	   for (int i = 0; i < SIZE; i++) 
-	   {
-		   Node n = Ts.head;
-		   TsClauses[i]= new Rule();
-		   Node nBody =RulesArray[n.var].body.head;
-		   Node nHead = RulesArray[n.var].head.head;
-		   while(nBody!=null)
-		   {
-			   TsClauses[i].body.addAtTail(nBody.var);
-			   nBody=nBody.next;
-		   }
-		   while(nHead!=null)
-		   {
-			   TsClauses[i].head.addAtTail(nHead.var);
-			   nHead=nHead.next;
-		   }
-		   n=n.next;
-	   }
-	   dpll(TsClauses);	   
-   }
-   
-  
-   
-   public boolean dpll(Rule[] TsClauses)
-   {
-	   while(true)//unit
-	   {
-		  int literalToRemove = literalToRemove(TsClauses);
-		  System.out.println("literal to remove = "+ literalToRemove);
-		  if(literalToRemove!=0)
-		  { 
-		
-			  if(SIZE==0)
-			  {
-				  System.out.println("Sat");
-				  return true;
-			  }
-			  
-		  }
-		  else
-		  {  
-			  break;
-		  }
-	   }
-	   
-	   Rule[] copy1 = new Rule[TsClauses.length + 1];
-	   copy(TsClauses , copy1);
-	   Rule[] copy2 = new Rule[TsClauses.length + 1];
-	   copy(TsClauses , copy2);
-	
-	   SIZE++;
-	   int lit =pickLiteral(TsClauses);
-	   System.out.println("pick literal "+ lit);
-	   copy1[TsClauses.length].addToBody(lit);
-	   System.out.println("copy1");
-	   copy2[TsClauses.length].addToHead(lit);
-	   System.out.println("copy2");
-	   
-	  if(dpll(copy1))
-	  {
-		  return true;
-	  }
-	  else {
-		  return dpll(copy2);
-	  }
-   }
-  
-   
-    private int pickLiteral(Rule[] TsClause)
-    {
-    	int literal = 0;
-    	
-    	for (int i = 0; i < TsClause.length; i++)
-    	{
-    		
-    			Node nBody =TsClause[i].body.head;
-    			Node nHead = TsClause[i].head.head;
-    			if(nBody!=null)
-				{
-					literal =nBody.var;
-					break;
-				}
-				else if(nHead!=null)
-				{
-					literal =nHead.var;
-					break;
-				}
-			
-		}
-    	return literal; 
-    }
-    private void copy(Rule[] from , Rule[] to)
-    {
-    	int i;
-    	 for ( i= 0; i < SIZE; i++) 
-  	   {
-  		
-  			   to[i]= new Rule();
-  			   Node nBody =from[i].body.head;
-  			   Node nHead = RulesArray[i].head.head;
-  			   while(nBody!=null)
-  			   {
-  				   to[i].body.addAtTail(nBody.var);
-  				   nBody=nBody.next;
-  			   }
-  			   while(nHead!=null)
-  			   {
-  				   to[i].head.addAtTail(nHead.var);
-  				   nHead=nHead.next;
-  			   }
-  	   }
-    	 to[i]= new Rule();
-    }
-   
-   public int literalToRemove(Rule[] TsClauses) // check units
-   {
-	   
-	   int literal = 0 ; //not found
-	   for (int i = 0; i < TsClauses.length; i++)
-       {
-		  if((TsClauses[i].body.getSize() + TsClauses[i].head.getSize())==1)
-			{
-				if(TsClauses[i].body.getSize() ==1)//body size is 1 and head size is 0s
-				{
-
-					literal = TsClauses[i].body.head.var;
-					valueTable.put(literal, false);	
-					Remove(TsClauses, literal, false);
-				}
-				else//head size is 1 and body size is 0
-				{
-					literal = TsClauses[i].head.head.var;
-					valueTable.put(literal, true);
-					Remove(TsClauses, literal, true);
-				}
-				break;
-				
-		   }
-		   
-			
-		}
-	   return literal;
-   }
-
-   public void Remove(Rule[] TsClauses , int var , boolean val)
-   {
-	 //  System.out.println("sbdhfbvdcsknajdvwvbhf");
-	   for (int i = 0; i < TsClauses.length; i++) 
-	   {
-		   if(InBody(TsClauses,var,i)&& !val)
-		   {
-			   deleteRule(TsClauses ,i);
-			   System.out.println("delete rule number "+ i);
-			   SIZE--;
-		   }
-		   
-		   else if((InBody(TsClauses,var,i)&& val))
-	   		{
-	   			deleteVarFromBody(TsClauses,var,i);
-	   			System.out.println( "DELETE VARIABLE " + var + " IN RULE " + i);
-	   		}
-	   		else if(InHead(TsClauses,var, i)&& val)
-	   		{
-	   			deleteRule(TsClauses ,i);
-	   			System.out.println("DELETE RULE NUMBER " + i);
-	   			SIZE--;
-	   		}
-	   		else if (InHead(TsClauses,var, i)&& !val)
-	   		{
-	   			deleteVarFromHead(TsClauses,var,i);
-	   			System.out.println("DELETE VARIABLE "+var+" IN RULE " +i );
-	   		}
-       }
-	
-   	return;
-   }
-   
-   
-   public boolean InBody(Rule[] TsClauses , int var , int ruleNum)
-   {
-	 	if(TsClauses[ruleNum]==null)
-	 		return false;
-	   Node n;
-	   n = TsClauses[ruleNum].body.head;
-  
-   	while(n!=null)
-   	{
-   		if(n.var == var)
-   			return true;
-   		n=n.next;
-   	}
-   	return false;
-   }
-   
-   public boolean InHead(Rule[] TsClauses , int var , int ruleNum)
-   {
-	   if(TsClauses[ruleNum]==null)
-	 		return false;
-	   Node n;
-   	n = TsClauses[ruleNum].head.head;
-   	while(n!=null)
-   	{
-   		if(n.var == var)
-   			return true;
-   		n=n.next;
-   	}
-   	return false;
-   }
-   public void deleteRule(Rule[] TsClauses , int ruleNum)
-   {
-	  
-   	TsClauses[ruleNum].body.deleteList();
-   	TsClauses[ruleNum].head.deleteList();
-  // 	TsClauses[ruleNum]=null;
-   }
-   
-   private void deleteVarFromBody(Rule[] TsClauses,int var, int ruleNum)
-   {
-   
-   	LinkedList l = TsClauses[ruleNum].body;
-   	int index = 0;
-   	Node n = l.head;
-   	while(n!=null)
-   	{
-   		if(n.var==var)
-   		{
-   			l.deleteAtIndex(index);
-   			break;
-   		}
-   		index++;
-   		n=n.next;
-   	}
-   }
-   private void deleteVarFromHead(Rule[] TsClauses,int var, int ruleNum)
-   {
-   	LinkedList l = TsClauses[ruleNum].head;
-   	int index = 0;
-   	Node n = l.head;
-   	while(n!=null)
-   	{
-   		if(n.var==var)
-   		{
-   			l.deleteAtIndex(index);
-   			break;
-   		}
-   		index++;
-   		n=n.next;
-   	}
-   }
-   
-   public void printTs(Rule[] T)
-   {
-   	int i;
-   	Node tempBody;
-   	Node tempHead;
-   	for (i = 0; i < T.length; i++)
-   	{
-   		System.out.println("RULE NUMBER " + i);
-   		System.out.print("\t Body Of Rule : ");
-   		tempBody = T[i].body.head;
-   		tempHead =T[i].head.head;
-   		while(tempBody!=null)
-   		{
-   			System.out.print(tempBody.var);
-   			if(tempBody.next!=null)
-   				System.out.print(" --> ");
-   			tempBody=tempBody.next;
-   		}
-   		System.out.println("\n");
-   		System.out.print("\t Head Of Rule : ");
-   		while(tempHead!=null)
-   		{
-   			System.out.print(tempHead.var);
-   			if(tempHead.next!=null)
-   				System.out.print(" --> ");
-   			tempHead=tempHead.next;
-   		}
-   		System.out.println("\n");
-
-		}
-   }
-   
-   
-   
-   
-   
-  */
 	
 
 }

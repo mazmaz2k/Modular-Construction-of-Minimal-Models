@@ -41,12 +41,13 @@ public class MinimalModel extends Graph<Integer>{
 		MinimalModel m = new MinimalModel();
 		//String path=args[0];
 		String path=".//CnfFile.txt";
+	
 
 		m.readfile(path);
-		//System.out.println(m.DS.isConflict());
+//		//System.out.println(m.DS.isConflict());
 		//m.DS.checkFormat().printList();
-		m.ModuMinUsingDP_AndSeperator();
-		System.out.println(m.DS.StringMinimalModel());
+		if(m.ModuMinUsingDP_AndSeperator())
+			System.out.println(m.DS.StringMinimalModel());
 		//		System.out.print(m.avgSourceSize);
 		////		System.out.print(",");
 		//		m.readfile(path);
@@ -334,7 +335,10 @@ public class MinimalModel extends Graph<Integer>{
 				if(minmodel.head!=null)
 				{
 					if(minmodel.head.var==-1)//unsat
+					{
+						System.out.println("UNSAT");
 						return false;
+					}
 					/**put the minimal model in the literal map*/
 					DS.putMinModelInLiteralMap(minmodel);
 
@@ -505,7 +509,7 @@ public class MinimalModel extends Graph<Integer>{
 			LinkedList Ts=DS.Ts(s);
 			if(!DS.FindMinimalModelForTs(Ts))
 			{
-				//				System.out.println("UNSAT");
+								System.out.println("UNSAT");
 				//				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
 				return false;
 			}
@@ -561,26 +565,30 @@ public class MinimalModel extends Graph<Integer>{
 
 				System.out.println(arrayToRemove);
 				DS.splitConnectedComponent(arrayToRemove);
-				
+				//DS.printRulesArray();
+
 				
 				//System.out.println("Array to remove $$$$$$$"+ arrayToRemove);
 				
 				
 			}
-			
 			else
 			{
 				System.out.println("out " + s.getSize());
+				s.printList();
 				LinkedList Ts=DS.Ts(s);
+				//DS.printRulesArray();
 				if(!DS.FindMinimalModelForTs(Ts))
 				{
-					//				System.out.println("UNSAT");
+									System.out.println("UNSAT");
 					//				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
+									//DS.printRulesArray();
 					return false;
 				}
 				//DS.printValueOfVariables();
 				DS.updateRuleDS();
 			}
+
 			
 			
 			
