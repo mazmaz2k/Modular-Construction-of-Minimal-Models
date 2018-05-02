@@ -190,7 +190,7 @@ def testDPcalls():
     py.plot(fig, filename='Run time test') 
     
    
-testDPcalls()   
+#testDPcalls()   
    
 def testMemUsage():
     K=3
@@ -340,8 +340,8 @@ def avgSource2():
 
 def printSources():
     K=3
-    M=100
-    L=520
+    M=50
+    L=100
     RandomPositiveCNF(L, M, K)
     filename="cnf_"+str(L)+"_"+str(M)
     output=GetJavaOutput(path, filename)
@@ -349,7 +349,7 @@ def printSources():
     
     
     
-#printSources()    
+printSources()    
     
 def checkModuMin():
     K=3

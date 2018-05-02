@@ -48,6 +48,7 @@ public class MinimalModel extends Graph<Integer>{
 		//m.DS.checkFormat().printList();
 		if(m.ModuMinUsingDP_AndSeperator())
 			System.out.println(m.DS.StringMinimalModel());
+		//System.out.println(m.DS.isTheoryPositive());
 		//		System.out.print(m.avgSourceSize);
 		////		System.out.print(",");
 		//		m.readfile(path);
@@ -504,6 +505,7 @@ public class MinimalModel extends Graph<Integer>{
 		{
 			//DS.printRulesArray();
 			DS.checkForUnits();//remove empty sources
+			//System.out.println("positive theory? " + DS.isTheoryPositive());
 			Graph<Integer> g = initGraph(DS, size);
 			LinkedList s = sourceOfGraph(g);
 			LinkedList Ts=DS.Ts(s);
@@ -519,6 +521,7 @@ public class MinimalModel extends Graph<Integer>{
 		//		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
 		return true;
 	}
+	
 	public boolean DP()
 	{
 		DS.removeDoubles();
@@ -548,6 +551,7 @@ public class MinimalModel extends Graph<Integer>{
 		while(DS.SIZE!=0)
 		{
 			DS.checkForUnits();//remove empty sources
+		//	DS.printRulesArray();
 			g = initGraph(DS, size);
 			if(first)
 			{
@@ -558,7 +562,7 @@ public class MinimalModel extends Graph<Integer>{
 			LinkedList s = sourceOfGraph(g);
 			double ratio = (double)s.getSize() / allVertexes;
 			if(ratio > 0.2) {
-				System.out.println(s.getSize());
+				//System.out.println(s.getSize());
 				Graph<Integer> graph = createGraphFromSource(s,g);
 		
 				ArrayList<Vertex<Integer>> arrayToRemove = vertexSeparator(graph);
@@ -568,15 +572,18 @@ public class MinimalModel extends Graph<Integer>{
 				//DS.printRulesArray();
 
 				
-				//System.out.println("Array to remove $$$$$$$"+ arrayToRemove);
+				System.out.println("AFTER SPLIT");
 				
 				
 			}
 			else
 			{
-				System.out.println("out " + s.getSize());
+				System.out.println("source size: " + s.getSize());
 				s.printList();
+				
 				LinkedList Ts=DS.Ts(s);
+				System.out.println("TS");
+				Ts.printList();
 				//DS.printRulesArray();
 				if(!DS.FindMinimalModelForTs(Ts))
 				{

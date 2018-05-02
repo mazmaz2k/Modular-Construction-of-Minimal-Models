@@ -191,29 +191,35 @@ public class RulesDataStructure extends DavisPutnamHelper
     
    public void checkForUnits()
     {
-    	Rule r;
-    	for (int i = 0; i < RulesArray.length; i++)
-    	{
-    		r=RulesArray[i];
-    		if(r!=null)
-    		{
-    			if(r.getSize()==1)
-    			{
-
-    				if(r.body.getSize() ==1)//body size is 1 and head size is 0s
-    				{
-    					literalMap.put(RulesArray[i].body.head.var, false);
-
-    				}
-    				else//head size is 1 and body size is 0
-    				{
-    					literalMap.put(RulesArray[i].head.head.var, true);
-    				}
-    			}
-    		}
-		}
-    	updateRuleDS();
-    	//System.out.println("after unit check");
+	   boolean flag;
+	   do
+	   {
+		   Rule r;
+		   flag= false;
+		   for (int i = 0; i < RulesArray.length; i++)
+		   {
+			   r=RulesArray[i];
+			   if(r!=null)
+			   {
+				   if(r.getSize()==1)
+				   {
+					   flag = true;
+					   if(r.body.getSize() ==1)//body size is 1 and head size is 0s
+					   {
+						   literalMap.put(RulesArray[i].body.head.var, false);
+						   //System.out.println(RulesArray[i].body.head.var);
+					   }
+					   else//head size is 1 and body size is 0
+					   {
+						   literalMap.put(RulesArray[i].head.head.var, true);
+						 // System.out.println( RulesArray[i].head.head.var);
+					   }
+					   updateRuleDS();
+				   }
+			   }
+		   }
+	   }while(flag);
+    	System.out.println("after unit check");
 
     }
     public void printValueOfVariables()
@@ -454,7 +460,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     public void updateRuleDS()
     {
     	Set<Integer> keys = literalMap.keySet();
-    	//try {
+    	
     		for(int key: keys)
     		{
     			//System.out.println("key: "+ Integer.parseInt(key) + " value:  "+literalMap.get(key) );
@@ -469,11 +475,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     			//System.out.println("remove key  " + key);
     		}
     		literalMap.clear();
-    //	}
-    	/*catch(Exception e)
-    	{
-    		
-    	}*/
+
     }
     
     
@@ -481,12 +483,12 @@ public class RulesDataStructure extends DavisPutnamHelper
     {
     	if(conflictWithAssignment(var, value))
     	{
-    		//System.out.println("CONFLICT");
+    		System.out.println("CONFLICT");
     		return ;
     	}
     	if(!variableExist(var))
     	{
-    		//System.out.println("VARIABLE NOT EXIST");
+    	//	System.out.println("VARIABLE NOT EXIST");
     		return ;
     	}
     	LinkedList l = varHT.get(var);
@@ -817,10 +819,22 @@ public class RulesDataStructure extends DavisPutnamHelper
     			for (int j = 0; j < size; j++) 
     			{
     				System.out.println("index: "+ i + " var: " + v.get(j).getId() +" val: " + binaryArray[j]);
-    				literalMap.put((int)v.get(j).getId(), binaryArray[j]);
+    				//literalMap.put((int)v.get(j).getId(), binaryArray[j]);
+    				ChangeDataStrucureByPlacingValueInVar((int)v.get(j).getId(), binaryArray[j]);
+    				
 				}
-    			updateRuleDS();
-    			return ;
+    			//updateRuleDS();
+    			if(isTheoryPositive())
+    			{
+    				for (int j = 0; j < size; j++) 
+        			{
+        				if(binaryArray[j])
+        				{
+        					minModel.addAtTail((int)v.get(j).getId());
+        				}        				
+    				}
+    				return ;
+    			}
     		}
     		//System.out.println(i);
     		literalMap.clear();
@@ -890,13 +904,27 @@ public class RulesDataStructure extends DavisPutnamHelper
      }
      
      
+     public boolean isTheoryPositive()
+     {
+    	 for (int i = 0; i < RulesArray.length; i++) 
+    	 {
+			if(RulesArray[i]!=null)
+			{
+				Rule r = RulesArray[i];
+				if(r.head.getSize()==0)
+				{
+					return false;
+				}
+			}
+		}
+    	 return true;
+     }
      
      
      
      
      
-     
-     //*************************check copy************************************//
+//*******************************check copy, another split method****************************************//
      
      
      
@@ -908,48 +936,61 @@ public class RulesDataStructure extends DavisPutnamHelper
      {
      	System.out.println("enter split 2");
      	int size = VertexSeperatorArray.size();
-         System.out.println("size of array is: " + size);
+        System.out.println("size of array is: " + size);
          int N = (int)Math.pow(2,size); 
          boolean[] binaryArray ;
      	
          for (int i = 0; i < N; i++) 
          {
-        	System.out.println("copy the DS");
+        	//System.out.println("copy the DS");
         	Rule[] copy = copyRulesDS();
             boolean conflict=false;
          	binaryArray = toBinary(i,size);//returns array
- 			System.out.println("INDEX "+i);
+ 			//System.out.println("INDEX "+i);
          	
          	for(int j =0;j<size;j++)
          	{
-         		System.out.println("check conflict with assigment " +(int)VertexSeperatorArray.get(j).getId()+"  "+ binaryArray[j]);
+         		//System.out.println("check conflict with assigment " +(int)VertexSeperatorArray.get(j).getId()+"  "+ binaryArray[j]);
          		if(conflictWithAssignment2(copy,(int)VertexSeperatorArray.get(j).getId(), binaryArray[j]))
          		{
          			conflict = true;
-         			System.out.println("found conflict.  another try");
+         			System.out.println("111");
          			break;
          		}
          		else
          		{
-         			System.out.println("not found conflict");
+         			//System.out.println("not found conflict");
          			ChangeDataStrucureByPlacingValueInVar2(copy,(int)VertexSeperatorArray.get(j).getId(), binaryArray[j]);
+         			checkForUnits2(copy);
          			if(isConflict2(copy))
          			{
          				conflict=true;
-         				System.out.println("dsm cms");
+         				System.out.println("222");
          				break;
          			}
-         			checkForUnits2(copy);
+         			if(!isTheoryPositive2(copy))
+         			{
+         				conflict = true;
+         				System.out.println("333");
+         				break;
+         			}
          		}
          	}
          	if(!conflict)
          	{
-         		System.out.println("we found one in index: "+ i);
+         		//System.out.println("we found one in index: "+ i);
+         		System.out.println(isTheoryPositive2(copy));
          		for (int j = 0; j < size; j++)
          		{
-         			System.out.println("change DS variable: "+(int)VertexSeperatorArray.get(j).getId()+" value: "+binaryArray[j]);
-         			ChangeDataStrucureByPlacingValueInVar((int)VertexSeperatorArray.get(j).getId(), binaryArray[j]);
+         			//System.out.println("change DS variable: "+(int)VertexSeperatorArray.get(j).getId()+" value: "+binaryArray[j]);
+         			//ChangeDataStrucureByPlacingValueInVar((int)VertexSeperatorArray.get(j).getId(), binaryArray[j]);
+         			literalMap.put((int)VertexSeperatorArray.get(j).getId(), binaryArray[j]);
+         			//checkForUnits();
 				}
+         		updateRuleDS();
+         	//	printRulesArray();
+         		//System.out.println("VAR_HT");
+         		//printHashTable();
          		return;
          	}
  		}
@@ -1058,7 +1099,7 @@ public class RulesDataStructure extends DavisPutnamHelper
  	    Node n = l.head;
      	while(n!=null)
      	{
-     		if((existInBody(var, n.var)&& !value)||(existInHead(var, n.var)&& value))
+     		if((existInBody2(array,var, n.var)&& !value)||(existInHead2(array,var, n.var)&& value))
      		{
      			deleteRule2(array,n.var);
      			//System.out.println("DELETE RULE NUMBER " + n.var);
@@ -1224,7 +1265,7 @@ public class RulesDataStructure extends DavisPutnamHelper
      				}
      				else//head size is 1 and body size is 0
      				{
-     					ChangeDataStrucureByPlacingValueInVar2(array, array[i].head.head.var, false);
+     					ChangeDataStrucureByPlacingValueInVar2(array, array[i].head.head.var, true);
      				}
      			}
      		}
@@ -1234,7 +1275,21 @@ public class RulesDataStructure extends DavisPutnamHelper
      }
      
      
-     
+     public boolean isTheoryPositive2(Rule[] array)
+     {
+    	 for (int i = 0; i < array.length; i++) 
+    	 {
+			if(array[i]!=null)
+			{
+				Rule r = array[i];
+				if(r.head.getSize()==0)
+				{
+					return false;
+				}
+			}
+		}
+    	 return true;
+     }
      
      
      
