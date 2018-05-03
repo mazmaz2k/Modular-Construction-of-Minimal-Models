@@ -542,10 +542,12 @@ public class RulesDataStructure extends DavisPutnamHelper
     		sizeOfHead = RulesArray[n.var].head.getSize();
     		if( (existInBody(var,n.var )) && sizeOfBody==1 && val &&sizeOfHead==0)
     		{
+    			System.out.println(var+" sjdcsamdncsn,mx,msanx,mnsm,xna");
     				return true;
     		}
     		else if((existInHead(var,n.var)) && sizeOfHead==1 && !val &&sizeOfBody==0)
     		{
+    			System.out.println(var+" sjdcsamdncsn,mx,msanx,mnsm,xna");
     			return true;
     		}
     		
@@ -961,7 +963,7 @@ public class RulesDataStructure extends DavisPutnamHelper
          		{
          			//System.out.println("not found conflict");
          			ChangeDataStrucureByPlacingValueInVar2(copy,(int)VertexSeperatorArray.get(j).getId(), binaryArray[j]);
-         			checkForUnits2(copy);
+         		//	checkForUnits2(copy);/////TODO change
          			if(isConflict2(copy))
          			{
          				conflict=true;

@@ -551,7 +551,7 @@ public class MinimalModel extends Graph<Integer>{
 		while(DS.SIZE!=0)
 		{
 			DS.checkForUnits();//remove empty sources
-		//	DS.printRulesArray();
+			//DS.printRulesArray();
 			g = initGraph(DS, size);
 			if(first)
 			{
@@ -573,17 +573,18 @@ public class MinimalModel extends Graph<Integer>{
 
 				
 				System.out.println("AFTER SPLIT");
-				
+				//DS.printRulesArray();
+				System.out.println("CHECK IF THE THEORY IS POSITIVE   #############################"  + DS.isTheoryPositive());
 				
 			}
 			else
 			{
-				System.out.println("source size: " + s.getSize());
-				s.printList();
+			//	System.out.println("source size: " + s.getSize());
+			//	s.printList();
 				
 				LinkedList Ts=DS.Ts(s);
-				System.out.println("TS");
-				Ts.printList();
+			//	System.out.println("TS");
+				//Ts.printList();
 				//DS.printRulesArray();
 				if(!DS.FindMinimalModelForTs(Ts))
 				{
