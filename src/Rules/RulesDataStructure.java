@@ -933,8 +933,6 @@ public class RulesDataStructure extends DavisPutnamHelper
      
      
      
-     
-     
      public void splitConnectedComponent2(ArrayList<Vertex<Integer>> VertexSeperatorArray)
      {
      	System.out.println("enter split 2");
@@ -964,7 +962,6 @@ public class RulesDataStructure extends DavisPutnamHelper
          		{
          			//System.out.println("not found conflict");
          			ChangeDataStrucureByPlacingValueInVar2(copy,(int)VertexSeperatorArray.get(j).getId(), binaryArray[j]);
-         			checkForUnits2(copy, valuesForVertexSeperatorArray);/////After we check that there are no units we do not need to check for conflict, but we steal need to check if theory remains positive
 //         			if(isConflict2(copy))
 //         			{
 //         				conflict=true;
@@ -977,9 +974,11 @@ public class RulesDataStructure extends DavisPutnamHelper
 //         				System.out.println("333");
 //         				break;
 //         			}
-         			System.out.println("hi");
+         			//System.out.println("hi");
          		}
-         	}
+         	}     
+         	checkForUnits2(copy, valuesForVertexSeperatorArray);/////After we check that there are no units we do not need to check for conflict, but we steal need to check if theory remains positive
+         	
          	if(!conflict&&isTheoryPositive2(copy))
          	{
          		//System.out.println("we found one in index: "+ i);

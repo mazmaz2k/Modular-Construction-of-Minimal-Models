@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -46,8 +47,14 @@ public class MinimalModel extends Graph<Integer>{
 		m.readfile(path);
 //		//System.out.println(m.DS.isConflict());
 		//m.DS.checkFormat().printList();
-		if(m.ModuMinUsingDP_AndSeperator())
+	if(m.ModuMinUsingDP_AndSeperator())
 			System.out.println(m.DS.StringMinimalModel());
+		
+		
+		
+		
+		
+		
 		//System.out.println(m.DS.isTheoryPositive());
 		//		System.out.print(m.avgSourceSize);
 		////		System.out.print(",");
@@ -605,7 +612,6 @@ public class MinimalModel extends Graph<Integer>{
 		//		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
 		return true;
 	}
-	
 
 
 
