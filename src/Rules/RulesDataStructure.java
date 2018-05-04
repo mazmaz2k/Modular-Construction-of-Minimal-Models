@@ -1,5 +1,6 @@
 package Rules;
 
+import java.awt.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -941,7 +942,7 @@ public class RulesDataStructure extends DavisPutnamHelper
         System.out.println("size of array is: " + size);
          int N = (int)Math.pow(2,size); 
          boolean[] binaryArray ;
-     	
+         HashMap<Integer, Boolean> valuesForVertexSeperatorArray = new HashMap<>();
          for (int i = 0; i < N; i++) 
          {
         	//System.out.println("copy the DS");
@@ -949,10 +950,10 @@ public class RulesDataStructure extends DavisPutnamHelper
             boolean conflict=false;
          	binaryArray = toBinary(i,size);//returns array
  			//System.out.println("INDEX "+i);
-         	
+         	valuesForVertexSeperatorArray.clear();
          	for(int j =0;j<size;j++)
          	{
-         		//System.out.println("check conflict with assigment " +(int)VertexSeperatorArray.get(j).getId()+"  "+ binaryArray[j]);
+         		System.out.println("check conflict with assigment " +(int)VertexSeperatorArray.get(j).getId()+"  "+ binaryArray[j]);
          		if(conflictWithAssignment2(copy,(int)VertexSeperatorArray.get(j).getId(), binaryArray[j]))
          		{
          			conflict = true;
@@ -963,22 +964,23 @@ public class RulesDataStructure extends DavisPutnamHelper
          		{
          			//System.out.println("not found conflict");
          			ChangeDataStrucureByPlacingValueInVar2(copy,(int)VertexSeperatorArray.get(j).getId(), binaryArray[j]);
-         		//	checkForUnits2(copy);/////TODO change
-         			if(isConflict2(copy))
-         			{
-         				conflict=true;
-         				System.out.println("222");
-         				break;
-         			}
-         			if(!isTheoryPositive2(copy))
-         			{
-         				conflict = true;
-         				System.out.println("333");
-         				break;
-         			}
+         			checkForUnits2(copy, valuesForVertexSeperatorArray);/////After we check that there are no units we do not need to check for conflict, but we steal need to check if theory remains positive
+//         			if(isConflict2(copy))
+//         			{
+//         				conflict=true;
+//         				System.out.println("222");
+//         				break;
+//         			}
+//         			if(!isTheoryPositive2(copy))
+//         			{
+//         				conflict = true;
+//         				System.out.println("333");
+//         				break;
+//         			}
+         			System.out.println("hi");
          		}
          	}
-         	if(!conflict)
+         	if(!conflict&&isTheoryPositive2(copy))
          	{
          		//System.out.println("we found one in index: "+ i);
          		System.out.println(isTheoryPositive2(copy));
@@ -989,6 +991,12 @@ public class RulesDataStructure extends DavisPutnamHelper
          			literalMap.put((int)VertexSeperatorArray.get(j).getId(), binaryArray[j]);
          			//checkForUnits();
 				}
+         		Set<Integer> keys = valuesForVertexSeperatorArray.keySet();
+         		for(int key:keys)
+         		{
+         			literalMap.put(key, valuesForVertexSeperatorArray.get(key));
+         		}
+         		
          		updateRuleDS();
          	//	printRulesArray();
          		//System.out.println("VAR_HT");
@@ -1249,29 +1257,37 @@ public class RulesDataStructure extends DavisPutnamHelper
      	return false;
      }
      
-     public void checkForUnits2(Rule[] array)
+     public void checkForUnits2(Rule[] array, HashMap<Integer, Boolean> map)
      {
-     	Rule r;
-     	for (int i = 0; i < array.length; i++)
-     	{
-     		r=array[i];
-     		if(r!=null)
-     		{
-     			if(r.getSize()==1)
-     			{
-
-     				if(r.body.getSize() ==1)//body size is 1 and head size is 0s
-     				{
-     					ChangeDataStrucureByPlacingValueInVar2(array, array[i].body.head.var, false);
-
-     				}
-     				else//head size is 1 and body size is 0
-     				{
-     					ChangeDataStrucureByPlacingValueInVar2(array, array[i].head.head.var, true);
-     				}
-     			}
-     		}
- 		}
+    	 boolean flag;
+    	 do
+    	 {
+    		 Rule r;
+    		 flag=false;
+    		 for (int i = 0; i < array.length; i++)
+    		 {
+    			 r=array[i];
+    			 if(r!=null)
+    			 {
+    				 if(r.getSize()==1)
+    				 {
+    					 flag = true;
+    					 if(r.body.getSize() ==1)//body size is 1 and head size is 0s
+    					 {
+    						 map.put( array[i].body.head.var, false);
+    						 ChangeDataStrucureByPlacingValueInVar2(array, array[i].body.head.var, false);
+    						 
+    					 }
+    					 else//head size is 1 and body size is 0
+    					 {
+    						 map.put(array[i].head.head.var, true);
+    						 ChangeDataStrucureByPlacingValueInVar2(array, array[i].head.head.var, true);
+    						
+    					 }
+    				 }
+    			 }
+    		 }
+    	 }while(flag);
      	//System.out.println("after unit check");
 
      }
