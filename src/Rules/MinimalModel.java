@@ -567,6 +567,7 @@ public class MinimalModel extends Graph<Integer>{
 				first= false;
 			}
 			LinkedList s = sourceOfGraph(g);
+			System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$    source size is " +s.getSize());
 			double ratio = (double)s.getSize() / allVertexes;
 			if(ratio > 0.2) {
 				//System.out.println(s.getSize());
@@ -575,7 +576,7 @@ public class MinimalModel extends Graph<Integer>{
 				ArrayList<Vertex<Integer>> arrayToRemove = vertexSeparator(graph);
 
 				System.out.println(arrayToRemove);
-				DS.splitConnectedComponent2(arrayToRemove);
+				DS.splitConnectedComponent(arrayToRemove);
 				//DS.printRulesArray();
 
 				

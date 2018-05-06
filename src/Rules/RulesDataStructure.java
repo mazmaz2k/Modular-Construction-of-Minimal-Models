@@ -543,12 +543,12 @@ public class RulesDataStructure extends DavisPutnamHelper
     		sizeOfHead = RulesArray[n.var].head.getSize();
     		if( (existInBody(var,n.var )) && sizeOfBody==1 && val &&sizeOfHead==0)
     		{
-    			System.out.println(var+" sjdcsamdncsn,mx,msanx,mnsm,xna");
+    			//System.out.println(var+" sjdcsamdncsn,mx,msanx,mnsm,xna");
     				return true;
     		}
     		else if((existInHead(var,n.var)) && sizeOfHead==1 && !val &&sizeOfBody==0)
     		{
-    			System.out.println(var+" sjdcsamdncsn,mx,msanx,mnsm,xna");
+    			//System.out.println(var+" sjdcsamdncsn,mx,msanx,mnsm,xna");
     			return true;
     		}
     		
@@ -822,12 +822,13 @@ public class RulesDataStructure extends DavisPutnamHelper
     			for (int j = 0; j < size; j++) 
     			{
     				System.out.println("index: "+ i + " var: " + v.get(j).getId() +" val: " + binaryArray[j]);
-    				//literalMap.put((int)v.get(j).getId(), binaryArray[j]);
-    				ChangeDataStrucureByPlacingValueInVar((int)v.get(j).getId(), binaryArray[j]);
+    				literalMap.put((int)v.get(j).getId(), binaryArray[j]);
+    				//ChangeDataStrucureByPlacingValueInVar((int)v.get(j).getId(), binaryArray[j]);
     				
 				}
-    			//updateRuleDS();
-    			if(isTheoryPositive())
+    			updateRuleDS();
+    			return;
+    			/*if(isTheoryPositive())
     			{
     				for (int j = 0; j < size; j++) 
         			{
@@ -837,7 +838,7 @@ public class RulesDataStructure extends DavisPutnamHelper
         				}        				
     				}
     				return ;
-    			}
+    			}*/
     		}
     		//System.out.println(i);
     		literalMap.clear();
@@ -930,385 +931,388 @@ public class RulesDataStructure extends DavisPutnamHelper
 //*******************************check copy, another split method****************************************//
      
      
-     
-     
-     
-     public void splitConnectedComponent2(ArrayList<Vertex<Integer>> VertexSeperatorArray)
-     {
-     	System.out.println("enter split 2");
-     	int size = VertexSeperatorArray.size();
-        System.out.println("size of array is: " + size);
-         int N = (int)Math.pow(2,size); 
-         boolean[] binaryArray ;
-         HashMap<Integer, Boolean> valuesForVertexSeperatorArray = new HashMap<>();
-         for (int i = 0; i < N; i++) 
-         {
-        	//System.out.println("copy the DS");
-        	Rule[] copy = copyRulesDS();
-            boolean conflict=false;
-         	binaryArray = toBinary(i,size);//returns array
- 			//System.out.println("INDEX "+i);
-         	valuesForVertexSeperatorArray.clear();
-         	for(int j =0;j<size;j++)
-         	{
-         		System.out.println("check conflict with assigment " +(int)VertexSeperatorArray.get(j).getId()+"  "+ binaryArray[j]);
-         		if(conflictWithAssignment2(copy,(int)VertexSeperatorArray.get(j).getId(), binaryArray[j]))
-         		{
-         			conflict = true;
-         			System.out.println("111");
-         			break;
-         		}
-         		else
-         		{
-         			//System.out.println("not found conflict");
-         			ChangeDataStrucureByPlacingValueInVar2(copy,(int)VertexSeperatorArray.get(j).getId(), binaryArray[j]);
-//         			if(isConflict2(copy))
+//     
+//     
+//     
+//     public void splitConnectedComponent2(ArrayList<Vertex<Integer>> VertexSeperatorArray)
+//     {
+//     	System.out.println("enter split 2");
+//     	int size = VertexSeperatorArray.size();
+//        System.out.println("size of array is: " + size);
+//         int N = (int)Math.pow(2,size); 
+//         boolean[] binaryArray ;
+//         HashMap<Integer, Boolean> valuesForVertexSeperatorArray = new HashMap<>();
+//         for (int i = 0; i < N; i++) 
+//         {
+//        	//System.out.println("copy the DS");
+//        	Rule[] copy = copyRulesDS();
+//            boolean conflict=false;
+//         	binaryArray = toBinary(i,size);//returns array
+// 			//System.out.println("INDEX "+i);
+//         	valuesForVertexSeperatorArray.clear();
+//         	for(int j =0;j<size;j++)
+//         	{
+//         		//System.out.println("check conflict with assigment " +(int)VertexSeperatorArray.get(j).getId()+"  "+ binaryArray[j]);
+//         		if(conflictWithAssignment2(copy,(int)VertexSeperatorArray.get(j).getId(), binaryArray[j]))
+//         		{
+//         			conflict = true;
+//         			System.out.println("111");
+//         			break;
+//         		}
+//         		else
+//         		{
+//         			//System.out.println("not found conflict");
+//         			ChangeDataStrucureByPlacingValueInVar2(copy,(int)VertexSeperatorArray.get(j).getId(), binaryArray[j]);
+////         			if(isConflict2(copy))
+////         			{
+////         				conflict=true;
+////         				System.out.println("222");
+////         				break;
+////         			}
+////         			if(!isTheoryPositive2(copy))
+////         			{
+////         				conflict = true;
+////         				System.out.println("333");
+////         				break;
+////         			}
+//         			//System.out.println("hi");
+//         		}
+//         	}     
+//         	
+//         	if(!conflict)
+//         	{
+//             	checkForUnits2(copy, valuesForVertexSeperatorArray);/////After we check that there are no units we do not need to check for conflict, but we steal need to check if theory remains positive
+//         		//System.out.println("we found one in index: "+ i);
+//         		if(isTheoryPositive2(copy))
+//         		{
+//         			System.out.println(isTheoryPositive2(copy));
+//         			for (int j = 0; j < size; j++)
 //         			{
-//         				conflict=true;
-//         				System.out.println("222");
-//         				break;
+//         				//System.out.println("change DS variable: "+(int)VertexSeperatorArray.get(j).getId()+" value: "+binaryArray[j]);
+//         				//ChangeDataStrucureByPlacingValueInVar((int)VertexSeperatorArray.get(j).getId(), binaryArray[j]);
+//         				literalMap.put((int)VertexSeperatorArray.get(j).getId(), binaryArray[j]);
+//         				//checkForUnits();
 //         			}
-//         			if(!isTheoryPositive2(copy))
+//         			Set<Integer> keys = valuesForVertexSeperatorArray.keySet();
+//         			for(int key:keys)
 //         			{
-//         				conflict = true;
-//         				System.out.println("333");
-//         				break;
+//         				literalMap.put(key, valuesForVertexSeperatorArray.get(key));
 //         			}
-         			//System.out.println("hi");
-         		}
-         	}     
-         	checkForUnits2(copy, valuesForVertexSeperatorArray);/////After we check that there are no units we do not need to check for conflict, but we steal need to check if theory remains positive
-         	
-         	if(!conflict&&isTheoryPositive2(copy))
-         	{
-         		//System.out.println("we found one in index: "+ i);
-         		System.out.println(isTheoryPositive2(copy));
-         		for (int j = 0; j < size; j++)
-         		{
-         			//System.out.println("change DS variable: "+(int)VertexSeperatorArray.get(j).getId()+" value: "+binaryArray[j]);
-         			//ChangeDataStrucureByPlacingValueInVar((int)VertexSeperatorArray.get(j).getId(), binaryArray[j]);
-         			literalMap.put((int)VertexSeperatorArray.get(j).getId(), binaryArray[j]);
-         			//checkForUnits();
-				}
-         		Set<Integer> keys = valuesForVertexSeperatorArray.keySet();
-         		for(int key:keys)
-         		{
-         			literalMap.put(key, valuesForVertexSeperatorArray.get(key));
-         		}
-         		
-         		updateRuleDS();
-         	//	printRulesArray();
-         		//System.out.println("VAR_HT");
-         		//printHashTable();
-         		return;
-         	}
- 		}
-   
-     	
-     }
-     
-     public Rule[] copyRulesDS()
-     {
-     	Rule[] rules = new Rule[rulesNum];
-     	for (int i = 0; i < rulesNum; i++)
-     	{
-     		rules[i]= new Rule();
- 		}
-     	for (int i = 0; i < RulesArray.length; i++) 
-     	{
- 			if(RulesArray[i]==null)
- 			{
- 				rules[i]=null;
- 			}
- 			else
- 			{
- 				Node nBody=RulesArray[i].body.head;
- 				Node nHead=RulesArray[i].head.head;
- 				rules[i].body=new LinkedList();
- 				rules[i].head= new LinkedList();
- 				while(nBody!=null)
- 				{
- 					rules[i].body.addAtTail(nBody.var);
- 					nBody=nBody.next;
- 				}
- 				while(nHead!=null)
- 				{
- 					rules[i].head.addAtTail(nHead.var);
- 					nHead=nHead.next;
- 				}
- 			}
- 		}
-     	return rules;
-     }
-     public void print(Rule[] array)
-     {
-
-     	int i;
-     	Node tempBody;
-     	Node tempHead;
-     	for (i = 0; i < array.length; i++)
-     	{
-     		if(array[i]!=null)
-     		{
-     			System.out.println("RULE NUMBER " + i);
-     			System.out.print("\t Body Of Rule : ");
-     			tempBody = array[i].body.head;
-     			tempHead =array[i].head.head;
-     			while(tempBody!=null)
-     			{
-     				System.out.print(tempBody.var);
-     				if(tempBody.next!=null)
-     					System.out.print(" --> ");
-     				tempBody=tempBody.next;
-     			}
-     			System.out.println("\n");
-     			System.out.print("\t Head Of Rule : ");
-     			while(tempHead!=null)
-     			{
-     				System.out.print(tempHead.var);
-     				if(tempHead.next!=null)
-     					System.out.print(" --> ");
-     				tempHead=tempHead.next;
-     			}
-     			System.out.println("\n");
-     		}
-
- 		}
-     }
-     public boolean conflictWithAssignment2(Rule[] array, int var ,boolean val)
-     {
-     	LinkedList l = varHT.get(var);
-     	Node n = l.head;
-     	while(n!=null)
-     	{
-     		int sizeOfBody, sizeOfHead;
-     		if(array[n.var]!=null)
-     		{
-     			sizeOfBody = array[n.var].body.getSize();
-     			sizeOfHead = array[n.var].head.getSize();
-     			if( sizeOfBody==1  && array[n.var].body.head.var==var  && val &&sizeOfHead==0)
-     			{
-     				return true;
-     			}
-     			else if(sizeOfHead==1 && array[n.var].head.head.var==var && !val &&sizeOfBody==0)
-     			{
-     				return true;
-     			}
-     		}
-     		
-     			n=n.next;
-     	}		
-     	
-     	return false;   	
-     }
-     public void ChangeDataStrucureByPlacingValueInVar2(Rule[] array, int var , boolean value)
-     {
-    	 
-     	LinkedList l = varHT.get(var);
- 	    Node n = l.head;
-     	while(n!=null)
-     	{
-     		if((existInBody2(array,var, n.var)&& !value)||(existInHead2(array,var, n.var)&& value))
-     		{
-     			deleteRule2(array,n.var);
-     			//System.out.println("DELETE RULE NUMBER " + n.var);
-     		}
-     		else if((existInBody2(array, var, n.var)&& value))
-     		{
-     			deleteVarFromBody2(array,var,n.var);
-     			//System.out.println( "DELETE VARIABLE FROM BODY" + var + " IN RULE " + n.var);
-     		}
-     		else if (existInHead2(array, var, n.var)&& !value)
-     		{
-     			deleteVarFromHead2(array, var,n.var);
-     			//System.out.println("DELETE VARIABLE FROM HEAD"+var+" IN RULE " + n.var);
-     		}	
-     		n=n.next;
-     		
-     	}
-     	return;
-     	
-     }
-     
-     private void deleteRule2(Rule[] array, int ruleNum)
-     {
-    	 if(array[ruleNum]==null)
-    		 return;
-     	array[ruleNum].body.deleteList();
-     	array[ruleNum].head.deleteList();
-     	array[ruleNum]=null;
-     }
-     
-     /**delete variable from body inside rules array */
-     private void deleteVarFromBody2(Rule[] array, int var, int ruleNum)
-     {
-     	LinkedList l = array[ruleNum].body;
-     	int index = 0;
-     	Node n = l.head;
-     	while(n!=null)
-     	{
-     		if(n.var==var)
-     		{
-     			l.deleteAtIndex(index);
-     			index--;
-     			break;
-     		}
-     		index++;
-     		n=n.next;
-     	}
-     }
-     /**delete variable from head inside rules array*/
-     private void deleteVarFromHead2(Rule[] array, int var, int ruleNum)
-     {
-     	LinkedList l = array[ruleNum].head;
-     	int index = 0;
-     	Node n = l.head;
-     	while(n!=null)
-     	{
-     		if(n.var==var)
-     		{
-     			l.deleteAtIndex(index);
-     			index--;
-     			break;
-     		}
-     		index++;
-     		n=n.next;
-     	}
-     }
-     
-     private boolean existInBody2(Rule[] array, int var, int ruleNum)
-     {
-     	if(array[ruleNum]==null)
-     	{
-     		return false;
-     	}
-     	Node n;
-     	n = array[ruleNum].body.head;
-     	while(n!=null)
-     	{
-     		if(n.var == var)
-     			return true;
-     		n=n.next;
-     	}
-     	return false;
-     }
-     
-     private boolean existInHead2(Rule[] array, int var , int ruleNum)
-     {
-    	 if(array[ruleNum]==null)
-      	{
-      		return false;
-      	}
-     	Node n;
-     	n = array[ruleNum].head.head;
-     	while(n!=null)
-     	{
-     		if(n.var == var)
-     			return true;
-     		n=n.next;
-     	}
-     	return false;
-     }
-     
-     public boolean isConflict2(Rule[] array)
-     {
-     	Rule r1,r2;
-     	for (int i = 0; i < array.length; i++) 
-     	{
-     		r1=array[i];
-     		if(r1!=null&&r1.getSize()==1)
-     		{
-     			boolean isPositive;
-     			int var;
-     			if(r1.body.getSize()==1)
-     			{
-     				isPositive=false;
-     				var=r1.body.head.var;
-     			}
-     			else
-     			{
-     				isPositive=true;
-     				var=r1.head.head.var;
-     			}
-     			
-     			for(int j=i+1;j<array.length;j++)
-     			{
-     				r2=array[j];
-     				if(r2!=null&&r2.getSize()==1)
-     				{
-     					if(r2.body.getSize()==1)
-     					{
-     						if(var==r2.body.head.var && isPositive)
-     							return true;//conflict exist
-     					}
-     					else
-     					{
-     						if(var==r2.head.head.var && !isPositive)
-     							return true; //conflict exist
-     					}
-     				}		
-     			}
-     			
-     		}
- 			
- 		}
-     	
-     	return false;
-     }
-     
-     public void checkForUnits2(Rule[] array, HashMap<Integer, Boolean> map)
-     {
-    	 boolean flag;
-    	 do
-    	 {
-    		 Rule r;
-    		 flag=false;
-    		 for (int i = 0; i < array.length; i++)
-    		 {
-    			 r=array[i];
-    			 if(r!=null)
-    			 {
-    				 if(r.getSize()==1)
-    				 {
-    					 flag = true;
-    					 if(r.body.getSize() ==1)//body size is 1 and head size is 0s
-    					 {
-    						 map.put( array[i].body.head.var, false);
-    						 ChangeDataStrucureByPlacingValueInVar2(array, array[i].body.head.var, false);
-    						 
-    					 }
-    					 else//head size is 1 and body size is 0
-    					 {
-    						 map.put(array[i].head.head.var, true);
-    						 ChangeDataStrucureByPlacingValueInVar2(array, array[i].head.head.var, true);
-    						
-    					 }
-    				 }
-    			 }
-    		 }
-    	 }while(flag);
-     	//System.out.println("after unit check");
-
-     }
-     
-     
-     public boolean isTheoryPositive2(Rule[] array)
-     {
-    	 for (int i = 0; i < array.length; i++) 
-    	 {
-			if(array[i]!=null)
-			{
-				Rule r = array[i];
-				if(r.head.getSize()==0)
-				{
-					return false;
-				}
-			}
-		}
-    	 return true;
-     }
-     
-     
+//
+//         			updateRuleDS();
+//         			//	printRulesArray();
+//         			//System.out.println("VAR_HT");
+//         			//printHashTable();
+//         			return;
+//         		}
+//         	}
+// 		}
+//   
+//     	
+//     }
+//     
+//     public Rule[] copyRulesDS()
+//     {
+//     	Rule[] rules = new Rule[rulesNum];
+//     	for (int i = 0; i < rulesNum; i++)
+//     	{
+//     		rules[i]= new Rule();
+// 		}
+//     	for (int i = 0; i < RulesArray.length; i++) 
+//     	{
+// 			if(RulesArray[i]==null)
+// 			{
+// 				rules[i]=null;
+// 			}
+// 			else
+// 			{
+// 				Node nBody=RulesArray[i].body.head;
+// 				Node nHead=RulesArray[i].head.head;
+// 				rules[i].body=new LinkedList();
+// 				rules[i].head= new LinkedList();
+// 				while(nBody!=null)
+// 				{
+// 					rules[i].body.addAtTail(nBody.var);
+// 					nBody=nBody.next;
+// 				}
+// 				while(nHead!=null)
+// 				{
+// 					rules[i].head.addAtTail(nHead.var);
+// 					nHead=nHead.next;
+// 				}
+// 			}
+// 		}
+//     	return rules;
+//     }
+//     public void print(Rule[] array)
+//     {
+//
+//     	int i;
+//     	Node tempBody;
+//     	Node tempHead;
+//     	for (i = 0; i < array.length; i++)
+//     	{
+//     		if(array[i]!=null)
+//     		{
+//     			System.out.println("RULE NUMBER " + i);
+//     			System.out.print("\t Body Of Rule : ");
+//     			tempBody = array[i].body.head;
+//     			tempHead =array[i].head.head;
+//     			while(tempBody!=null)
+//     			{
+//     				System.out.print(tempBody.var);
+//     				if(tempBody.next!=null)
+//     					System.out.print(" --> ");
+//     				tempBody=tempBody.next;
+//     			}
+//     			System.out.println("\n");
+//     			System.out.print("\t Head Of Rule : ");
+//     			while(tempHead!=null)
+//     			{
+//     				System.out.print(tempHead.var);
+//     				if(tempHead.next!=null)
+//     					System.out.print(" --> ");
+//     				tempHead=tempHead.next;
+//     			}
+//     			System.out.println("\n");
+//     		}
+//
+// 		}
+//     }
+//     public boolean conflictWithAssignment2(Rule[] array, int var ,boolean val)
+//     {
+//     	LinkedList l = varHT.get(var);
+//     	Node n = l.head;
+//     	while(n!=null)
+//     	{
+//     		int sizeOfBody, sizeOfHead;
+//     		if(array[n.var]!=null)
+//     		{
+//     			sizeOfBody = array[n.var].body.getSize();
+//     			sizeOfHead = array[n.var].head.getSize();
+//     			if( sizeOfBody==1  && array[n.var].body.head.var==var  && val &&sizeOfHead==0)
+//     			{
+//     				return true;
+//     			}
+//     			else if(sizeOfHead==1 && array[n.var].head.head.var==var && !val &&sizeOfBody==0)
+//     			{
+//     				return true;
+//     			}
+//     		}
+//     		
+//     			n=n.next;
+//     	}		
+//     	
+//     	return false;   	
+//     }
+//     public void ChangeDataStrucureByPlacingValueInVar2(Rule[] array, int var , boolean value)
+//     {
+//    	 
+//     	LinkedList l = varHT.get(var);
+// 	    Node n = l.head;
+//     	while(n!=null)
+//     	{
+//     		if((existInBody2(array,var, n.var)&& !value)||(existInHead2(array,var, n.var)&& value))
+//     		{
+//     			deleteRule2(array,n.var);
+//     			//System.out.println("DELETE RULE NUMBER " + n.var);
+//     		}
+//     		else if((existInBody2(array, var, n.var)&& value))
+//     		{
+//     			deleteVarFromBody2(array,var,n.var);
+//     			//System.out.println( "DELETE VARIABLE FROM BODY" + var + " IN RULE " + n.var);
+//     		}
+//     		else if (existInHead2(array, var, n.var)&& !value)
+//     		{
+//     			deleteVarFromHead2(array, var,n.var);
+//     			//System.out.println("DELETE VARIABLE FROM HEAD"+var+" IN RULE " + n.var);
+//     		}	
+//     		n=n.next;
+//     		
+//     	}
+//     	return;
+//     	
+//     }
+//     
+//     private void deleteRule2(Rule[] array, int ruleNum)
+//     {
+//    	 if(array[ruleNum]==null)
+//    		 return;
+//     	array[ruleNum].body.deleteList();
+//     	array[ruleNum].head.deleteList();
+//     	array[ruleNum]=null;
+//     }
+//     
+//     /**delete variable from body inside rules array */
+//     private void deleteVarFromBody2(Rule[] array, int var, int ruleNum)
+//     {
+//     	LinkedList l = array[ruleNum].body;
+//     	int index = 0;
+//     	Node n = l.head;
+//     	while(n!=null)
+//     	{
+//     		if(n.var==var)
+//     		{
+//     			l.deleteAtIndex(index);
+//     			index--;
+//     			break;
+//     		}
+//     		index++;
+//     		n=n.next;
+//     	}
+//     }
+//     /**delete variable from head inside rules array*/
+//     private void deleteVarFromHead2(Rule[] array, int var, int ruleNum)
+//     {
+//     	LinkedList l = array[ruleNum].head;
+//     	int index = 0;
+//     	Node n = l.head;
+//     	while(n!=null)
+//     	{
+//     		if(n.var==var)
+//     		{
+//     			l.deleteAtIndex(index);
+//     			index--;
+//     			break;
+//     		}
+//     		index++;
+//     		n=n.next;
+//     	}
+//     }
+//     
+//     private boolean existInBody2(Rule[] array, int var, int ruleNum)
+//     {
+//     	if(array[ruleNum]==null)
+//     	{
+//     		return false;
+//     	}
+//     	Node n;
+//     	n = array[ruleNum].body.head;
+//     	while(n!=null)
+//     	{
+//     		if(n.var == var)
+//     			return true;
+//     		n=n.next;
+//     	}
+//     	return false;
+//     }
+//     
+//     private boolean existInHead2(Rule[] array, int var , int ruleNum)
+//     {
+//    	 if(array[ruleNum]==null)
+//      	{
+//      		return false;
+//      	}
+//     	Node n;
+//     	n = array[ruleNum].head.head;
+//     	while(n!=null)
+//     	{
+//     		if(n.var == var)
+//     			return true;
+//     		n=n.next;
+//     	}
+//     	return false;
+//     }
+//     
+//     public boolean isConflict2(Rule[] array)
+//     {
+//     	Rule r1,r2;
+//     	for (int i = 0; i < array.length; i++) 
+//     	{
+//     		r1=array[i];
+//     		if(r1!=null&&r1.getSize()==1)
+//     		{
+//     			boolean isPositive;
+//     			int var;
+//     			if(r1.body.getSize()==1)
+//     			{
+//     				isPositive=false;
+//     				var=r1.body.head.var;
+//     			}
+//     			else
+//     			{
+//     				isPositive=true;
+//     				var=r1.head.head.var;
+//     			}
+//     			
+//     			for(int j=i+1;j<array.length;j++)
+//     			{
+//     				r2=array[j];
+//     				if(r2!=null&&r2.getSize()==1)
+//     				{
+//     					if(r2.body.getSize()==1)
+//     					{
+//     						if(var==r2.body.head.var && isPositive)
+//     							return true;//conflict exist
+//     					}
+//     					else
+//     					{
+//     						if(var==r2.head.head.var && !isPositive)
+//     							return true; //conflict exist
+//     					}
+//     				}		
+//     			}
+//     			
+//     		}
+// 			
+// 		}
+//     	
+//     	return false;
+//     }
+//     
+//     public void checkForUnits2(Rule[] array, HashMap<Integer, Boolean> map)
+//     {
+//    	 boolean flag;
+//    	 do
+//    	 {
+//    		 Rule r;
+//    		 flag=false;
+//    		 for (int i = 0; i < array.length; i++)
+//    		 {
+//    			 r=array[i];
+//    			 if(r!=null)
+//    			 {
+//    				 if(r.getSize()==1)
+//    				 {
+//    					 flag = true;
+//    					 if(r.body.getSize() ==1)//body size is 1 and head size is 0s
+//    					 {
+//    						 map.put( array[i].body.head.var, false);
+//    						 ChangeDataStrucureByPlacingValueInVar2(array, array[i].body.head.var, false);
+//    						 
+//    					 }
+//    					 else//head size is 1 and body size is 0
+//    					 {
+//    						 map.put(array[i].head.head.var, true);
+//    						 ChangeDataStrucureByPlacingValueInVar2(array, array[i].head.head.var, true);
+//    						
+//    					 }
+//    				 }
+//    			 }
+//    		 }
+//    	 }while(flag);
+//     	//System.out.println("after unit check");
+//
+//     }
+//     
+//     
+//     public boolean isTheoryPositive2(Rule[] array)
+//     {
+//    	 for (int i = 0; i < array.length; i++) 
+//    	 {
+//			if(array[i]!=null)
+//			{
+//				Rule r = array[i];
+//				if(r.head.getSize()==0)
+//				{
+//					return false;
+//				}
+//			}
+//		}
+//    	 return true;
+//     }
+//     
+//     
      
      
      
