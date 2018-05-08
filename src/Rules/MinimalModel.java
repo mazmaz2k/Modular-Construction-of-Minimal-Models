@@ -568,7 +568,17 @@ public class MinimalModel extends Graph<Integer>{
 				//System.out.println("alllllllllllll vertexessssssss : "+ allVertexes);
 				first= false;
 			}
-			LinkedList s = sourceOfGraph(g);
+			LinkedList s;
+			if(!DS.isTheoryPositive())
+			{
+				ArrayList<Integer> constraintsVars = new ArrayList<>();
+				DS.IntegrityConstraint(constraintsVars);
+				//DS.printRulesArray();
+				//System.out.println("constrains varsss     "+constraintsVars.toString());
+			}
+		
+			s= sourceOfGraph(g);
+			
 		
 		//	DS.ChangeDataStrucureByPlacingValueInVar(DS.FALSE_VAR, false);//added
 			System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$    source size is " +s.getSize());

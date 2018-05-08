@@ -25,7 +25,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     public LinkedList minModel;
     public int placedValueCounter;
     public int SIZE;
-    final int FALSE_VAR=10000;
+   // final int FALSE_VAR=10000;
     public RulesDataStructure (int numOfRules)
     {
     	this.rulesNum=numOfRules;
@@ -928,7 +928,7 @@ public class RulesDataStructure extends DavisPutnamHelper
      }
      
      
-     public void IntegrityConstraint()
+     public void IntegrityConstraint(ArrayList<Integer> array)
      {
     	 for (int i = 0; i < RulesArray.length; i++) 
     	 {
@@ -937,9 +937,15 @@ public class RulesDataStructure extends DavisPutnamHelper
     		 {
     			 if(r.head.getSize()==0)
     			 {
-    				 System.out.println("add FALSE VAR to rule " + i);
-    				 r.head.addAtTail(FALSE_VAR);
-    				 addToHashTable(FALSE_VAR, i);
+    				 Node n = r.body.head;
+    				 while(n!=null)
+    				 {
+    					if(!array.contains(n.var)) 
+    					{
+    						array.add(n.var);
+    					}
+    					n=n.next;
+    				 }
     			 }
     		 }
 			
