@@ -25,6 +25,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     public LinkedList minModel;
     public int placedValueCounter;
     public int SIZE;
+    final int FALSE_VAR=10000;
     public RulesDataStructure (int numOfRules)
     {
     	this.rulesNum=numOfRules;
@@ -535,6 +536,8 @@ public class RulesDataStructure extends DavisPutnamHelper
     public boolean conflictWithAssignment(int var ,boolean val)
     {
     	LinkedList l = varHT.get(var);
+    	if(l==null)
+    		return false;
     	Node n = l.head;
     	while(n!=null)
     	{
@@ -925,15 +928,30 @@ public class RulesDataStructure extends DavisPutnamHelper
      }
      
      
-     
+     public void IntegrityConstraint()
+     {
+    	 for (int i = 0; i < RulesArray.length; i++) 
+    	 {
+    		 Rule r = RulesArray[i];
+    		 if(r!=null)
+    		 {
+    			 if(r.head.getSize()==0)
+    			 {
+    				 System.out.println("add FALSE VAR to rule " + i);
+    				 r.head.addAtTail(FALSE_VAR);
+    				 addToHashTable(FALSE_VAR, i);
+    			 }
+    		 }
+			
+		}
+     }
      
      
 //*******************************check copy, another split method****************************************//
      
+
      
-//     
-//     
-//     
+     
 //     public void splitConnectedComponent2(ArrayList<Vertex<Integer>> VertexSeperatorArray)
 //     {
 //     	System.out.println("enter split 2");

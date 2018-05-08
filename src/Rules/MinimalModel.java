@@ -559,6 +559,8 @@ public class MinimalModel extends Graph<Integer>{
 		{
 			DS.checkForUnits();//remove empty sources
 			//DS.printRulesArray();
+		//	DS.IntegrityConstraint();//added
+		
 			g = initGraph(DS, size);
 			if(first)
 			{
@@ -567,6 +569,8 @@ public class MinimalModel extends Graph<Integer>{
 				first= false;
 			}
 			LinkedList s = sourceOfGraph(g);
+		
+		//	DS.ChangeDataStrucureByPlacingValueInVar(DS.FALSE_VAR, false);//added
 			System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$    source size is " +s.getSize());
 			double ratio = (double)s.getSize() / allVertexes;
 			if(ratio > 0.2) {
