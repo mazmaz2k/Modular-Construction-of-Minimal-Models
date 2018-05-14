@@ -3,7 +3,6 @@ package Graph;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import Rules.RulesDataStructure;
-import Test.graphTests;
 import Rules.LinkedList;
 import Rules.LinkedList.Node;
 public class Graph<T>{
@@ -38,6 +36,14 @@ public class Graph<T>{
 			return true;
 		}
 		return false;
+	
+//		for (Edge<T> edge : v1.getEdges()) 
+//		{		System.out.println("ssssssssssssssssssssss");
+//
+//			if(edge.getVertex2().getId()==v2.getId())
+//				return true;
+//		}
+	
 	}
 
 	//This works only for directed graph because for undirected graph we can end up
@@ -195,13 +201,80 @@ public class Graph<T>{
 	} 
 	
 	
+	/**
+	 * find all vertex of the parent up to the source and insert them to array.
+	 * */
+	public static void findAllVertexes(SuperGraph superGraph,Vertex<Integer> vertex, ArrayList<Vertex<Integer>> returnVertex){
+		if(superGraph.getParent(vertex).isEmpty())
+		{
+			return;
+		}
+		
+		ArrayList<Vertex<Integer>> parentArr= superGraph.getParent(vertex);
+//		returnVertex.addAll(vertex.getCCList());
+
+		for(Vertex<Integer> v: parentArr) {
+			for(Vertex<Integer> vertexInCC :v.getCCList()) {
+				if(!returnVertex.contains(vertexInCC)) {
+//    				System.out.println("222222");
+					returnVertex.add(vertexInCC);
+				}
+			}
+			findAllVertexes(superGraph,v,returnVertex);
+		}
+	}
 	
+	/**
+	 * Handle Integrity Constraint 
+	 * return all vertexes up to the source the connect to IC vertexes
+	 * */
+	public static ArrayList<Vertex<Integer>> IntegrityConstraintHandle(Graph<Integer> graph, ArrayList<Integer>  CIVars){
+		//Vertex<ArrayList<Integer>> x = new Vertex<>(5);
+		ArrayList<Vertex<Integer>> returnVertexes = new ArrayList<>();
+//		StronglyConnectedComponent scc = new StronglyConnectedComponent();
+		SuperGraph superGraph = new SuperGraph(graph);
+        Graph<Integer> super_graph = superGraph.getSuperGraph();
+//        ArrayList<Vertex<Integer>> parentArray;
+        for(Integer vId :CIVars) {
+        	for(Vertex<Integer> vertex : super_graph.getAllVertex()) {
+        		for(Vertex<Integer> v :vertex.getCCList()) {
+        			if(vId==(int)v.getId()) {
+//        				System.out.println("11111");
+        				for(Vertex<Integer> vertexInCC :vertex.getCCList()) {
+        					if(!returnVertexes.contains(vertexInCC)) {
+            					returnVertexes.add(vertexInCC);
+        					}
+        				}
+        				findAllVertexes(superGraph,vertex,returnVertexes);
+
+        			}
+        		}
+        	}
+        }
+        superGraph.printGraph();
+        //print the result
+//        result.forEach(set -> {
+//            set.forEach(v -> System.out.print(v.getId() + " "));
+//            //System.out.println();
+//        });
+//		for(Set<Vertex<Integer>> set : result) {
+//			for(Integer x : CIVars) {
+//				if()
+//				acyclicGraph.addSingleVertex(set);
+//				
+//			}
+//		}
+        
+        
+		//x.setData();
+		return returnVertexes;
+	}
 	
 	
 	
 	
 
-	/**Vertex separator
+	/**Vertex separator !!!!
 	 * */
 	public static ArrayList<Vertex<Integer>> vertexSeparator( Graph<Integer> graph){
 		ArrayList<Vertex<Integer>> returnVertexes = new ArrayList<>();

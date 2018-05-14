@@ -6,6 +6,7 @@ import java.util.Set;
 
 import Graph.Graph;
 import Graph.StronglyConnectedComponent;
+import Graph.SuperGraph;
 import Graph.Vertex;
 
 public class testForNewAlgorithm {
@@ -25,7 +26,15 @@ public class testForNewAlgorithm {
 		g.addEdge(5, 6, 1);
 		g.addEdge(2, 6, 1);
 		g.addEdge(5, 2, 1);
-		System.out.println(g);
+		
+	
+		g.addEdge(95, 96, 1);
+		g.addEdge(96, 92, 1);
+		g.addEdge(92, 95, 1);
+
+		g.addEdge(94, 92, 1);
+		
+//		System.out.println(g);
 
 		StronglyConnectedComponent scc = new StronglyConnectedComponent();
 		List<Set<Vertex<Integer>>> result = scc.scc(g);
@@ -40,17 +49,30 @@ public class testForNewAlgorithm {
 		System.out.println("Vertex to remove: " + vertexToremove);
 		
 		
-		g=g.removeVertex(vertexToremove);
-		//		System.out.println(g);
-		//		 StronglyConnectedComponent scc = new StronglyConnectedComponent();
+//		g=g.removeVertex(vertexToremove);
+//		System.out.println(g);
+		//StronglyConnectedComponent scc = new StronglyConnectedComponent();
 		System.out.println("connected component After dismentle: ");
 		result = scc.scc(g);
-
+		ArrayList<Integer> CLA = new ArrayList<>();
+		for(Vertex<Integer> v: vertexToremove) {
+			CLA.add((int) v.getId());
+		}
 		//print the result
-		result.forEach(set -> {
-			set.forEach(v -> System.out.print(v.getId() + " "));
-			System.out.println();
-		});
+//		result.forEach(set -> {
+//			set.forEach(v -> System.out.print(v.getId() + " "));
+//			System.out.println();
+//		});
+//		
+//		
+		ArrayList<Vertex<Integer>> vertexCI = Graph.IntegrityConstraintHandle( g,CLA);
+		System.out.println("CLA vertex:"+ CLA);
+		System.out.println("CI vertex: " +vertexCI);
+
+		System.out.println("-------------------------------------------------------------------------------------------");
+		SuperGraph super_graph = new SuperGraph(g);
+		super_graph.printGraph();
+		System.out.println("------------------------------");
 
 
 
