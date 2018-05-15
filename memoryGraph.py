@@ -347,9 +347,8 @@ def printSources():
     output=GetJavaOutput(path, filename)
     print(output)       
     
-    
-    
-printSources()    
+for i in range(0,10):      
+    printSources()    
     
 def checkModuMin():
     K=3
