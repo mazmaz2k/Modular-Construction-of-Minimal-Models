@@ -204,7 +204,7 @@ public class Graph<T>{
 	/**
 	 * find all vertex of the parent up to the source and insert them to array.
 	 * */
-	public static void findAllVertexes(SuperGraph superGraph,Vertex<Integer> vertex, ArrayList<Vertex<Integer>> returnVertex){
+	public static void findAllVertexes(SuperGraph superGraph,Vertex<Integer> vertex, LinkedList returnVertex){
 		if(superGraph.getParent(vertex).isEmpty())
 		{
 			return;
@@ -215,9 +215,9 @@ public class Graph<T>{
 
 		for(Vertex<Integer> v: parentArr) {
 			for(Vertex<Integer> vertexInCC :v.getCCList()) {
-				if(!returnVertex.contains(vertexInCC)) {
+				if(!returnVertex.contains((int)vertexInCC.getId())) {
 //    				System.out.println("222222");
-					returnVertex.add(vertexInCC);
+					returnVertex.addAtTail((int)vertexInCC.getId());
 				}
 			}
 			findAllVertexes(superGraph,v,returnVertex);
@@ -228,9 +228,9 @@ public class Graph<T>{
 	 * Handle Integrity Constraint 
 	 * return all vertexes up to the source the connect to IC vertexes
 	 * */
-	public static ArrayList<Vertex<Integer>> IntegrityConstraintHandle(Graph<Integer> graph, ArrayList<Integer>  CIVars){
+	public static LinkedList IntegrityConstraintHandle(Graph<Integer> graph, ArrayList<Integer>  CIVars){
 		//Vertex<ArrayList<Integer>> x = new Vertex<>(5);
-		ArrayList<Vertex<Integer>> returnVertexes = new ArrayList<>();
+		LinkedList returnVertexes = new LinkedList();
 //		StronglyConnectedComponent scc = new StronglyConnectedComponent();
 		SuperGraph superGraph = new SuperGraph(graph);
         Graph<Integer> super_graph = superGraph.getSuperGraph();
@@ -241,8 +241,8 @@ public class Graph<T>{
         			if(vId==(int)v.getId()) {
 //        				System.out.println("11111");
         				for(Vertex<Integer> vertexInCC :vertex.getCCList()) {
-        					if(!returnVertexes.contains(vertexInCC)) {
-            					returnVertexes.add(vertexInCC);
+        					if(!returnVertexes.contains((int)vertexInCC.getId())) {
+            					returnVertexes.addAtTail((int)vertexInCC.getId());
         					}
         				}
         				findAllVertexes(superGraph,vertex,returnVertexes);
@@ -251,7 +251,7 @@ public class Graph<T>{
         		}
         	}
         }
-        superGraph.printGraph();
+//        superGraph.printGraph();
         //print the result
 //        result.forEach(set -> {
 //            set.forEach(v -> System.out.print(v.getId() + " "));

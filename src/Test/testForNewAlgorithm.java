@@ -8,6 +8,7 @@ import Graph.Graph;
 import Graph.StronglyConnectedComponent;
 import Graph.SuperGraph;
 import Graph.Vertex;
+import Rules.LinkedList;
 
 public class testForNewAlgorithm {
 
@@ -65,7 +66,7 @@ public class testForNewAlgorithm {
 //		});
 //		
 //		
-		ArrayList<Vertex<Integer>> vertexCI = Graph.IntegrityConstraintHandle( g,CLA);
+		LinkedList vertexCI = Graph.IntegrityConstraintHandle( g,CLA);
 		System.out.println("CLA vertex:"+ CLA);
 		System.out.println("CI vertex: " +vertexCI);
 
