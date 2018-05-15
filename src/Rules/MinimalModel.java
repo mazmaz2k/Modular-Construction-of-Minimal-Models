@@ -571,13 +571,21 @@ public class MinimalModel extends Graph<Integer>{
 			LinkedList s;
 			if(!DS.isTheoryPositive())
 			{
+				s= new LinkedList();
 				ArrayList<Integer> constraintsVars = new ArrayList<>();
 				DS.IntegrityConstraint(constraintsVars);
+				ArrayList<Vertex<Integer>> a = IntegrityConstraintHandle(g, constraintsVars);
+				for(Vertex<Integer> v : a)
+				{
+					s.addAtTail((int)v.getId());
+				}
 				//DS.printRulesArray();
 				//System.out.println("constrains varsss     "+constraintsVars.toString());
 			}
-		
-			s= sourceOfGraph(g);
+			else
+			{
+				s= sourceOfGraph(g);
+			}
 			
 		
 		//	DS.ChangeDataStrucureByPlacingValueInVar(DS.FALSE_VAR, false);//added
