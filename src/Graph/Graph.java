@@ -298,9 +298,7 @@ public class Graph<T>{
 				//			System.out.println("W max size is: "+ w_max);			
 				int count = 0;
 				do {
-//					if(W_vertexList != null ) {
-						W_vertexList.clear();
-//					}
+					W_vertexList.clear();
 					for(int i=0 ; i<3 ; i++) { //Lottery W 3 times !
 						for(Vertex<Integer> vertex : graph.getAllVertex()) {
 							if(Math.random() <= 0.1) {
@@ -310,21 +308,18 @@ public class Graph<T>{
 						}
 
 					}
-					
 //					System.out.println("in first while");
 					count++;
 				}while((W_vertexList.isEmpty() || W_vertexList.size() > w) && count <=200  );	//we have W set
 				if(count > 201) {
 					continue;
 				}
-
 				for(int count_a_b=0; count_a_b < 20 && flag ;count_a_b++) {	//for every w find 20 A and B sets
 					int counter=0;
 					do {
-					
-							A_vertexList.clear();
-							B_vertexList.clear();
-							double x = Math.random();
+						A_vertexList.clear();
+						B_vertexList.clear();
+						double x = Math.random();
 						for(Vertex<Integer> vertex :W_vertexList) {
 							if(x > 0.5) {
 								
@@ -343,9 +338,6 @@ public class Graph<T>{
 //						System.out.println("error to find W");
 						continue;
 					}		
-
-
-
 //					System.out.println("Point B");
 					flowNetGraph = createFlowNetwork(graph, A_vertexList,B_vertexList);
 					if(flowNetGraph ==null) {
@@ -383,7 +375,6 @@ public class Graph<T>{
 						continue;
 					}
 //					System.out.println("Point C");
-
 					double s_balance =((double)collection_S.size() /((double) flowNetGraph.getAllVertex().size()*2));
 					//			System.out.println("s "+collection_S.size()+ " all "+flowNetGraph.getAllVertex().size());
 					double t_balance = (double) collection_T.size() / ((double)flowNetGraph.getAllVertex().size()*2);
@@ -402,11 +393,7 @@ public class Graph<T>{
 //					System.out.println("S (of vertexes) is" + collection_S + " Balance " +s_balance);
 //					System.out.println("T (of vertexes) is" + collection_T + " Balance " +t_balance);
 //					System.out.println();
-					//			if(collection_S ==null || collection_T ==null) {
-					//				System.err.println("error in flow nework Set S or Set T are NULL");
-					//				return null;		
-					//			}
-					
+
 					ArrayList<Edge<Integer>> edgeList=new ArrayList<>(); //array list to hold all the edges of the CUT !
 					//		ArrayList<Vertex<Integer>> vertexsListToRemove= new ArrayList<>();
 
@@ -441,10 +428,7 @@ public class Graph<T>{
 					//System.out.println("-----------------------------------------------------------------------");	
 					ff=null;
 					flowNetGraph= null;
-
 				}
-
-
 			}
 			if(/*returnVertexes.size() <= w_max &&*/ returnVertexes.size()>0) {
 				f =false;
@@ -569,15 +553,7 @@ public class Graph<T>{
 		{
 			s.addAtTail((int)vertex.getId());	//add to source arrayList 
 		}
-		//    System.out.println("------------------------------------------------------------------------------------------------------------------");
-		//    System.out.println("Here are the size of all the connected component in the graph");
-		//    //print the result
-		//    result.forEach(set -> {
-		//    	System.out.println("sizeof :"+ set.size());
-		//       // set.forEach(v -> System.out.print(v.getId() + " "));
-		//        System.out.println();
-		//    });
-		//    System.out.println("------------------------------------------------------------------------------------------------------------------");
+		
 		return s;
 	}
 
