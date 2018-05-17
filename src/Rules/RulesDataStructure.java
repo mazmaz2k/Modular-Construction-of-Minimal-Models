@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.SortedMap;
 
 import Graph.Vertex;
 
@@ -22,9 +23,10 @@ public class RulesDataStructure extends DavisPutnamHelper
     Hashtable<Integer, LinkedList> varHT ;
     static HashMap<Integer, Boolean> literalMap;// We will store the value of literals in this structure as we go along
     public int dpCalls;
-    public LinkedList minModel;
+    public ArrayList<Integer> minModel;
     public int placedValueCounter;
     public int SIZE;
+   
    // final int FALSE_VAR=10000;
     public RulesDataStructure (int numOfRules)
     {
@@ -39,7 +41,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	varHT = new Hashtable<Integer, LinkedList>();
     	
     	literalMap = new HashMap<Integer,Boolean>();
-    	minModel = new LinkedList();
+    	minModel = new ArrayList<>();
     	dpCalls = 0;
     	placedValueCounter=0;
     }
@@ -468,7 +470,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     			//System.out.println("key: "+ Integer.parseInt(key) + " value:  "+literalMap.get(key) );
     			if(literalMap.get(key))
     			{
-    				minModel.addAtTail(key);
+    				minModel.add(key);
     			}
     			//System.out.println("key is: " + key +"   value is: " + literalMap.get(key));
     			ChangeDataStrucureByPlacingValueInVar(key, literalMap.get(key));
@@ -732,13 +734,12 @@ public class RulesDataStructure extends DavisPutnamHelper
     public String StringMinimalModel()
     {
     	String str= "[ ";
-    	Node n = minModel.head;
-    	while(n!=null)
+    	
+    	for(int var : this.minModel)
     	{
-    		str+= "{"+n.var+"}" + " ";
-    		n=n.next;
+    		str+= "{"+var+"}" + " ";
     	}
-    	str+= "]" + "\r\n" +" |MM| = "+ minModel.getSize();
+    	str+= "]" + "\r\n" +" |MM| = "+ minModel.size();
     	return str;
     }
     
