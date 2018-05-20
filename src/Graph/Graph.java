@@ -277,10 +277,13 @@ public class Graph<T>{
 	/**Vertex separator !!!!
 	 * */
 	public static ArrayList<Vertex<Integer>> vertexSeparator( Graph<Integer> graph){
+		ArrayList<ArrayList<Vertex<Integer>>> arr = new ArrayList<>();
 		ArrayList<Vertex<Integer>> returnVertexes = new ArrayList<>();
 		ArrayList<Vertex<Integer>> W_vertexList = new ArrayList<>();
 		ArrayList<Vertex<Integer>> A_vertexList = new ArrayList<>();
 		ArrayList<Vertex<Integer>> B_vertexList = new ArrayList<>();
+		ArrayList<Edge<Integer>> edgeList = new ArrayList<>(); //array list to hold all the edges of the CUT !
+
 		if(graph ==null) {
 			System.out.println("Graph.vertexSeperator() error graph is empty in vertexSeparator method");
 			return null;
@@ -292,30 +295,33 @@ public class Graph<T>{
 		if (w_max <2) {
 			w_max=2;
 		}
-		while(f) {
-			flag= true;
-			for(int w=2 ; w<=w_max; w=w*2) {
+		int idx = 0;
+//		while(f) {
+//			flag= true;
+			for(int w=4 ; w<=32; w=w*2) {
 				//			System.out.println("W max size is: "+ w_max);			
 				int count = 0;
+				W_vertexList.clear();
+
 				do {
 					W_vertexList.clear();
 					for(int i=0 ; i<3 ; i++) { //Lottery W 3 times !
 						for(Vertex<Integer> vertex : graph.getAllVertex()) {
 							if(Math.random() <= 0.1) {
-								
 								W_vertexList.add(vertex);
 							}
 						}
-
 					}
 //					System.out.println("in first while");
-					count++;
-				}while((W_vertexList.isEmpty() || W_vertexList.size() > w) && count <=200  );	//we have W set
-				if(count > 201) {
+				}while((W_vertexList.isEmpty() || W_vertexList.size() >= w) && count <=2000  );	//we have W set
+				if(count > 2000) {
 					continue;
 				}
-				for(int count_a_b=0; count_a_b < 20 && flag ;count_a_b++) {	//for every w find 20 A and B sets
+				for(int count_a_b=0; count_a_b < Math.min(200, Math.pow(2, w)) && flag ;count_a_b++) {	//for every w find 20 A and B sets
 					int counter=0;
+					returnVertexes.clear();
+					A_vertexList.clear();
+					B_vertexList.clear();
 					do {
 						A_vertexList.clear();
 						B_vertexList.clear();
@@ -331,9 +337,9 @@ public class Graph<T>{
 						}
 //						System.out.println("In second while");
 						counter++;
-					}while((Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size() > 0.5 || checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty()) && counter <= 200);
-
-					if((Math.abs(A_vertexList.size()-B_vertexList.size())/W_vertexList.size() > 0.5) ||  checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty()) {
+					}while((checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty())&& counter<2000 );
+					
+					if(  checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty() || counter>2000 ) {
 //						flag=false;
 //						System.out.println("error to find W");
 						continue;
@@ -387,14 +393,14 @@ public class Graph<T>{
 //					System.out.println("Point D");
 //					System.out.println("i is:" + count_a_b);
 //					System.out.println("max flow is: "+ x1);
-//					System.out.println("W is:" + W_vertexList+" W size: " + W_vertexList.size()+ " W max size: "+ w_max);
+//					System.out.println("W is:" + W_vertexList+" W size: " + W_vertexList.size());
 //					System.out.println("A is:" + A_vertexList);
 //					System.out.println("B is:"+ B_vertexList);
 //					System.out.println("S (of vertexes) is" + collection_S + " Balance " +s_balance);
 //					System.out.println("T (of vertexes) is" + collection_T + " Balance " +t_balance);
 //					System.out.println();
 
-					ArrayList<Edge<Integer>> edgeList=new ArrayList<>(); //array list to hold all the edges of the CUT !
+					edgeList.clear(); //array list to hold all the edges of the CUT !
 					//		ArrayList<Vertex<Integer>> vertexsListToRemove= new ArrayList<>();
 
 					for(Vertex<Integer> v: flowNetGraph.getAllVertex()) {
@@ -402,25 +408,29 @@ public class Graph<T>{
 							for(Edge<Integer> e : v.getEdges()) {
 								if(collection_T.contains((int)e.getVertex2().getId())) {
 									edgeList.add(e); //add edge  of the cut 
+
 								}
 							}
 						}
 
 					}
+					ArrayList<Vertex<Integer>> temp = new ArrayList<>();
+
 					//		System.out.println(edgeList);
-					if(returnVertexes != null) {
-						returnVertexes.clear();;
-					}
 					for(Edge<Integer> e: edgeList) {
-						if(returnVertexes.size() <= w_max)
-						{
+					//	if(returnVertexes.size() <= w_max)
+						//{
 							if(!returnVertexes.contains(e.getVertex1()) && e.getVertex1().getId()!=S ) {
 								returnVertexes.add(flowNetGraph.getVertex(Math.abs(e.getVertex1().getId())));
+								temp.add(flowNetGraph.getVertex(Math.abs(e.getVertex1().getId())));
+
 							}
 							else if(!returnVertexes.contains(e.getVertex2()) && e.getVertex2().getId()!=T) {
 								returnVertexes.add(flowNetGraph.getVertex(Math.abs(e.getVertex2().getId())));
+								temp.add(flowNetGraph.getVertex(Math.abs(e.getVertex2().getId())));
+
 							}
-						}
+						//}
 					}
 					//returnVertexes.add(graph.getVertex(Integer.MAX_VALUE));
 					//returnVertexes.add(graph.getVertex(Integer.MIN_VALUE));
@@ -428,13 +438,31 @@ public class Graph<T>{
 					//System.out.println("-----------------------------------------------------------------------");	
 					ff=null;
 					flowNetGraph= null;
+//					System.out.println("return in for: "+returnVertexes);
+					arr.add(temp);
 				}
 			}
-			if(/*returnVertexes.size() <= w_max &&*/ returnVertexes.size()>0) {
-				f =false;
+			
+			for(ArrayList<Vertex<Integer>> array: arr) {
+				System.out.println("array: "+array + " size: "+ array.size());
+
 			}
+//			if(/*returnVertexes.size() <= w_max &&*/ returnVertexes.size()>0) {
+//				f =false;
+//			}
+//		}
+		int min =0,id=0,i=0;
+		//finds the min size of separator and return it ! 
+		for(ArrayList<Vertex<Integer>> array : arr) {
+			if(array.size() < min) {
+				min =array.size();
+				id=i;
+			}
+			i++;
 		}
-		return returnVertexes;
+//		System.out.println("Min array: "+arr.get(id) + " size: "+ arr.get(id).size());
+
+		return arr.get(id);
 	}
 
 	private static Graph<Integer> createFlowNetwork(Graph<Integer> graph ,
