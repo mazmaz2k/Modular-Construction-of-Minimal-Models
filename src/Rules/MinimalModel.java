@@ -614,7 +614,7 @@ public class MinimalModel extends Graph<Integer>{
 		
 				ArrayList<Vertex<Integer>> arrayToRemove = vertexSeparator(graph);
 
-				System.out.println(arrayToRemove);
+//				System.out.println(arrayToRemove);
 				DS.splitConnectedComponent(arrayToRemove);
 				//DS.printRulesArray();
 

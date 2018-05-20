@@ -312,7 +312,7 @@ public class Graph<T>{
 							}
 						}
 					}
-//					System.out.println("in first while");
+					//					System.out.println("in first while");
 				}while((W_vertexList.isEmpty() || W_vertexList.size() >= w) && count <=2000  );	//we have W set
 				if(count > 2000) {
 					continue;
@@ -328,23 +328,23 @@ public class Graph<T>{
 						double x = Math.random();
 						for(Vertex<Integer> vertex :W_vertexList) {
 							if(x > 0.5) {
-								
+
 								A_vertexList.add(vertex);
 							}else {
 								B_vertexList.add(vertex);
 							}
 							x = Math.random();
 						}
-//						System.out.println("In second while");
+						//						System.out.println("In second while");
 						counter++;
 					}while((checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty())&& counter<2000 );
-					
+
 					if(  checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty() || counter>2000 ) {
-//						flag=false;
-//						System.out.println("error to find W");
+						//						flag=false;
+						//						System.out.println("error to find W");
 						continue;
 					}		
-//					System.out.println("Point B");
+					//					System.out.println("Point B");
 					flowNetGraph = createFlowNetwork(graph, A_vertexList,B_vertexList);
 					if(flowNetGraph ==null) {
 						System.out.println("error in flow nework some of the variables are NULL");
@@ -361,18 +361,18 @@ public class Graph<T>{
 					int x1=0;
 					Collection<Integer> collection_S = null,collection_T =null ;
 					try {
-//						System.out.println("v1: "+ flowNetGraph.getVertex(Long.MAX_VALUE) +" v2: "+flowNetGraph.getVertex(Long.MIN_VALUE));
-//						System.out.println("v1: "+flowNetGraph.getVertex(S));
-//						System.out.println("v2: "+flowNetGraph.getVertex(T));
-//						System.out.println("V1 index:" +ff.findVertexIndex(flowNetGraph.getVertex(S))+ " V2 index: " + ff.findVertexIndex(flowNetGraph.getVertex(T)));
+						//						System.out.println("v1: "+ flowNetGraph.getVertex(Long.MAX_VALUE) +" v2: "+flowNetGraph.getVertex(Long.MIN_VALUE));
+						//						System.out.println("v1: "+flowNetGraph.getVertex(S));
+						//						System.out.println("v2: "+flowNetGraph.getVertex(T));
+						//						System.out.println("V1 index:" +ff.findVertexIndex(flowNetGraph.getVertex(S))+ " V2 index: " + ff.findVertexIndex(flowNetGraph.getVertex(T)));
 						x1=ff.maxFlow( ff.findVertexIndex(flowNetGraph.getVertex(S)),  ff.findVertexIndex(flowNetGraph.getVertex(T)));//find max flow & min cut between S and T
 						collection_S= ff.getS();
 						collection_T = ff.getT();
 					}catch (Exception e) {
-//						System.out.println("v1: "+ flowNetGraph.getVertex(Long.MAX_VALUE) +" v2: "+flowNetGraph.getVertex(Long.MIN_VALUE));
-//						System.out.println("v1: "+flowNetGraph.getVertex(S));
-//						System.out.println("v2: "+flowNetGraph.getVertex(T));
-//						System.out.println("V1 index:" +ff.findVertexIndex(flowNetGraph.getVertex(S))+ " V2 index: " + ff.findVertexIndex(flowNetGraph.getVertex(T)));
+						//						System.out.println("v1: "+ flowNetGraph.getVertex(Long.MAX_VALUE) +" v2: "+flowNetGraph.getVertex(Long.MIN_VALUE));
+						//						System.out.println("v1: "+flowNetGraph.getVertex(S));
+						//						System.out.println("v2: "+flowNetGraph.getVertex(T));
+						//						System.out.println("V1 index:" +ff.findVertexIndex(flowNetGraph.getVertex(S))+ " V2 index: " + ff.findVertexIndex(flowNetGraph.getVertex(T)));
 						e.printStackTrace();
 					}
 					if(x1<=0 || collection_S ==null || collection_T ==null) {
@@ -380,7 +380,7 @@ public class Graph<T>{
 						flowNetGraph = null;
 						continue;
 					}
-//					System.out.println("Point C");
+					//					System.out.println("Point C");
 					double s_balance =((double)collection_S.size() /((double) flowNetGraph.getAllVertex().size()*2));
 					//			System.out.println("s "+collection_S.size()+ " all "+flowNetGraph.getAllVertex().size());
 					double t_balance = (double) collection_T.size() / ((double)flowNetGraph.getAllVertex().size()*2);
@@ -390,15 +390,15 @@ public class Graph<T>{
 						flowNetGraph = null;
 						continue;
 					}
-//					System.out.println("Point D");
-//					System.out.println("i is:" + count_a_b);
-//					System.out.println("max flow is: "+ x1);
-//					System.out.println("W is:" + W_vertexList+" W size: " + W_vertexList.size());
-//					System.out.println("A is:" + A_vertexList);
-//					System.out.println("B is:"+ B_vertexList);
-//					System.out.println("S (of vertexes) is" + collection_S + " Balance " +s_balance);
-//					System.out.println("T (of vertexes) is" + collection_T + " Balance " +t_balance);
-//					System.out.println();
+					//					System.out.println("Point D");
+					//					System.out.println("i is:" + count_a_b);
+					//					System.out.println("max flow is: "+ x1);
+					//					System.out.println("W is:" + W_vertexList+" W size: " + W_vertexList.size());
+					//					System.out.println("A is:" + A_vertexList);
+					//					System.out.println("B is:"+ B_vertexList);
+					//					System.out.println("S (of vertexes) is" + collection_S + " Balance " +s_balance);
+					//					System.out.println("T (of vertexes) is" + collection_T + " Balance " +t_balance);
+					//					System.out.println();
 
 					edgeList.clear(); //array list to hold all the edges of the CUT !
 					//		ArrayList<Vertex<Integer>> vertexsListToRemove= new ArrayList<>();
@@ -418,18 +418,18 @@ public class Graph<T>{
 
 					//		System.out.println(edgeList);
 					for(Edge<Integer> e: edgeList) {
-					//	if(returnVertexes.size() <= w_max)
+						//	if(returnVertexes.size() <= w_max)
 						//{
-							if(!returnVertexes.contains(e.getVertex1()) && e.getVertex1().getId()!=S ) {
-								returnVertexes.add(flowNetGraph.getVertex(Math.abs(e.getVertex1().getId())));
-								temp.add(flowNetGraph.getVertex(Math.abs(e.getVertex1().getId())));
+						if(!returnVertexes.contains(e.getVertex1()) && e.getVertex1().getId()!=S ) {
+							returnVertexes.add(flowNetGraph.getVertex(Math.abs(e.getVertex1().getId())));
+							temp.add(flowNetGraph.getVertex(Math.abs(e.getVertex1().getId())));
 
-							}
-							else if(!returnVertexes.contains(e.getVertex2()) && e.getVertex2().getId()!=T) {
-								returnVertexes.add(flowNetGraph.getVertex(Math.abs(e.getVertex2().getId())));
-								temp.add(flowNetGraph.getVertex(Math.abs(e.getVertex2().getId())));
+						}
+						else if(!returnVertexes.contains(e.getVertex2()) && e.getVertex2().getId()!=T) {
+							returnVertexes.add(flowNetGraph.getVertex(Math.abs(e.getVertex2().getId())));
+							temp.add(flowNetGraph.getVertex(Math.abs(e.getVertex2().getId())));
 
-							}
+						}
 						//}
 					}
 					//returnVertexes.add(graph.getVertex(Integer.MAX_VALUE));
@@ -438,22 +438,23 @@ public class Graph<T>{
 					//System.out.println("-----------------------------------------------------------------------");	
 					ff=null;
 					flowNetGraph= null;
-//					System.out.println("return in for: "+returnVertexes);
+					//					System.out.println("return in for: "+returnVertexes);
 					arr.add(temp);
 				}
 			}
-			
-			for(ArrayList<Vertex<Integer>> array: arr) {
-				System.out.println("array: "+array + " size: "+ array.size());
 
-			}
-//			if(/*returnVertexes.size() <= w_max &&*/ returnVertexes.size()>0) {
-//				f =false;
-//			}
+//	    for(ArrayList<Vertex<Integer>> array: arr) {
+//				System.out.println("array: "+array + " size: "+ array.size());
+//
 //		}
-		int min =0,id=0,i=0;
+			//			if(/*returnVertexes.size() <= w_max &&*/ returnVertexes.size()>0) {
+			//				f =false;
+			//			} 
+			//		}
+		int min =S,id=0,i=0;
 		//finds the min size of separator and return it ! 
 		for(ArrayList<Vertex<Integer>> array : arr) {
+//			System.out.println("array: "+array + " size: "+ array.size());
 			if(array.size() < min) {
 				min =array.size();
 				id=i;
@@ -461,7 +462,7 @@ public class Graph<T>{
 			i++;
 		}
 //		System.out.println("Min array: "+arr.get(id) + " size: "+ arr.get(id).size());
-
+		System.out.println("id " + id + " arr: "+ arr.get(id) + " size "+ arr.get(id).size());
 		return arr.get(id);
 	}
 
