@@ -45,19 +45,18 @@ public class MinimalModel extends Graph<Integer>{
 		MinimalModel m = new MinimalModel();
 		//String path=args[0];
 		String path=".//CnfFile.txt";
-	
+
 
 		m.readfile(path);
-//		//System.out.println(m.DS.isConflict());
+		//		//System.out.println(m.DS.isConflict());
 		//m.DS.checkFormat().printList();
-	if(m.ModuMinUsingDP_AndSeperator())
-			System.out.println(m.DS.StringMinimalModel());
-		
-		
-		
-		
-		
-		
+		//if(m.ModuMinUsingDP_AndSeperator())
+		//	System.out.println(m.DS.StringMinimalModel());
+
+		m.graphTest();
+
+
+
 		//System.out.println(m.DS.isTheoryPositive());
 		//		System.out.print(m.avgSourceSize);
 		////		System.out.print(",");
@@ -521,7 +520,7 @@ public class MinimalModel extends Graph<Integer>{
 			LinkedList Ts=DS.Ts(s);
 			if(!DS.FindMinimalModelForTs(Ts))
 			{
-								System.out.println("UNSAT");
+				System.out.println("UNSAT");
 				//				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
 				return false;
 			}
@@ -531,7 +530,7 @@ public class MinimalModel extends Graph<Integer>{
 		//		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
 		return true;
 	}
-	
+
 	public boolean DP()
 	{
 		DS.removeDoubles();
@@ -550,7 +549,65 @@ public class MinimalModel extends Graph<Integer>{
 		return true;
 	}
 
-	
+
+
+
+	public void graphTest() {
+
+
+		int size = DS.SIZE;			
+
+		Graph<Integer> g = initGraph(DS, size);
+
+		StronglyConnectedComponent scc = new StronglyConnectedComponent();
+		List<Set<Vertex<Integer>>> result = scc.scc(g);
+
+		System.out.println("Original CC: ");
+		//print the result
+		result.forEach(set -> {
+			set.forEach(v -> System.out.print(v.getId() + " "));
+			System.out.println();
+		});
+		if(result.get(0).size()!=g.getAllVertex().size()) {
+			System.out.println("not cc");
+			return ;
+		}
+		ArrayList<ArrayList<Vertex<Integer>>> arr=new ArrayList<>();;
+		ArrayList<Vertex<Integer>> min_array=new ArrayList<>();
+		min_array= Graph.vertexSeparator(g);
+		//			System.out.println(i+") "+arr.get(i));
+
+		int i=0;
+		System.out.println("Min Vertex to remove: " + min_array + " Size of the Seperator: "+ min_array.size());			
+		Graph<Integer> copyGraph = copyGraph(g);
+
+
+		//		for(ArrayList<Vertex<Integer>> vertexToremove : arr) {
+		//			System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+		////			System.out.println("Vertex to remove: " + vertexToremove + " Size of the Seperator: "+ vertexToremove.size());			
+		//			g = initGraph(DS, size);
+		////			copyGraph = copyGraph(g);
+		//			g=g.removeVertex(vertexToremove);
+		//
+		//			//		System.out.println(g);
+		//			//		 StronglyConnectedComponent scc = new StronglyConnectedComponent();
+		//			System.out.println(i+") "+vertexToremove + ", Size of the Seperator: "+ vertexToremove.size());
+		//			System.out.println("connected component After dismentle: ");
+		//			result = scc.scc(g);
+		//
+		//			//print the result
+		//			result.forEach(set -> {
+		//				set.forEach(v -> System.out.print(v.getId() + " "));
+		//				System.out.println();
+		//			});
+		//			//copyGraph = copyGraph(g);
+		//			i++;
+		//		}
+
+	}
+
+
+
 	public boolean ModuMinUsingDP_AndSeperator()
 	{
 		int size = DS.SIZE;	
@@ -564,8 +621,8 @@ public class MinimalModel extends Graph<Integer>{
 		{
 			DS.checkForUnits();//remove empty sources
 			//DS.printRulesArray();
-		//	DS.IntegrityConstraint();//added
-		
+			//	DS.IntegrityConstraint();//added
+
 			g = initGraph(DS, size);
 			if(first)
 			{
@@ -583,7 +640,7 @@ public class MinimalModel extends Graph<Integer>{
 				set.forEach(v -> System.out.print(v.getId() + " "));
 				System.out.println();
 			});
-//			System.out.println(g);
+			//			System.out.println(g);
 
 			LinkedList s;
 			boolean flag=false;
@@ -601,9 +658,9 @@ public class MinimalModel extends Graph<Integer>{
 			{
 				s= sourceOfGraph(g);
 			}
-			
-			
-		//	DS.ChangeDataStrucureByPlacingValueInVar(DS.FALSE_VAR, false);//added
+
+
+			//	DS.ChangeDataStrucureByPlacingValueInVar(DS.FALSE_VAR, false);//added
 			System.out.println("$$$  source size is " +s.getSize());
 			double ratio = (double)s.getSize() / allVertexes;
 			if(ratio > 0.2 && !flag) {
@@ -611,43 +668,43 @@ public class MinimalModel extends Graph<Integer>{
 				System.out.println();
 				//System.out.println(s.getSize());
 				Graph<Integer> graph = createGraphFromSource(s,g);
-		
+
 				ArrayList<Vertex<Integer>> arrayToRemove = vertexSeparator(graph);
 
-//				System.out.println(arrayToRemove);
+				//				System.out.println(arrayToRemove);
 				DS.splitConnectedComponent(arrayToRemove);
 				//DS.printRulesArray();
 
-				
+
 				System.out.println("AFTER SPLIT===============");
 				//DS.printRulesArray();
 				System.out.println("CHECK IF THE THEORY IS POSITIVE   #############################"  + DS.isTheoryPositive());
-				
+
 			}
 			else
 			{
-			//	System.out.println("source size: " + s.getSize());
-			//	s.printList();
-				
+				//	System.out.println("source size: " + s.getSize());
+				//	s.printList();
+
 				LinkedList Ts=DS.Ts(s);
-			//	System.out.println("TS");
+				//	System.out.println("TS");
 				//Ts.printList();
 				//DS.printRulesArray();
 				if(!DS.FindMinimalModelForTs(Ts))
 				{
-									System.out.println("UNSAT");
+					System.out.println("UNSAT");
 					//				System.out.println("The amount of time we put value in a variable is : " + DS.counter);
-									//DS.printRulesArray();
+					//DS.printRulesArray();
 					return false;
 				}
 				//DS.printValueOfVariables();
 				DS.updateRuleDS();
 			}
 
-			
-			
-			
-			
+
+
+
+
 		}		
 		//		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
 		Collections.sort(DS.minModel);

@@ -393,9 +393,9 @@ public class Graph<T>{
 					//					System.out.println("Point D");
 					//					System.out.println("i is:" + count_a_b);
 					//					System.out.println("max flow is: "+ x1);
-					//					System.out.println("W is:" + W_vertexList+" W size: " + W_vertexList.size());
-					//					System.out.println("A is:" + A_vertexList);
-					//					System.out.println("B is:"+ B_vertexList);
+										System.out.println("W is:" + W_vertexList+" W size: " + W_vertexList.size());
+										System.out.println("A is:" + A_vertexList);
+										System.out.println("B is:"+ B_vertexList);
 					//					System.out.println("S (of vertexes) is" + collection_S + " Balance " +s_balance);
 					//					System.out.println("T (of vertexes) is" + collection_T + " Balance " +t_balance);
 					//					System.out.println();
@@ -434,8 +434,8 @@ public class Graph<T>{
 					}
 					//returnVertexes.add(graph.getVertex(Integer.MAX_VALUE));
 					//returnVertexes.add(graph.getVertex(Integer.MIN_VALUE));
-					//System.out.println("Return vertex to remove"+ returnVertexes);
-					//System.out.println("-----------------------------------------------------------------------");	
+					System.out.println("Return vertex to remove"+ returnVertexes);
+					System.out.println("-----------------------------------------------------------------------");	
 					ff=null;
 					flowNetGraph= null;
 					//					System.out.println("return in for: "+returnVertexes);
@@ -820,6 +820,19 @@ public class Graph<T>{
 		}
 		return vertexsListToRemove;
 	}
+	
+	public static Graph<Integer> copyGraph(Graph<Integer> oldGraph) {
+		Graph<Integer> newGraph = new Graph<>(true);
+		for(Vertex<Integer> v: oldGraph.getAllVertex()) {
+			if(v.getId()!= T  && v.getId()!=S ) {
+				newGraph.addVertex(v);
+			}
+			
+		}
+
+		return newGraph;
+	} 
+	
 
 	/***  unite all dismantle graph methodes 
 	ALL OF THAT IN COPY GRAPH: change name of method copy graph to something else
