@@ -120,13 +120,13 @@ def get_string_print_chart(s,a_b_runs):
     print()
     print("===============================================")
 
-    for i in range(0, 4):
+    for i in range(0, 3):
         #x = [10, 20, 50, 100, 200]
-        if i == 4:
-            continue
+        # if i == 4:
+        #     continue
         x = arr[i]
         layout = go.Layout(
-            title='TEST for ' + names[i] + ' and '+names[3]+'<br>'+'\n#A&B is: '+ a_b_runs,
+            title='TEST for ' + names[i] + ' and '+names[3]+'<br>'+'#A&B is: '+ a_b_runs,
             yaxis=dict(
                 title=names[3]
             ),
@@ -260,7 +260,7 @@ def printChart():
     x = [5,10 , 20 , 50, 100, 200]
     res =[mem_array_usage, run_time_array,min_separator]
     dic = ['mem usage in MB','runtime in mili','min size of separator' ]
-    dic2=['memoryUsage','runTime','separatorSize']
+    dic2=['memory Usage','run Time','separator Size']
     for idx in range(0,3):
         layout = go.Layout(
             title='TEST for '+dic2[idx],
@@ -297,10 +297,16 @@ def print_table(mem_array, run_time, min_separator,a_b_runs):
     #     if idx != 0:
     #         res.append(str("Mem: "+x+" --- "+"Runtime: " + y))
     # x = [5,10,20,50,100,200]
-    for i in range(len(mem_array)):
-        mem_array[i] = str(mem_array[i]+ " MB")
-    for i in range(len(run_time)):
-        run_time[i] = str(run_time[i] + " millisec")
+    temp_mem =[]
+    temp_run = []
+    # for i in range(len(temp_mem)):
+    #     temp_mem[i] = str(temp_mem[i] + " MB")
+    # for i in range(len(temp_run)):
+    #     temp_run[i] = str(temp_run[i] + " millisec")
+    for i in run_time:
+        temp_run.append(str(i + " millisec"))
+    for i in mem_array:
+        temp_mem.append(str(i + " MB"))
     trace = go.Table(
         # values=[['<b>#(A B)</b><br>'],
         #         ['<b>W size</b><br>']],
@@ -321,7 +327,7 @@ def print_table(mem_array, run_time, min_separator,a_b_runs):
         ),
         cells=dict(
             # prefix=[None] * 1 + ['<b>MB'] + ['sec '] + [None] * 3,
-            values=[a_b_runs, mem_array,run_time,min_separator],
+            values=[a_b_runs, temp_mem, temp_run, min_separator],
 
         )
     )
