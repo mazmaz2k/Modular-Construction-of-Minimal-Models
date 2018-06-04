@@ -50,8 +50,8 @@ public class MinimalModel extends Graph<Integer>{
 		m.readfile(path);
 		//		//System.out.println(m.DS.isConflict());
 		//m.DS.checkFormat().printList();
-		//if(m.ModuMinUsingDP_AndSeperator())
-		//	System.out.println(m.DS.StringMinimalModel());
+//		if(m.ModuMinUsingDP_AndSeperator())
+//			System.out.println(m.DS.StringMinimalModel());
 
 		m.graphTest();
 
@@ -553,7 +553,24 @@ public class MinimalModel extends Graph<Integer>{
 
 
 	public void graphTest() {
+		
+		
+//		/**memory usage checking**/
+//		Runtime runtime = Runtime.getRuntime();
+//        // Run the garbage collector
+//        runtime.gc();
+//        // Calculate the used memory
+//        double memory = runtime.totalMemory() - runtime.freeMemory();
+//       
 
+		
+		/***run time checking*/
+		long startTime,endTime,totalTime;//in mili sec
+		
+		startTime = System.currentTimeMillis();
+		//your program
+
+		
 
 		int size = DS.SIZE;			
 
@@ -562,24 +579,23 @@ public class MinimalModel extends Graph<Integer>{
 		StronglyConnectedComponent scc = new StronglyConnectedComponent();
 		List<Set<Vertex<Integer>>> result = scc.scc(g);
 
-		System.out.println("Original CC: ");
+		//System.out.println("Original CC: ");
 		//print the result
-		result.forEach(set -> {
-			set.forEach(v -> System.out.print(v.getId() + " "));
-			System.out.println();
-		});
+//		result.forEach(set -> {
+//			set.forEach(v -> System.out.print(v.getId() + " "));
+//			System.out.println();
+//		});
 		if(result.get(0).size()!=g.getAllVertex().size()) {
 			System.out.println("not cc");
 			return ;
 		}
-		ArrayList<ArrayList<Vertex<Integer>>> arr=new ArrayList<>();;
+//		ArrayList<ArrayList<Vertex<Integer>>> arr=new ArrayList<>();;
 		ArrayList<Vertex<Integer>> min_array=new ArrayList<>();
 		min_array= Graph.vertexSeparator(g);
 		//			System.out.println(i+") "+arr.get(i));
 
-		int i=0;
-		System.out.println("Min Vertex to remove: " + min_array + " Size of the Seperator: "+ min_array.size());			
-		Graph<Integer> copyGraph = copyGraph(g);
+//		System.out.println("Min Vertex to remove: " + min_array + " Size of the Seperator: "+ min_array.size());			
+//		Graph<Integer> copyGraph = copyGraph(g);
 
 
 		//		for(ArrayList<Vertex<Integer>> vertexToremove : arr) {
@@ -603,6 +619,22 @@ public class MinimalModel extends Graph<Integer>{
 		//			//copyGraph = copyGraph(g);
 		//			i++;
 		//		}
+		
+		
+		
+		
+		/**memory usage checking**/
+//		Runtime runtime = Runtime.getRuntime();
+//        // Run the garbage collector
+//        runtime.gc();
+//        // Calculate the used memory
+//        double memory = runtime.totalMemory() - runtime.freeMemory();
+//       System.out.println("Memory usage: "+ memory/(1024*1024)+" MB");
+//
+//		 endTime   = System.currentTimeMillis();
+//		 totalTime = endTime - startTime;
+//		 System.out.print("Total Run Time in mili seconds: " + totalTime);
+
 
 	}
 
@@ -709,6 +741,7 @@ public class MinimalModel extends Graph<Integer>{
 		//		System.out.println("The amount of times we put value in a variable is : " + DS.counter);
 		Collections.sort(DS.minModel);
 
+		
 		return true;
 	}
 

@@ -36,14 +36,14 @@ public class Graph<T>{
 			return true;
 		}
 		return false;
-	
-//		for (Edge<T> edge : v1.getEdges()) 
-//		{		System.out.println("ssssssssssssssssssssss");
-//
-//			if(edge.getVertex2().getId()==v2.getId())
-//				return true;
-//		}
-	
+
+		//		for (Edge<T> edge : v1.getEdges()) 
+		//		{		System.out.println("ssssssssssssssssssssss");
+		//
+		//			if(edge.getVertex2().getId()==v2.getId())
+		//				return true;
+		//		}
+
 	}
 
 	//This works only for directed graph because for undirected graph we can end up
@@ -182,8 +182,8 @@ public class Graph<T>{
 		}
 		return buffer.toString();
 	}
-	
-	
+
+
 	public static Graph<Integer>  createGraphFromSource(LinkedList s, Graph<Integer> graph){
 		Graph<Integer> graphToReturn = new Graph<Integer>(graph.isDirected);
 		for(Vertex<Integer> v: graph.getAllVertex()) {
@@ -195,12 +195,12 @@ public class Graph<T>{
 					}
 				}
 			}
-			
+
 		}
 		return graphToReturn;
 	} 
-	
-	
+
+
 	/**
 	 * find all vertex of the parent up to the source and insert them to array.
 	 * */
@@ -209,21 +209,21 @@ public class Graph<T>{
 		{
 			return;
 		}
-		
+
 		ArrayList<Vertex<Integer>> parentArr= superGraph.getParent(vertex);
-//		returnVertex.addAll(vertex.getCCList());
+		//		returnVertex.addAll(vertex.getCCList());
 
 		for(Vertex<Integer> v: parentArr) {
 			for(Vertex<Integer> vertexInCC :v.getCCList()) {
 				if(!returnVertex.contains((int)vertexInCC.getId())) {
-//    				System.out.println("222222");
+					//    				System.out.println("222222");
 					returnVertex.addAtTail((int)vertexInCC.getId());
 				}
 			}
 			findAllVertexes(superGraph,v,returnVertex);
 		}
 	}
-	
+
 	/**
 	 * Handle Integrity Constraint 
 	 * return all vertexes up to the source the connect to IC vertexes
@@ -231,48 +231,48 @@ public class Graph<T>{
 	public static LinkedList IntegrityConstraintHandle(Graph<Integer> graph, ArrayList<Integer>  CIVars){
 		//Vertex<ArrayList<Integer>> x = new Vertex<>(5);
 		LinkedList returnVertexes = new LinkedList();
-//		StronglyConnectedComponent scc = new StronglyConnectedComponent();
+		//		StronglyConnectedComponent scc = new StronglyConnectedComponent();
 		SuperGraph superGraph = new SuperGraph(graph);
-        Graph<Integer> super_graph = superGraph.getSuperGraph();
-//        ArrayList<Vertex<Integer>> parentArray;
-        for(Integer vId :CIVars) {
-        	for(Vertex<Integer> vertex : super_graph.getAllVertex()) {
-        		for(Vertex<Integer> v :vertex.getCCList()) {
-        			if(vId==(int)v.getId()) {
-//        				System.out.println("11111");
-        				for(Vertex<Integer> vertexInCC :vertex.getCCList()) {
-        					if(!returnVertexes.contains((int)vertexInCC.getId())) {
-            					returnVertexes.addAtTail((int)vertexInCC.getId());
-        					}
-        				}
-        				findAllVertexes(superGraph,vertex,returnVertexes);
+		Graph<Integer> super_graph = superGraph.getSuperGraph();
+		//        ArrayList<Vertex<Integer>> parentArray;
+		for(Integer vId :CIVars) {
+			for(Vertex<Integer> vertex : super_graph.getAllVertex()) {
+				for(Vertex<Integer> v :vertex.getCCList()) {
+					if(vId==(int)v.getId()) {
+						//        				System.out.println("11111");
+						for(Vertex<Integer> vertexInCC :vertex.getCCList()) {
+							if(!returnVertexes.contains((int)vertexInCC.getId())) {
+								returnVertexes.addAtTail((int)vertexInCC.getId());
+							}
+						}
+						findAllVertexes(superGraph,vertex,returnVertexes);
 
-        			}
-        		}
-        	}
-        }
-//        superGraph.printGraph();
-        //print the result
-//        result.forEach(set -> {
-//            set.forEach(v -> System.out.print(v.getId() + " "));
-//            //System.out.println();
-//        });
-//		for(Set<Vertex<Integer>> set : result) {
-//			for(Integer x : CIVars) {
-//				if()
-//				acyclicGraph.addSingleVertex(set);
-//				
-//			}
-//		}
-        
-        
+					}
+				}
+			}
+		}
+		//        superGraph.printGraph();
+		//print the result
+		//        result.forEach(set -> {
+		//            set.forEach(v -> System.out.print(v.getId() + " "));
+		//            //System.out.println();
+		//        });
+		//		for(Set<Vertex<Integer>> set : result) {
+		//			for(Integer x : CIVars) {
+		//				if()
+		//				acyclicGraph.addSingleVertex(set);
+		//				
+		//			}
+		//		}
+
+
 		//x.setData();
 		return returnVertexes;
 	}
-	
-	
-	
-	
+
+
+
+
 
 	/**Vertex separator !!!!
 	 * */
@@ -283,6 +283,7 @@ public class Graph<T>{
 		ArrayList<Vertex<Integer>> A_vertexList = new ArrayList<>();
 		ArrayList<Vertex<Integer>> B_vertexList = new ArrayList<>();
 		ArrayList<Edge<Integer>> edgeList = new ArrayList<>(); //array list to hold all the edges of the CUT !
+
 
 		if(graph ==null) {
 			System.out.println("Graph.vertexSeperator() error graph is empty in vertexSeparator method");
@@ -295,9 +296,19 @@ public class Graph<T>{
 		if (w_max <2) {
 			w_max=2;
 		}
-		int idx = 0;
-//		while(f) {
-//			flag= true;
+		//		int idx = 0;
+		//		while(f) {
+		//			flag= true;
+		int[] arrOfA_B = new int[]{5,10,20,50,100,200};
+		for(int a_b : arrOfA_B) {
+			System.out.println("Start");
+			arr.clear();
+			returnVertexes.clear();
+			/***run time checking*/
+			long startTime=0,endTime=0,totalTime=0;//in mili sec
+
+			startTime = System.currentTimeMillis();
+
 			for(int w=4 ; w<=32; w=w*2) {
 				//			System.out.println("W max size is: "+ w_max);			
 				int count = 0;
@@ -312,12 +323,13 @@ public class Graph<T>{
 							}
 						}
 					}
-					//					System.out.println("in first while");
+					//										System.out.println("in first while");
+					count++;
 				}while((W_vertexList.isEmpty() || W_vertexList.size() >= w) && count <=2000  );	//we have W set
 				if(count > 2000) {
 					continue;
 				}
-				for(int count_a_b=0; count_a_b < Math.min(200, Math.pow(2, w)) && flag ;count_a_b++) {	//for every w find 20 A and B sets
+				for(int count_a_b=0; count_a_b < Math.min(a_b, Math.pow(2, w)) /*&& flag*/ ;count_a_b++) {	//for every w find 20 A and B sets
 					int counter=0;
 					returnVertexes.clear();
 					A_vertexList.clear();
@@ -328,14 +340,13 @@ public class Graph<T>{
 						double x = Math.random();
 						for(Vertex<Integer> vertex :W_vertexList) {
 							if(x > 0.5) {
-
 								A_vertexList.add(vertex);
 							}else {
 								B_vertexList.add(vertex);
 							}
 							x = Math.random();
 						}
-						//						System.out.println("In second while");
+						//												System.out.println("In second while");
 						counter++;
 					}while((checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty())&& counter<2000 );
 
@@ -345,6 +356,7 @@ public class Graph<T>{
 						continue;
 					}		
 					//					System.out.println("Point B");
+					flowNetGraph =null;
 					flowNetGraph = createFlowNetwork(graph, A_vertexList,B_vertexList);
 					if(flowNetGraph ==null) {
 						System.out.println("error in flow nework some of the variables are NULL");
@@ -357,6 +369,7 @@ public class Graph<T>{
 					//all other weights are |V|                                V
 					//System.out.println("Flow Graph----------");
 					//System.out.println(flowNetGraph);
+					ff =null;
 					ff = new FordFulkerson(flowNetGraph);
 					int x1=0;
 					Collection<Integer> collection_S = null,collection_T =null ;
@@ -393,9 +406,10 @@ public class Graph<T>{
 					//					System.out.println("Point D");
 					//					System.out.println("i is:" + count_a_b);
 					//					System.out.println("max flow is: "+ x1);
-										System.out.println("W is:" + W_vertexList+" W size: " + W_vertexList.size());
-										System.out.println("A is:" + A_vertexList);
-										System.out.println("B is:"+ B_vertexList);
+					//										System.out.println("w is " + w);
+					//										System.out.println("W is:" + W_vertexList+" W size: " + W_vertexList.size());
+					//										System.out.println("A is:" + A_vertexList);
+					//										System.out.println("B is:"+ B_vertexList);
 					//					System.out.println("S (of vertexes) is" + collection_S + " Balance " +s_balance);
 					//					System.out.println("T (of vertexes) is" + collection_T + " Balance " +t_balance);
 					//					System.out.println();
@@ -434,35 +448,63 @@ public class Graph<T>{
 					}
 					//returnVertexes.add(graph.getVertex(Integer.MAX_VALUE));
 					//returnVertexes.add(graph.getVertex(Integer.MIN_VALUE));
-					System.out.println("Return vertex to remove"+ returnVertexes);
-					System.out.println("-----------------------------------------------------------------------");	
+					System.out.print(w+", " +W_vertexList.size()+", "+ count_a_b +", "+returnVertexes.size()+", ");
+					//					System.out.println("Return vertex to remove"+ returnVertexes + " return size " + returnVertexes.size());
+					//					System.out.println("-----------------------------------------------------------------------");	
 					ff=null;
 					flowNetGraph= null;
-					//					System.out.println("return in for: "+returnVertexes);
+					// System.out.println("return in for: "+returnVertexes);
 					arr.add(temp);
+
 				}
 			}
-
-//	    for(ArrayList<Vertex<Integer>> array: arr) {
-//				System.out.println("array: "+array + " size: "+ array.size());
-//
-//		}
-			//			if(/*returnVertexes.size() <= w_max &&*/ returnVertexes.size()>0) {
-			//				f =false;
-			//			} 
-			//		}
+			System.out.println("\nEnd");
+			System.out.println("size of #A_B: " + a_b +" pp");
+			/**memory usage checking**/
+			Runtime runtime = Runtime.getRuntime();
+			// Run the garbage collector
+			runtime.gc();
+			// Calculate the used memory
+			double memory = runtime.totalMemory() - runtime.freeMemory();
+			//	        System.out.println();
+			System.out.println("Memory usage: "+ memory/(1024*1024)+" MB");
+			endTime   = System.currentTimeMillis();
+			totalTime = endTime - startTime;
+			System.out.print("Total Run Time in mili seconds: " + totalTime + " sec");
+			System.out.println();
+			int min =S,id=0,i=0;
+			//finds the min size of separator and return it ! 
+			for(ArrayList<Vertex<Integer>> array : arr) {
+				//					System.out.println("array: "+array + " size: "+ array.size());
+				if(array.size() < min) {
+					min =array.size();
+					id=i;
+				}
+				i++;
+			}
+			System.out.println("Min seperator size: "+ arr.get(id).size() + " EOF");
+		}
+		//	    for(ArrayList<Vertex<Integer>> array: arr) {
+		//				System.out.println("array: "+array + " size: "+ array.size());
+		//
+		//		}
+		//			if(/*returnVertexes.size() <= w_max &&*/ returnVertexes.size()>0) {
+		//				f =false;
+		//			} 
+		//		}
 		int min =S,id=0,i=0;
 		//finds the min size of separator and return it ! 
 		for(ArrayList<Vertex<Integer>> array : arr) {
-//			System.out.println("array: "+array + " size: "+ array.size());
+			//			System.out.println("array: "+array + " size: "+ array.size());
 			if(array.size() < min) {
 				min =array.size();
 				id=i;
 			}
 			i++;
 		}
-//		System.out.println("Min array: "+arr.get(id) + " size: "+ arr.get(id).size());
-		System.out.println("id " + id + " arr: "+ arr.get(id) + " size "+ arr.get(id).size());
+		//		System.out.println("Min seperator: "+ arr.get(id));
+		//		System.out.println("Min array: "+arr.get(id) + " size: "+ arr.get(id).size());
+		//		System.out.println("\n return arr size: "+ arr.get(id).size());
 		return arr.get(id);
 	}
 
@@ -472,30 +514,30 @@ public class Graph<T>{
 			System.err.println(" graph / allVertex / are / a_vertexList / b_vertexList null in createFlowNetwork method");
 			return null;
 		}
-
-		graph.addSingleVertex(S);//This is "S" vertex
-		graph.addSingleVertex(T);//This is "T" vertex
-		for(Vertex<Integer> v : graph.getAllVertex()) {
+		Graph<Integer> g2 = copyGraph(graph);
+		g2.addSingleVertex(S);//This is "S" vertex
+		g2.addSingleVertex(T);//This is "T" vertex
+		for(Vertex<Integer> v : g2.getAllVertex()) {
 			if(a_vertexList.contains(v))
 			{
-				graph.addEdge(S, v.getId(), graph.getAllVertex().size()); // create edge between "S" to Vertex in A  with weight |v| 
+				g2.addEdge(S, v.getId(), g2.getAllVertex().size()); // create edge between "S" to Vertex in A  with weight |v| 
 			}else if(b_vertexList.contains(v)) {
-				graph.addEdge(v.getId(), T, graph.getAllVertex().size()); // create edge between Vertex in B to "T" with weight |v| 
+				g2.addEdge(v.getId(), T, g2.getAllVertex().size()); // create edge between Vertex in B to "T" with weight |v| 
 			}
 
 		}
-		a_vertexList.add(graph.getVertex(S));	// add node S to A
-		b_vertexList.add(graph.getVertex(T));	// add vertex T to B
+		a_vertexList.add(g2.getVertex(S));	// add node S to A
+		b_vertexList.add(g2.getVertex(T));	// add vertex T to B
 		//		System.out.println("A: " + a_vertexList );
 		//		System.out.println("B: " + b_vertexList);
 		Set<Vertex<Integer>> vertexToDuplicate = new HashSet<>();
-		for(Vertex<Integer> v : graph.getAllVertex()) {
+		for(Vertex<Integer> v : g2.getAllVertex()) {
 			if(!a_vertexList.contains(v) && !b_vertexList.contains(v)) { // enter to array all node that not in A and B and not vertex T and vertex S
 				vertexToDuplicate.add(v);
 			}
 		}
 		//		System.out.println("duplicate " + vertexToDuplicate);
-		Graph<Integer> g=duplicateGraph(graph, vertexToDuplicate); // duplicate all vertex that not in A and B and not vertex T and vertex S
+		Graph<Integer> g=duplicateGraph(g2, vertexToDuplicate); // duplicate all vertex that not in A and B and not vertex T and vertex S
 		return g;
 	}
 	/*Duplicate a graph
@@ -582,7 +624,7 @@ public class Graph<T>{
 		{
 			s.addAtTail((int)vertex.getId());	//add to source arrayList 
 		}
-		
+
 		return s;
 	}
 
@@ -820,19 +862,27 @@ public class Graph<T>{
 		}
 		return vertexsListToRemove;
 	}
-	
+
 	public static Graph<Integer> copyGraph(Graph<Integer> oldGraph) {
 		Graph<Integer> newGraph = new Graph<>(true);
+		if(oldGraph==null)
+			return null;
 		for(Vertex<Integer> v: oldGraph.getAllVertex()) {
-			if(v.getId()!= T  && v.getId()!=S ) {
-				newGraph.addVertex(v);
+//			if(v.getId()!= T  && v.getId()!=S ) {
+				newGraph.addSingleVertex(v.getId());
+//			}
+//			System.out.println("ffff"+ v.getEdges());
+			for(Edge<Integer> e : v.getEdges()) {
+//				System.out.println("ffff "+ e);
+
+				newGraph.addEdge(e.getVertex1().getId(), e.getVertex2().getId(),e.getWeight());
 			}
-			
+
 		}
 
 		return newGraph;
 	} 
-	
+
 
 	/***  unite all dismantle graph methodes 
 	ALL OF THAT IN COPY GRAPH: change name of method copy graph to something else
