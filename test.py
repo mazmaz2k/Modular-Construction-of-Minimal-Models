@@ -50,6 +50,90 @@ filename = "someFile"
 #fmyFile = RandomGraphMaker(13)
 #fmyFile.close()
 
+
+
+
+def return_sum(arr):
+    sum_out=0
+    for i in range(len(arr)):
+        sum_out = int(sum_out) + int(float(arr[i]))
+        # sum_out = 0
+    return sum_out
+
+def get_string_print_chart(s,a_b_runs):
+    W_for_x = []
+    w_size = []
+    a_b_size = []
+    seperator_size = []
+
+    for idx, val in enumerate(s):
+        if idx == (len(s) - 1):
+            break
+        if idx % 4 == 0:
+            W_for_x.append(val)
+        elif idx % 4 == 1:
+            w_size.append(val)
+        elif idx % 4 == 2:
+            a_b_size.append(val)
+        else:
+            seperator_size.append(val)
+    arr = [W_for_x, w_size, a_b_size, seperator_size]
+    # average_arr = []
+    # for i in arr:
+    #     average_arr.append(return_sum(i) / len(i))
+
+    names = ['W_for_x', 'w_size', 'a_b_size', 'seperator_size']
+    for x in W_for_x:
+        print(x, end=" ")
+    print()
+    for x in w_size:
+        print(x, end=" ")
+    print()
+    for x in a_b_size:
+        print(x, end=" ")
+    print()
+    for x in seperator_size:
+        print(x, end=" ")
+    print()
+    print("===============================================")
+
+    for i in range(0, 3):
+        #x = [10, 20, 50, 100, 200]
+        # if i == 4:
+        #     continue
+        x = arr[i]
+        layout = go.Layout(
+            title='TEST for ' + names[i] + ' and '+names[3]+'<br>'+'#A&B is: '+ a_b_runs,
+            yaxis=dict(
+                title=names[3]
+            ),
+            xaxis=dict(
+                title='' + names[i]
+            )
+        )
+        tracel = go.Scatter(
+            x=arr[i],
+            y=arr[3],
+            mode=' lines + markers',
+            name=names[3] + '(#A&B)',
+            line=dict(
+                shape='spline'
+            )
+        )
+        trace2 = go.Scatter(
+            x=arr[i],
+            y= (return_sum(arr[i]) / (len(arr[i])+0.00001)),
+            mode='lines + markers',
+            name='average',
+            line = dict(
+                shape='spline'
+            )
+        )
+        fig = go.Figure(data=[tracel,trace2], layout=layout)
+        plotly.offline.plot(fig, filename='testFiles\graphTestFiles\\'+str(i) + 'test' + names[i] + '.html')
+
+
+
 def parse_to_arrays_and_print_chart(stri):
     output = stri.split("\n")
     W_for_x = []
@@ -206,15 +290,23 @@ Memory usage: 15.945304870605469 MB
 Total Run Time in mili seconds: 104491 sec
 Min seperator size: 12 EOF
     '''
+    a_b_runs_array = output.split('size of #A_B: ')
+    a_b_runs = []
+    for idx, val in enumerate(a_b_runs_array):
+        if idx == 0:
+            continue
+        a_b_runs.append(val.split(' pp')[0])
+
     test = output.split('Start')
     s2 = []
     for i in test:
         # print(i)
         s2.append(i.split('End')[0])
-    for i in s2:
-        # print(i)
-        a = i.split(', ')
-        get_string_print_chart(a)
+    for idx, val in enumerate(s2):
+        a = val.split(', ')
+        if (idx < len(a_b_runs)):
+            get_string_print_chart(a, a_b_runs[idx])
+        # get_string_print_chart(a)
 
         # for x in a:
         #     print(x, end=" ")
@@ -224,10 +316,10 @@ Min seperator size: 12 EOF
     mem_array = []
     run_time_array_usage = output.split('Total Run Time in mili seconds: ')
     min_separator_array = output.split('Min seperator size: ')
-    a_b_runs_array = output.split('size of #A_B: ')
+    # a_b_runs_array = output.split('size of #A_B: ')
     # print("tttttttttttttttttttttttt "+mem_array_usage[0])
     run_time = []
-    a_b_runs = []
+    # a_b_runs = []
     min_separator = []
     # print("--------------------------------------------------------------------")
     for idx,val in enumerate(mem_array_usage):
@@ -243,10 +335,10 @@ Min seperator size: 12 EOF
         if idx == 0:
             continue
         min_separator.append(val.split(' EOF')[0])
-    for idx, val in enumerate(a_b_runs_array):
-        if idx == 0:
-            continue
-        a_b_runs.append(val.split(' pp')[0])
+    # for idx, val in enumerate(a_b_runs_array):
+    #     if idx == 0:
+    #         continue
+    #     a_b_runs.append(val.split(' pp')[0])
         # print(i +'\n ^^^^^^^^^^^^^^^^^^^^')
     # for i in mem_array:
     # print(i +'^^^^^^^^^^^^^^^^^^^^^^')
@@ -260,83 +352,22 @@ Min seperator size: 12 EOF
     # for i in min_separator:
     #     print(i, end=" ")
     # print("\n--------------------------------------------------------------------")
-
+    print_table(mem_array, run_time ,min_separator,a_b_runs)
     return mem_array, run_time,min_separator, a_b_runs
 
 
 
 
 
-def get_string_print_chart(s):
-    W_for_x = []
-    w_size = []
-    a_b_size = []
-    seperator_size = []
-
-    for idx, val in enumerate(s):
-        if idx == (len(s)-1):
-            break
-        if idx % 4 == 0:
-            W_for_x.append(val)
-        elif idx % 4 == 1:
-            w_size.append(val)
-        elif idx % 4 == 2:
-            a_b_size.append(val)
-        else:
-            seperator_size.append(val)
-    arr = [W_for_x,w_size,a_b_size,seperator_size]
-    names= ['W_for_x','w_size','a_b_size','seperator_size']
-    # for x in W_for_x:
-    #     print(x,end=" ")
-    # print()
-    # for x in w_size:
-    #     print(x,end=" ")
-    # print()
-    # for x in a_b_size:
-    #     print(x,end=" ")
-    # print()
-    # for x in seperator_size:
-    #     print(x,end=" ")
-    # print()
-    # print("===============================================")
-
-    for i in range(0,4):
-        x = [5,10,20,50,100,200]
-        layout = go.Layout(
-            title='TEST for '+ names[i],
-            yaxis=dict(
-                title= names[i]
-            ),
-            xaxis=dict(
-                title='# of A&B'
-            )
-        )
-        tracel = go.Scatter(
-            x=x,
-            y=arr[i],
-            mode=' lines + markers',
-            name=names[i] + '(#A&B)',
-            line=dict(
-                shape='spline'
-            )
-        )
-        fig = go.Figure(data=[tracel], layout=layout)
-        # plotly.offline.plot(fig,filename=str(i)+'test'+names[i]+'.html')
-        # fig2 = go.Figure(data=[trace2], layout=layout2)
-        # # plotly.offline.plot(fig2,filename='2.html')
-
-
-
-
 def printChart():
     # W_for_x_array, w_size_array, a_b_array, seperator_array = create_array()
-    mem_array_usage, run_time_array,min_separator = create_array()
+    mem_array_usage, run_time_array,min_separator,a_b_runs = create_array()
     # x = np.linspace(2, 32)
     # x= w_size_array
     x = [5,10 , 20 , 50, 100, 200]
     res =[mem_array_usage, run_time_array,min_separator]
     dic = ['mem usage in MB','runtime in mili','min size of separator' ]
-    dic2=['memoryUsage','runTime','separatorSize']
+    dic2=['memory Usage','run Time','separator Size']
     for idx in range(0,3):
         layout = go.Layout(
             title='TEST for '+dic2[idx],
@@ -348,7 +379,7 @@ def printChart():
             )
         )
         tracel = go.Scatter(
-            x=x,
+            x=a_b_runs,
             y=res[idx],
             mode=' lines + markers',
             name=dic2[idx]+'(#A&B)',
@@ -399,9 +430,8 @@ def printChart():
     # plotly.offline.plot(fig2,filename='2.html')
 
 
-
-def print_table():
-    mem_array, run_time, min_separator,a_b_runs = create_array()
+def print_table(mem_array, run_time, min_separator,a_b_runs):
+    # mem_array, run_time, min_separator,a_b_runs = create_array()
     # x = [5 , 10 , 20, 40, 80]
     y = [2, 4, 8, 16, 32]
     # res = [[0 for x in range(5)] for y in range(5)]
@@ -413,10 +443,16 @@ def print_table():
     #     if idx != 0:
     #         res.append(str("Mem: "+x+" --- "+"Runtime: " + y))
     # x = [5,10,20,50,100,200]
-    for i in range(len(mem_array)):
-        mem_array[i] = str(mem_array[i]+ " MB")
-    for i in range(len(run_time)):
-        run_time[i] = str(run_time[i] + " millisec")
+    temp_mem =[]
+    temp_run = []
+    # for i in range(len(temp_mem)):
+    #     temp_mem[i] = str(temp_mem[i] + " MB")
+    # for i in range(len(temp_run)):
+    #     temp_run[i] = str(temp_run[i] + " millisec")
+    for i in run_time:
+        temp_run.append(str(i + " millisec"))
+    for i in mem_array:
+        temp_mem.append(str(i + " MB"))
     trace = go.Table(
         # values=[['<b>#(A B)</b><br>'],
         #         ['<b>W size</b><br>']],
@@ -437,7 +473,7 @@ def print_table():
         ),
         cells=dict(
             # prefix=[None] * 1 + ['<b>MB'] + ['sec '] + [None] * 3,
-            values=[a_b_runs, mem_array,run_time,min_separator],
+            values=[a_b_runs, temp_mem, temp_run, min_separator],
 
         )
     )
@@ -447,5 +483,5 @@ def print_table():
 
 
 if __name__ == '__main__':
-    # printChart()
-    print_table()
+    printChart()
+    # print_table()

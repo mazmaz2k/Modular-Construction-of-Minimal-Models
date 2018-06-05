@@ -87,6 +87,16 @@ filename = "someFile"
 #     #     print(i, end="")
 #     return W_for_x, w_size, a_b_size, seperator_size
 
+def return_avg(arr):
+    if len(arr) == 0:
+        return 0
+    sum_out = 0
+    for i in arr:
+        sum_out = int(sum_out) + int(float(i))
+        # sum_out = 0
+    # print(sum_out)
+    return sum_out/len(arr)
+
 def get_string_print_chart(s,a_b_runs):
     W_for_x = []
     w_size = []
@@ -105,6 +115,10 @@ def get_string_print_chart(s,a_b_runs):
         else:
             seperator_size.append(val)
     arr = [W_for_x, w_size, a_b_size, seperator_size]
+    # average_arr = []
+    # for i in arr:
+    #     average_arr.append(return_sum(i) / len(i))
+
     names = ['W_for_x', 'w_size', 'a_b_size', 'seperator_size']
     for x in W_for_x:
         print(x, end=" ")
@@ -118,13 +132,16 @@ def get_string_print_chart(s,a_b_runs):
     for x in seperator_size:
         print(x, end=" ")
     print()
-    print("===============================================")
-
+    temp_array =[]
+    # temp_array.append(return_avg(seperator_size))
+    avg = return_avg(seperator_size)
     for i in range(0, 3):
         #x = [10, 20, 50, 100, 200]
         # if i == 4:
         #     continue
         x = arr[i]
+        for x in range(len(arr[i])):
+            temp_array.append(avg)
         layout = go.Layout(
             title='TEST for ' + names[i] + ' and '+names[3]+'<br>'+'#A&B is: '+ a_b_runs,
             yaxis=dict(
@@ -135,7 +152,7 @@ def get_string_print_chart(s,a_b_runs):
             )
         )
         tracel = go.Scatter(
-            x=x,
+            x=arr[i],
             y=arr[3],
             mode=' lines + markers',
             name=names[3] + '(#A&B)',
@@ -143,14 +160,28 @@ def get_string_print_chart(s,a_b_runs):
                 shape='spline'
             )
         )
-        fig = go.Figure(data=[tracel], layout=layout)
-        plotly.offline.plot(fig, filename='testFiles\graphTestFiles\\'+str(i) + 'test' + names[i] + '.html')
+        trace2 = go.Scatter(
+            x=arr[i],
+            y=temp_array,
+            mode='lines + markers',
+            name='average',
+            line = dict(
+                shape='spline'
+            )
+        )
+        fig = go.Figure(data=[tracel, trace2], layout=layout)
+        plotly.offline.plot(fig, filename='testFiles\graphTestFiles\\'+a_b_runs + '__test_separator_and_' + names[i] + '.html')
         # fig2 = go.Figure(data=[trace2], layout=layout2)
         # # plotly.offline.plot(fig2,filename='2.html')
 
 
 def create_array():
     output =  GetJavaOutput(pathToFile, filename)
+    # print(output)
+    # print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+    # print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+    # print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+
     a_b_runs_array = output.split('size of #A_B: ')
     a_b_runs =[]
     for idx, val in enumerate(a_b_runs_array):
@@ -159,14 +190,21 @@ def create_array():
         a_b_runs.append(val.split(' pp')[0])
     test = output.split('Start')
     s2 = []
+    # print("7777777777777777777777777777777777777777")
     for i in test:
         # print(i)
         s2.append(i.split('End')[0])
+    # print("7777777777777777777777777777777777777777")
+
     for idx,val in enumerate(s2):
-        # print(i)
-        a = i.split(', ')
-        if(idx<len(a_b_runs)):
-            get_string_print_chart(a, a_b_runs[idx])
+        # print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+        # print(val)
+        # print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+        if idx ==0:
+            continue
+        a = val.split(', ')
+        if(idx<=len(a_b_runs)):
+            get_string_print_chart(a, a_b_runs[idx-1])
         # for x in a:
         #     print(x, end=" ")
         a.clear()
