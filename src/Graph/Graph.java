@@ -324,11 +324,9 @@ public class Graph<T>{
 							}
 						}
 					}
-<<<<<<< HEAD
 					//										System.out.println("in first while");
-=======
+
 					//					System.out.println("in first while");
->>>>>>> ec2c627dfc914824057211f0c9f0f948c82f1d5d
 					count++;
 				}while((W_vertexList.isEmpty() || W_vertexList.size() >= w) && count <=2000  );	//we have W set
 				if(count > 2000) {
