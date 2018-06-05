@@ -50,10 +50,10 @@ public class MinimalModel extends Graph<Integer>{
 		m.readfile(path);
 		//		//System.out.println(m.DS.isConflict());
 		//m.DS.checkFormat().printList();
-		//if(m.ModuMinUsingDP_AndSeperator())
-		//	System.out.println(m.DS.StringMinimalModel());
+		if(m.ModuMinUsingDP_AndSeperator())
+			System.out.println(m.DS.StringMinimalModel());
 
-		m.graphTest();
+//		m.graphTest();
 
 
 
