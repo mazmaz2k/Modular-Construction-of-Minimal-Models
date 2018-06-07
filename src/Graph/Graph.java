@@ -1,6 +1,7 @@
 package Graph;
 
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -346,7 +347,7 @@ public class Graph<T>{
 							}
 							x = Math.random();
 						}
-						//												System.out.println("In second while");
+//						System.out.println("In second while");
 						counter++;
 					}while((checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty())&& counter<2000 );
 
@@ -355,7 +356,7 @@ public class Graph<T>{
 						//						System.out.println("error to find W");
 						continue;
 					}		
-					//					System.out.println("Point B");
+//					System.out.println("Point B");
 					flowNetGraph =null;
 					flowNetGraph = createFlowNetwork(graph, A_vertexList,B_vertexList);
 					if(flowNetGraph ==null) {
@@ -482,6 +483,21 @@ public class Graph<T>{
 				}
 				i++;
 			}
+			Graph<Integer> tempGraph = copyGraph(graph);
+			tempGraph.removeVertex(arr.get(id));
+			StronglyConnectedComponent scc = new StronglyConnectedComponent();
+			List<Set<Vertex<Integer>>> result = scc.scc(tempGraph);
+			System.out.println("--------------------------------------------------------------------------------------");
+			System.out.println("connected component After dismentle: ");
+			result = scc.scc(tempGraph);
+			
+						//print the result
+			result.forEach(set -> {
+			
+			System.out.println(set.size());
+			});
+			System.out.println("--------------------------------------------------------------------------------------");
+
 			System.out.println("Min seperator size: "+ arr.get(id).size() + " EOF");
 		}
 		//	    for(ArrayList<Vertex<Integer>> array: arr) {

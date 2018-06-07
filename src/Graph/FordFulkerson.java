@@ -320,7 +320,6 @@ public class FordFulkerson {
 				//explore the vertex only if it is not visited and its residual capacity is
 				//greater than 0	
 				for(Node n: list.getList()) {
-
 					if(!visited.contains(n.indexJ) && getWightFromList(resList, u, n.indexJ) > 0 ) {//TODO: fix return in this part!!
 						//add in parent map saying v got explored by u
 						parent.put(n.indexJ, u);
