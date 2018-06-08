@@ -591,9 +591,12 @@ public class MinimalModel extends Graph<Integer>{
 		}
 //		ArrayList<ArrayList<Vertex<Integer>>> arr=new ArrayList<>();;
 		ArrayList<Vertex<Integer>> min_array=new ArrayList<>();
+		
 		min_array= Graph.vertexSeparator(g);
 		//			System.out.println(i+") "+arr.get(i));
-
+		if(min_array.isEmpty()||min_array==null) {
+			System.out.println("error in result array at the end !!!!!");
+		}
 //		System.out.println("Min Vertex to remove: " + min_array + " Size of the Seperator: "+ min_array.size());			
 //		Graph<Integer> copyGraph = copyGraph(g);
 

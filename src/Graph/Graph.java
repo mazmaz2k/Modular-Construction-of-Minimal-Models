@@ -342,7 +342,7 @@ public class Graph<T>{
 				}
 
 //				System.out.println(w+" "  +endTime_w+" " +startTime_w +" Total Run Time for W in mili seconds: " + total_w + " milisec");
-				for(int count_a_b=0; count_a_b < Math.min(5, Math.pow(2, w)) /*&& flag*/ ;count_a_b++) {	//for every w find 20 A and B sets
+				for(int count_a_b=0; count_a_b < Math.min(a_b, Math.pow(2, w)) /*&& flag*/ ;count_a_b++) {	//for every w find 20 A and B sets
 					startTime_a_b =System.currentTimeMillis();
 					int counter=0;
 					returnVertexes.clear();
@@ -578,7 +578,7 @@ public class Graph<T>{
 //			});
 //			System.out.println("--------------------------------------------------------------------------------------");
 
-//			System.out.println("Min seperator size: "+ arr.get(0).size() + " EOF");
+			System.out.println("Min seperator size: "+ arr.get(0).size() + " EOF");
 			
 		}
 		//	    for(ArrayList<Vertex<Integer>> array: arr) {
@@ -600,10 +600,10 @@ public class Graph<T>{
 //			i++;
 //			
 //		}
-		System.out.println("---------------"+ 0+ " "+arr.get(0).size());
-		//		System.out.println("Min seperator: "+ arr.get(id));
+//		System.out.println("---------------"+ 0+ " "+arr.get(0).size());
+//				System.out.println("Min seperator: "+ arr.get(id));
 		//		System.out.println("Min array: "+arr.get(id) + " size: "+ arr.get(id).size());
-		//		System.out.println("\n return arr size: "+ arr.get(id).size());
+//		System.out.println("\n return arr size: "+ arr.get(0).size());
 		return arr.get(0);
 	}
 
@@ -611,12 +611,10 @@ public class Graph<T>{
 	 * */
 	private static void printsForTests(Graph<Integer> graph ,ArrayList<ArrayList<Vertex<Integer>>> arr) {
 		for(int i =0; i<Math.min(5, arr.size());i++) {
-			System.out.println("--------------------------------------------------------------------------------------");
 			System.out.println("separator size: "+ arr.get(i).size());
 			Graph<Integer> tempGraph=graph.removeVertex(arr.get(i));
 			StronglyConnectedComponent scc = new StronglyConnectedComponent();
 			List<Set<Vertex<Integer>>> result = scc.scc(tempGraph);
-			System.out.println("connected component After dismentle: ");
 			result = scc.scc(tempGraph);
 			
 						//print the sorted result
@@ -633,14 +631,13 @@ public class Graph<T>{
 				}
 			});
 			double x= 100-((double)result.get(0).size() / (double) graph.getAllVertex().size())*100;
-			System.out.println("presentage of dismantle: "+ x+" %" );
-
+			System.out.println("percentage of dismantle: "+ x+" %" );
 			System.out.println("Largest CC: "+ result.get(0).size());
+			System.out.println("connected component After dismentle: ");
 			result.forEach(set -> {
-			
-			System.out.println(set.size());
+			System.out.print(set.size()+" ");
 			});
-			System.out.println("--------------------------------------------------------------------------------------");			
+			System.out.println("fin\n");			
 		}
 	}
 	private static Graph<Integer> createFlowNetwork(Graph<Integer> graph ,
