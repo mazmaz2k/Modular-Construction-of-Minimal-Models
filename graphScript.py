@@ -87,6 +87,85 @@ filename = "someFile"
 #     #     print(i, end="")
 #     return W_for_x, w_size, a_b_size, seperator_size
 
+def runtime_table(s):
+    runtime_for_lottery_w_array = s.split('Total Run Time for w in mili seconds: ')
+    runtime_for_lottery_a_b_array = s.split('Total Run Time for #AB in mili seconds: ')
+    runtime_to_create_flow_chart_array = s.split('Total Run Time for create flow Network Graph in mili seconds: ')
+    runtime_for_ff_array = s.split('Total Run Time for ff in mili seconds: ')
+    runtime_for_contains_array = s.split('Total Run Time for contains in mili seconds: ')
+    runtime_for_lottery_w = []
+    runtime_for_lottery_a_b = []
+    runtime_to_create_flow_chart = []
+    runtime_for_ff = []
+    runtime_for_contains = []
+    a_b_runs_array = s.split('size of #A_B: ')
+    a_b_runs =[]
+    for idx, val in enumerate(a_b_runs_array):
+        if idx == 0:
+            continue
+        a_b_runs.append(val.split(' pp')[0])
+    for idx,val in enumerate(runtime_for_lottery_w_array):
+        if idx == 0:
+            continue
+        runtime_for_lottery_w.append(val.split(' milisec')[0])
+    for idx,val in enumerate(runtime_for_lottery_a_b_array):
+        if idx == 0:
+            continue
+        runtime_for_lottery_a_b.append(val.split(' milisec')[0])
+    for idx, val in enumerate(runtime_to_create_flow_chart_array):
+        if idx == 0:
+            continue
+        runtime_to_create_flow_chart.append(val.split(' milisec')[0])
+    for idx, val in enumerate(runtime_for_ff_array):
+        if idx == 0:
+            continue
+        runtime_for_ff.append(val.split(' milisec')[0])
+    for idx, val in enumerate(runtime_for_contains_array):
+        if idx == 0:
+            continue
+        runtime_for_contains.append(val.split(' milisec')[0])
+    runs =[1, 2, 3, 4, 5,6]
+    # for i in run_time:
+    #     temp_run.append(str(i + " millisec"))
+    # for i in mem_array:
+    #     temp_mem.append(str(i + " MB"))
+    total=[]
+    for  i in range(0,len(a_b_runs)):
+        total.append(int(runtime_for_lottery_w[i])+int(runtime_for_lottery_a_b[i])+int(runtime_to_create_flow_chart[i])+
+                     int(runtime_for_ff[i])+ int(runtime_for_contains[i]))
+    trace = go.Table(
+        # values=[['<b>#(A B)</b><br>'],
+        #         ['<b>W size</b><br>']],
+        header=dict(
+            values=[['<b>#</b><br>'],
+                    ['<b>#AB run</b><br>'],
+                    ['<b>Runtime </b><br><b>for lottery w</b>'],
+                    ['<b>Runtime for</b><br><b>lottery A an B</b>'],
+                    ['<b>Run Time</b><br><b>to create flow chart</b>'],
+                    ['<b>Runtime for</b><br><b>Ford Fulkerson </b>'],
+                    ['<b>Runtime for</b><br><b>contains </b>'],
+                    ['<b>Total runtime </b><br>']],
+                     #  ['<b>2</b>'],
+                     #  ['<b>4</b>'],
+                     # ['<b>8</b>'],
+                     #  ['<b>16</b>'],
+                     #  ['<b>32</b>']] #['W_for_x_array', '# A & B', 'separator_array']
+            line=dict(color='rgb(50, 50, 50)'),
+            align=['left'] * 5,
+            font=dict(color=['rgb(45, 45, 45)'] * 5, size=14),
+            fill=dict(color='#d562be'),
+        ),
+        cells=dict(
+            # prefix=[None] * 1 + ['<b>MB'] + ['sec '] + [None] * 3,
+            values=[runs,a_b_runs, runtime_for_lottery_w, runtime_for_lottery_a_b, runtime_to_create_flow_chart,
+                    runtime_for_ff,runtime_for_contains,total],
+
+        )
+    )
+
+    data = [trace]
+    plotly.offline.plot(data,filename='testFiles\graphTestFiles\\table_test_1.html')
+
 def return_avg(arr):
     if len(arr) == 0:
         return 0
@@ -170,7 +249,7 @@ def get_string_print_chart(s,a_b_runs):
             )
         )
         fig = go.Figure(data=[tracel, trace2], layout=layout)
-        plotly.offline.plot(fig, filename='testFiles\graphTestFiles\\'+a_b_runs + '__test_separator_and_' + names[i] + '.html')
+        # plotly.offline.plot(fig, filename='testFiles\graphTestFiles\\'+a_b_runs + '__test_separator_and_' + names[i] + '.html')
         # fig2 = go.Figure(data=[trace2], layout=layout2)
         # # plotly.offline.plot(fig2,filename='2.html')
 
@@ -181,6 +260,7 @@ def create_array():
     # print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
     # print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
     # print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+    runtime_table(output)
 
     a_b_runs_array = output.split('size of #A_B: ')
     a_b_runs =[]
@@ -202,9 +282,10 @@ def create_array():
         # print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
         if idx ==0:
             continue
+
         a = val.split(', ')
-        if(idx<=len(a_b_runs)):
-            get_string_print_chart(a, a_b_runs[idx-1])
+        # if(idx<=len(a_b_runs)):
+            # get_string_print_chart(a, a_b_runs[idx-1])
         # for x in a:
         #     print(x, end=" ")
         a.clear()
@@ -225,7 +306,7 @@ def create_array():
     for idx,val in enumerate(run_time_array_usage):
         if idx == 0:
             continue
-        run_time.append(val.split(' sec')[0])
+        run_time.append(val.split(' milli sec')[0])
         # print(i +'\n ^^^^^^^^^^^^^^^^^^^^')
     for idx,val in enumerate(min_separator_array):
         if idx == 0:

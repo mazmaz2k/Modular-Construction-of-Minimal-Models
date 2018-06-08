@@ -223,7 +223,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 			   }
 		   }
 	   }while(flag);
-    	System.out.println("after unit check");
+//    	System.out.println("after unit check");
 
     }
     public void printValueOfVariables()
@@ -750,7 +750,12 @@ public class RulesDataStructure extends DavisPutnamHelper
     public void splitConnectedComponent(ArrayList<Vertex<Integer>> v)
     {
     	//System.out.println("enter split");
-
+    	if(v==null) {
+    		System.out.println("sssssssssssssssssssss");
+    	}
+    	else {
+    		System.out.println(v);
+    	}
     	ArrayList<Clause> clauses = new ArrayList<>();
     	for (int i = 0; i < RulesArray.length; i++) 
     	{
@@ -780,7 +785,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	//System.out.println("print clauses");
     	//printClauses(clauses);
  //   	System.out.println("copy to array list");
-    	int size = v.size();
+    	int size = v.size(); 
     //	System.out.println("size of array is: " + size);
     	int N = (int)Math.pow(2,size); 
     	boolean[] binaryArray ;

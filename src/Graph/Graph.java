@@ -4,11 +4,13 @@ package Graph;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import Rules.RulesDataStructure;
 import Rules.LinkedList;
@@ -292,29 +294,34 @@ public class Graph<T>{
 		}
 		FordFulkerson ff =null;
 		Graph<Integer> flowNetGraph =null; 
-		boolean flag= true, f=true;
 		double w_max = Math.ceil( 0.1 * graph.getAllVertex().size() ) ;
 		if (w_max <2) {
 			w_max=2;
 		}
+//		System.out.println(w_max);
 		//		int idx = 0;
 		//		while(f) {
 		//			flag= true;
 		int[] arrOfA_B = new int[]{5,10,20,50,100,200};
+		long startTime=0,endTime=0,totalTime=0;//in mili sec
+		long startTime_w =0, startTime_a_b =0, startTime_create_flowNetGraph=0,startTime_ff=0,startTime_contains=0;
+		long endTime_w =0, endTime_a_b =0, endTime_create_flowNetGraph=0,endTime_ff=0,endTime_contains=0;
+		long total_w =0, total_a_b =0, total_create_flowNetGraph=0,total_ff=0,total_contains=0;
+		boolean flag = true;
 		for(int a_b : arrOfA_B) {
 			System.out.println("Start");
 			arr.clear();
 			returnVertexes.clear();
 			/***run time checking*/
-			long startTime=0,endTime=0,totalTime=0;//in mili sec
-
+			total_w =0; total_a_b =0; total_create_flowNetGraph=0;total_ff=0;total_contains=0;
 			startTime = System.currentTimeMillis();
+			for(int w=4 ; w<= 32; w=w*2) 
+			{
 
-			for(int w=4 ; w<=32; w=w*2) {
 				//			System.out.println("W max size is: "+ w_max);			
 				int count = 0;
+				startTime_w =System.currentTimeMillis();
 				W_vertexList.clear();
-
 				do {
 					W_vertexList.clear();
 					for(int i=0 ; i<3 ; i++) { //Lottery W 3 times !
@@ -324,13 +331,19 @@ public class Graph<T>{
 							}
 						}
 					}
-					//										System.out.println("in first while");
+					//	System.out.println("in first while");
 					count++;
-				}while((W_vertexList.isEmpty() || W_vertexList.size() >= w) && count <=2000  );	//we have W set
+				}while((W_vertexList.isEmpty() || W_vertexList.size() > w) && count <=2000  );	//we have W set
+				endTime_w = System.currentTimeMillis();
+//				System.out.println(endTime_w - startTime);
+				total_w += (endTime_w - startTime_w);
 				if(count > 2000) {
 					continue;
 				}
-				for(int count_a_b=0; count_a_b < Math.min(a_b, Math.pow(2, w)) /*&& flag*/ ;count_a_b++) {	//for every w find 20 A and B sets
+
+//				System.out.println(w+" "  +endTime_w+" " +startTime_w +" Total Run Time for W in mili seconds: " + total_w + " milisec");
+				for(int count_a_b=0; count_a_b < Math.min(5, Math.pow(2, w)) /*&& flag*/ ;count_a_b++) {	//for every w find 20 A and B sets
+					startTime_a_b =System.currentTimeMillis();
 					int counter=0;
 					returnVertexes.clear();
 					A_vertexList.clear();
@@ -353,16 +366,22 @@ public class Graph<T>{
 
 					if(  checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty() || counter>2000 ) {
 						//						flag=false;
-						//						System.out.println("error to find W");
+//						System.out.println("error to find W");
 						continue;
-					}		
+					}	
+					endTime_a_b = System.currentTimeMillis();
+					total_a_b += (endTime_a_b - startTime_a_b);
+//					System.out.println(total_a_b);
 //					System.out.println("Point B");
+					startTime_create_flowNetGraph=System.currentTimeMillis();
 					flowNetGraph =null;
 					flowNetGraph = createFlowNetwork(graph, A_vertexList,B_vertexList);
 					if(flowNetGraph ==null) {
 						System.out.println("error in flow nework some of the variables are NULL");
 						continue;
 					}
+					endTime_create_flowNetGraph = System.currentTimeMillis();
+					total_create_flowNetGraph =+ Math.abs(endTime_create_flowNetGraph - startTime_create_flowNetGraph);
 					//TODO: continue working!! create flow net graph!!!
 					// create edge to S T from A and B with weight |v|         V
 					// Separate a to a1 and a2 to all vertex beside S A T B    V
@@ -370,10 +389,14 @@ public class Graph<T>{
 					//all other weights are |V|                                V
 					//System.out.println("Flow Graph----------");
 					//System.out.println(flowNetGraph);
+					if(flag) {
+						startTime_ff=System.currentTimeMillis();
+					}
 					ff =null;
 					ff = new FordFulkerson(flowNetGraph);
 					int x1=0;
 					Collection<Integer> collection_S = null,collection_T =null ;
+
 					try {
 						//						System.out.println("v1: "+ flowNetGraph.getVertex(Long.MAX_VALUE) +" v2: "+flowNetGraph.getVertex(Long.MIN_VALUE));
 						//						System.out.println("v1: "+flowNetGraph.getVertex(S));
@@ -389,11 +412,15 @@ public class Graph<T>{
 						//						System.out.println("V1 index:" +ff.findVertexIndex(flowNetGraph.getVertex(S))+ " V2 index: " + ff.findVertexIndex(flowNetGraph.getVertex(T)));
 						e.printStackTrace();
 					}
+
 					if(x1<=0 || collection_S ==null || collection_T ==null) {
 						ff=null;
 						flowNetGraph = null;
+
+						flag = false;
 						continue;
 					}
+
 					//					System.out.println("Point C");
 					double s_balance =((double)collection_S.size() /((double) flowNetGraph.getAllVertex().size()*2));
 					//			System.out.println("s "+collection_S.size()+ " all "+flowNetGraph.getAllVertex().size());
@@ -402,21 +429,29 @@ public class Graph<T>{
 					if(s_balance< 0.1 || t_balance< 0.1) {
 						ff=null;
 						flowNetGraph = null;
+						flag = false;
+
 						continue;
 					}
+					endTime_ff = System.currentTimeMillis();
+					total_ff += (endTime_ff - startTime_ff);
+					flag=true;
 					//					System.out.println("Point D");
 					//					System.out.println("i is:" + count_a_b);
 					//					System.out.println("max flow is: "+ x1);
 					//										System.out.println("w is " + w);
-					//										System.out.println("W is:" + W_vertexList+" W size: " + W_vertexList.size());
+//					System.out.println("W is:" + W_vertexList+" W size: " + W_vertexList.size());
 					//										System.out.println("A is:" + A_vertexList);
 					//										System.out.println("B is:"+ B_vertexList);
+					System.out.print(w+", " +W_vertexList.size()+", "+ count_a_b +", "+returnVertexes.size()+", ");
+
 					//					System.out.println("S (of vertexes) is" + collection_S + " Balance " +s_balance);
 					//					System.out.println("T (of vertexes) is" + collection_T + " Balance " +t_balance);
 					//					System.out.println();
-
+					startTime_contains=System.currentTimeMillis();
 					edgeList.clear(); //array list to hold all the edges of the CUT !
 					//		ArrayList<Vertex<Integer>> vertexsListToRemove= new ArrayList<>();
+
 
 					for(Vertex<Integer> v: flowNetGraph.getAllVertex()) {
 						if(collection_S.contains((int)v.getId())) {
@@ -429,6 +464,7 @@ public class Graph<T>{
 						}
 
 					}
+
 					ArrayList<Vertex<Integer>> temp = new ArrayList<>();
 
 					//		System.out.println(edgeList);
@@ -445,21 +481,38 @@ public class Graph<T>{
 							temp.add(flowNetGraph.getVertex(Math.abs(e.getVertex2().getId())));
 
 						}
+						
 						//}
 					}
 					//returnVertexes.add(graph.getVertex(Integer.MAX_VALUE));
 					//returnVertexes.add(graph.getVertex(Integer.MIN_VALUE));
-					System.out.print(w+", " +W_vertexList.size()+", "+ count_a_b +", "+returnVertexes.size()+", ");
-					//					System.out.println("Return vertex to remove"+ returnVertexes + " return size " + returnVertexes.size());
+//					System.out.print(returnVertexes.size()+", ");
+//					System.out.println("Return vertex to remove"+ returnVertexes + " return size " + returnVertexes.size());
 					//					System.out.println("-----------------------------------------------------------------------");	
 					ff=null;
 					flowNetGraph= null;
 					// System.out.println("return in for: "+returnVertexes);
 					arr.add(temp);
+					endTime_contains = System.currentTimeMillis();
+//					System.out.println(endTime_contains - startTime_contains);
+					total_contains +=(endTime_contains - startTime_contains);
 
 				}
 			}
+//			for(ArrayList<Vertex<Integer>> a :arr) {
+//				System.out.println(a);
+//			}
 			System.out.println("\nEnd");
+			if(arr.isEmpty()) {
+				return null;
+			}
+			System.out.println("Total Run Time for w in mili seconds: " + total_w + " milisec");
+			System.out.println("Total Run Time for #AB in mili seconds: " + total_a_b + " milisec");
+			System.out.println("Total Run Time for create flow Network Graph in mili seconds: " + total_create_flowNetGraph + " milisec");
+			System.out.println("Total Run Time for ff in mili seconds: " + total_ff + " milisec");
+			System.out.println("Total Run Time for contains in mili seconds: " + total_contains + " milisec");
+
+			System.out.println(total_w + total_a_b + total_create_flowNetGraph + total_ff + total_contains);
 			System.out.println("size of #A_B: " + a_b +" pp");
 			/**memory usage checking**/
 			Runtime runtime = Runtime.getRuntime();
@@ -467,38 +520,66 @@ public class Graph<T>{
 			runtime.gc();
 			// Calculate the used memory
 			double memory = runtime.totalMemory() - runtime.freeMemory();
-			//	        System.out.println();
+			System.out.println();
 			System.out.println("Memory usage: "+ memory/(1024*1024)+" MB");
 			endTime   = System.currentTimeMillis();
 			totalTime = endTime - startTime;
-			System.out.print("Total Run Time in mili seconds: " + totalTime + " sec");
+			System.out.print("Total Run Time in mili seconds: " + totalTime + " milli sec");
 			System.out.println();
-			int min =S,id=0,i=0;
+//			int min =S,id=0,i=0;
 			//finds the min size of separator and return it ! 
-			for(ArrayList<Vertex<Integer>> array : arr) {
-				//					System.out.println("array: "+array + " size: "+ array.size());
-				if(array.size() < min) {
-					min =array.size();
-					id=i;
-				}
-				i++;
-			}
-			Graph<Integer> tempGraph = copyGraph(graph);
-			tempGraph.removeVertex(arr.get(id));
-			StronglyConnectedComponent scc = new StronglyConnectedComponent();
-			List<Set<Vertex<Integer>>> result = scc.scc(tempGraph);
-			System.out.println("--------------------------------------------------------------------------------------");
-			System.out.println("connected component After dismentle: ");
-			result = scc.scc(tempGraph);
-			
-						//print the result
-			result.forEach(set -> {
-			
-			System.out.println(set.size());
-			});
-			System.out.println("--------------------------------------------------------------------------------------");
+//			for(ArrayList<Vertex<Integer>> array : arr) {
+//				//					System.out.println("array: "+array + " size: "+ array.size());
+//				if(array.size() < min) {
+//					min =array.size();
+//					id=i;
+//				}
+//				i++;
+//			}
+			arr.sort(new Comparator<ArrayList<Vertex<Integer>>>() {
 
-			System.out.println("Min seperator size: "+ arr.get(id).size() + " EOF");
+				@Override
+				public int compare(ArrayList<Vertex<Integer>> arr1, ArrayList<Vertex<Integer>> arr2) {
+					if(arr1.size()<arr2.size()) {
+						return -1;
+					}else if(arr1.size()>arr2.size()) {
+						return 1;
+					}
+					return 0;
+				}
+				
+			});
+			printsForTests(graph,arr);
+//			Graph<Integer> tempGraph = copyGraph(graph);
+//			System.out.println("separator size: "+ arr.get(0).size());
+//			Graph<Integer> tempGraph=graph.removeVertex(arr.get(0));
+//			StronglyConnectedComponent scc = new StronglyConnectedComponent();
+//			List<Set<Vertex<Integer>>> result = scc.scc(tempGraph);
+//			System.out.println("--------------------------------------------------------------------------------------");
+//			System.out.println("connected component After dismentle: ");
+//			result = scc.scc(tempGraph);
+//			
+//						//print the sorted result
+//			result.sort(new Comparator<Set<Vertex<Integer>>>() {
+//				@Override
+//				public int compare(Set<Vertex<Integer>> s1, Set<Vertex<Integer>> s2) {
+//					if(s1.size()==s2.size()) {
+//						return 0;
+//					}else if(s1.size()>=s2.size()) {
+//						return -1;
+//					}else {
+//						return 1;
+//					}
+//				}
+//			});
+//			result.forEach(set -> {
+//			
+//			System.out.println(set.size());
+//			});
+//			System.out.println("--------------------------------------------------------------------------------------");
+
+//			System.out.println("Min seperator size: "+ arr.get(0).size() + " EOF");
+			
 		}
 		//	    for(ArrayList<Vertex<Integer>> array: arr) {
 		//				System.out.println("array: "+array + " size: "+ array.size());
@@ -508,22 +589,60 @@ public class Graph<T>{
 		//				f =false;
 		//			} 
 		//		}
-		int min =S,id=0,i=0;
-		//finds the min size of separator and return it ! 
-		for(ArrayList<Vertex<Integer>> array : arr) {
-			//			System.out.println("array: "+array + " size: "+ array.size());
-			if(array.size() < min) {
-				min =array.size();
-				id=i;
-			}
-			i++;
-		}
+//		int min =S,id=0,i=0;
+//		//finds the min size of separator and return it ! 
+//		for(ArrayList<Vertex<Integer>> array : arr) {
+//			//			System.out.println("array: "+array + " size: "+ array.size());
+//			if(array.size() < min) {
+//				min =array.size();
+//				id=i;
+//			}
+//			i++;
+//			
+//		}
+		System.out.println("---------------"+ 0+ " "+arr.get(0).size());
 		//		System.out.println("Min seperator: "+ arr.get(id));
 		//		System.out.println("Min array: "+arr.get(id) + " size: "+ arr.get(id).size());
 		//		System.out.println("\n return arr size: "+ arr.get(id).size());
-		return arr.get(id);
+		return arr.get(0);
 	}
 
+	/**get sorted array of arrays of vertexes and print 
+	 * */
+	private static void printsForTests(Graph<Integer> graph ,ArrayList<ArrayList<Vertex<Integer>>> arr) {
+		for(int i =0; i<Math.min(5, arr.size());i++) {
+			System.out.println("--------------------------------------------------------------------------------------");
+			System.out.println("separator size: "+ arr.get(i).size());
+			Graph<Integer> tempGraph=graph.removeVertex(arr.get(i));
+			StronglyConnectedComponent scc = new StronglyConnectedComponent();
+			List<Set<Vertex<Integer>>> result = scc.scc(tempGraph);
+			System.out.println("connected component After dismentle: ");
+			result = scc.scc(tempGraph);
+			
+						//print the sorted result
+			result.sort(new Comparator<Set<Vertex<Integer>>>() {
+				@Override
+				public int compare(Set<Vertex<Integer>> s1, Set<Vertex<Integer>> s2) {
+					if(s1.size()==s2.size()) {
+						return 0;
+					}else if(s1.size()>=s2.size()) {
+						return -1;
+					}else {
+						return 1;
+					}
+				}
+			});
+			double x= 100-((double)result.get(0).size() / (double) graph.getAllVertex().size())*100;
+			System.out.println("presentage of dismantle: "+ x+" %" );
+
+			System.out.println("Largest CC: "+ result.get(0).size());
+			result.forEach(set -> {
+			
+			System.out.println(set.size());
+			});
+			System.out.println("--------------------------------------------------------------------------------------");			
+		}
+	}
 	private static Graph<Integer> createFlowNetwork(Graph<Integer> graph ,
 			ArrayList<Vertex<Integer>> a_vertexList, ArrayList<Vertex<Integer>> b_vertexList) {
 		if(graph==null || a_vertexList==null||b_vertexList==null) {

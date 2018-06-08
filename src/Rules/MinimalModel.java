@@ -51,7 +51,7 @@ public class MinimalModel extends Graph<Integer>{
 		//		//System.out.println(m.DS.isConflict());
 		//m.DS.checkFormat().printList();
 //		if(m.ModuMinUsingDP_AndSeperator())
-//			System.out.println(m.DS.StringMinimalModel());
+//		 	System.out.println(m.DS.StringMinimalModel());
 
 		m.graphTest();
 
@@ -667,11 +667,11 @@ public class MinimalModel extends Graph<Integer>{
 			result=null;
 			result = scc.scc(g);
 			//print the result
-			System.out.println("*****************Here is all CC *******************");
-			result.forEach(set -> {
-				set.forEach(v -> System.out.print(v.getId() + " "));
-				System.out.println();
-			});
+//			System.out.println("*****************Here is all CC *******************");
+//			result.forEach(set -> {
+//				set.forEach(v -> System.out.print(v.getId() + " "));
+//				System.out.println();
+//			});
 			//			System.out.println(g);
 
 			LinkedList s;
@@ -693,7 +693,7 @@ public class MinimalModel extends Graph<Integer>{
 
 
 			//	DS.ChangeDataStrucureByPlacingValueInVar(DS.FALSE_VAR, false);//added
-			System.out.println("$$$  source size is " +s.getSize());
+//			System.out.println("$$$  source size is " +s.getSize());
 			double ratio = (double)s.getSize() / allVertexes;
 			if(ratio > 0.2 && !flag) {
 				System.out.println("source Is TOO BIG ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
@@ -702,15 +702,15 @@ public class MinimalModel extends Graph<Integer>{
 				Graph<Integer> graph = createGraphFromSource(s,g);
 
 				ArrayList<Vertex<Integer>> arrayToRemove = vertexSeparator(graph);
-
+				
 				//				System.out.println(arrayToRemove);
 				DS.splitConnectedComponent(arrayToRemove);
 				//DS.printRulesArray();
 
 
-				System.out.println("AFTER SPLIT===============");
-				//DS.printRulesArray();
-				System.out.println("CHECK IF THE THEORY IS POSITIVE   #############################"  + DS.isTheoryPositive());
+//				System.out.println("AFTER SPLIT===============");
+//				//DS.printRulesArray();
+//				System.out.println("CHECK IF THE THEORY IS POSITIVE   #############################"  + DS.isTheoryPositive());
 
 			}
 			else
