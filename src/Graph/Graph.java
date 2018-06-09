@@ -303,6 +303,7 @@ public class Graph<T>{
 		//		while(f) {
 		//			flag= true;
 		int[] arrOfA_B = new int[]{5,10,20,50,100,200};
+//		int [] arrOfA_B = new int[] {200};
 		long startTime=0,endTime=0,totalTime=0;//in mili sec
 		long startTime_w =0, startTime_a_b =0, startTime_create_flowNetGraph=0,startTime_ff=0,startTime_contains=0;
 		long endTime_w =0, endTime_a_b =0, endTime_create_flowNetGraph=0,endTime_ff=0,endTime_contains=0;
@@ -443,7 +444,6 @@ public class Graph<T>{
 //					System.out.println("W is:" + W_vertexList+" W size: " + W_vertexList.size());
 					//										System.out.println("A is:" + A_vertexList);
 					//										System.out.println("B is:"+ B_vertexList);
-					System.out.print(w+", " +W_vertexList.size()+", "+ count_a_b +", "+returnVertexes.size()+", ");
 
 					//					System.out.println("S (of vertexes) is" + collection_S + " Balance " +s_balance);
 					//					System.out.println("T (of vertexes) is" + collection_T + " Balance " +t_balance);
@@ -484,6 +484,8 @@ public class Graph<T>{
 						
 						//}
 					}
+					System.out.print(w+", " +W_vertexList.size()+", "+ count_a_b +", "+returnVertexes.size()+", ");
+
 					//returnVertexes.add(graph.getVertex(Integer.MAX_VALUE));
 					//returnVertexes.add(graph.getVertex(Integer.MIN_VALUE));
 //					System.out.print(returnVertexes.size()+", ");
@@ -536,6 +538,8 @@ public class Graph<T>{
 //				}
 //				i++;
 //			}
+//			printsForTests(graph,arr);
+
 			arr.sort(new Comparator<ArrayList<Vertex<Integer>>>() {
 
 				@Override
@@ -549,7 +553,10 @@ public class Graph<T>{
 				}
 				
 			});
+
 			printsForTests(graph,arr);
+			
+			
 //			Graph<Integer> tempGraph = copyGraph(graph);
 //			System.out.println("separator size: "+ arr.get(0).size());
 //			Graph<Integer> tempGraph=graph.removeVertex(arr.get(0));
@@ -606,10 +613,12 @@ public class Graph<T>{
 //		System.out.println("\n return arr size: "+ arr.get(0).size());
 		return arr.get(0);
 	}
+	
 
 	/**get sorted array of arrays of vertexes and print 
 	 * */
 	private static void printsForTests(Graph<Integer> graph ,ArrayList<ArrayList<Vertex<Integer>>> arr) {
+		int maxCC =0;
 		for(int i =0; i<Math.min(5, arr.size());i++) {
 			System.out.println("separator size: "+ arr.get(i).size());
 			Graph<Integer> tempGraph=graph.removeVertex(arr.get(i));
@@ -633,12 +642,16 @@ public class Graph<T>{
 			double x= 100-((double)result.get(0).size() / (double) graph.getAllVertex().size())*100;
 			System.out.println("percentage of dismantle: "+ x+" %" );
 			System.out.println("Largest CC: "+ result.get(0).size());
-			System.out.println("connected component After dismentle: ");
+			System.out.print("connected component After dismentle: ");
+			if(result.get(0).size()>maxCC) {
+				maxCC=result.get(0).size();
+			}
 			result.forEach(set -> {
 			System.out.print(set.size()+" ");
 			});
 			System.out.println("fin\n");			
 		}
+		System.out.println("Max CC: "+ maxCC);
 	}
 	private static Graph<Integer> createFlowNetwork(Graph<Integer> graph ,
 			ArrayList<Vertex<Integer>> a_vertexList, ArrayList<Vertex<Integer>> b_vertexList) {

@@ -5,8 +5,7 @@ Created on Apr 10, 2018
 import os
 import io
 import random
-
-
+from operator import itemgetter
 
 import plotly.plotly as py
 
@@ -92,19 +91,29 @@ def dismentle_efficiency(s,a_b_runs):
     seperator_size_array = s.split('separator size: ')
     percentage_of_dismantle_array= s.split('percentage of dismantle: ')
     largest_CC_size_array = s.split('Largest CC: ')
-    connected_component_after_dismantle_array = s.split('After dismentle:  ')
+    connected_component_after_dismantle_array = s.split('connected component After dismentle: ')
+    count_occurence_array=s.split('Min seperator size:')
+    count_occurence =[]
     seperator_size = []
     percentage_of_dismantle = []
     largest_CC_size = []
     connected_component_after_dismantle = []
+    for idx, val in enumerate(count_occurence_array):
+        # if idx == 0:
+        #     continue
+        count_occurence.append(int(val.count('connected component After dismentle: ')))
+    # print("=++___________+++++++++++++++++++++++++++++++++++++++++++++++")
+    # for i in count_occurence:
+    #     print(i)
+    # print("=++___________+++++++++++++++++++++++++++++++++++++++++++++++")
     for idx, val in enumerate(seperator_size_array):
         if idx == 0:
             continue
         seperator_size.append(val.split('\npercentage of dismantle:')[0])
-    for idx, val in enumerate(percentage_of_dismantle_array):
+    for idx, val in enumerate(percentage_of_dismantle_array ):
         if idx == 0:
             continue
-        percentage_of_dismantle.append(val.split(' %')[0])
+        percentage_of_dismantle.append(val.split(' %')[0]+" %")
     for idx, val in enumerate(largest_CC_size_array):
         if idx == 0:
             continue
@@ -112,47 +121,55 @@ def dismentle_efficiency(s,a_b_runs):
     for idx, val in enumerate(connected_component_after_dismantle_array):
         if idx == 0:
             continue
-        connected_component_after_dismantle.append(val.split(' fin\n')[0].split(''))
+        # print(val)
+        connected_component_after_dismantle.append(val.split(' fin')[0])
     # print("00000000000000000000000000000000000000000000000000000000000000000000000000000000")
     # # for i in connected_component_after_dismantle:
     # #     print(i)
     # print("00000000000000000000000000000000000000000000000000000000000000000000000000000000")
-
+    last = 0
+    first =0
     x = np.arange(1, 6)
-    for i, a_b in enumerate(a_b_runs):
-
+    for count,(i, a_b) in zip(count_occurence,enumerate(a_b_runs)):
+        last = first + count_occurence[i]
         trace = go.Table(
             type='table',
 
-            # values=[['<b>#(A B)</b><br>'],
-            #         ['<b>W size</b><br>']],
-            # title='Test for dismantle_efficiency when '+str(a_b_runs),
+             # values=[['<b>#(A B)</b><br>'],
+                #         ['<b>W size</b><br>']],
+                # title='Test for dismantle_efficiency when '+str(a_b_runs),
             header=dict(
-                values=[['<b>#</b><br>'],
-                        ['<b>seperator size</b><br>'],
-                        ['<b>Percentage of</b><br><b>dismantle</b>'],
-                        ['<b>largest CC size</b><br>'],
-                        ['<b>All connected component</b><br><b>after_dismantle</b>']],
-                #  ['<b>2</b>'],
-                #  ['<b>4</b>'],
-                # ['<b>8</b>'],
-                #  ['<b>16</b>'],
-                #  ['<b>32</b>']] #['W_for_x_array', '# A & B', 'separator_array']
+                 values=[['<b style="text-align:center;">#</b><br>'],
+                    ['<b>seperator size</b><br>'],
+                    ['<b>Percentage of</b><br><b>dismantle</b>'],
+                    ['<b>largest CC size</b><br>'],
+                    ['<b>All connected component</b><br><b>after_dismantle</b>']],
+                    #  ['<b>2</b>'],
+                    #  ['<b>4</b>'],
+                    # ['<b>8</b>'],
+                    #  ['<b>16</b>'],
+                    #  ['<b>32</b>']] #['W_for_x_array', '# A & B', 'separator_array']
                 line=dict(color='rgb(50, 50, 50)'),
-                align=['left'] * 5,
-                font=dict(color=['rgb(45, 45, 45)'] * 5, size=14),
-                fill=dict(color='#d562be'),
+                    align=['left'] * 5,
+                    font=dict(color=['rgb(45, 45, 45)'] * 5, size=14),
+                    fill=dict(color='#d562be'),
             ),
             cells=dict(
                 # prefix=[None] * 1 + ['<b>MB'] + ['sec '] + [None] * 3,
-                values=[x, seperator_size[i*5:(5*i+5)], percentage_of_dismantle[i*5:(5*i+5)], largest_CC_size[i*5:(5*i+5)],
-                        connected_component_after_dismantle[i*5:(5*i+5)]],
+                 values=[x, seperator_size[first:last], percentage_of_dismantle[first:last], largest_CC_size[first:last],
+                         connected_component_after_dismantle[first:last]],
 
+                )
             )
-        )
+        first = last
 
+
+        layout = dict(
+            title='Table test for dismantle efficiency when #AB=' + a_b,
+        )
         data = [trace]
-        plotly.offline.plot(data, filename='testFiles\graphTestFiles\\table_test_for_dismantle_efficiency'+a_b+'.html')
+        fig = dict(data=data, layout=layout)
+        plotly.offline.plot(fig, filename='testFiles\graphTestFiles\\table_test_for_dismantle_efficiency'+a_b+'.html')
 
 
 def runtime_table(s):
@@ -237,9 +254,103 @@ def runtime_table(s):
 
         )
     )
-
+    layout = dict(
+        title='Table test for Run Time for every #AB',
+    )
     data = [trace]
-    plotly.offline.plot(data, filename='testFiles\graphTestFiles\\table_test_1.html')
+    fig = dict(data=data, layout=layout)
+    plotly.offline.plot(fig, filename='testFiles\graphTestFiles\\table_test_run_time.html')
+
+
+# def create_multiple_charts():
+#     output = GetJavaOutput(pathToFile, filename)
+#     s_array = output.split('Start')
+#     s=[]
+#     seperator_and_w_array =[]
+#     for idx,val in enumerate(s_array):
+#         if idx == 0:
+#             continue
+#         s.append(val.split('End'))
+#     W_for_x = []
+#     w_size = []
+#     a_b_size = []
+#     seperator_size = []
+#
+#     for idx, val in enumerate(s):
+#         if idx == (len(s) - 1):
+#             break
+#         if idx % 4 == 0:
+#             W_for_x.append(val)
+#         elif idx % 4 == 1:
+#             w_size.append(val)
+#         elif idx % 4 == 2:
+#             a_b_size.append(val)
+#         else:
+#             seperator_size.append(val)
+#     for val1,val2 in zip(seperator_size, w_size):
+#         seperator_and_w_array.append([val1,val2])
+#     for val in seperator_and_w_array:
+#         print(val)
+#     arr = [W_for_x, w_size, a_b_size, seperator_size]
+#     # average_arr = []
+#     # for i in arr:
+#     #     average_arr.append(return_sum(i) / len(i))
+#
+#     names = ['W_for_x', 'w_size', 'a_b_size', 'seperator_size']
+#     # for x in W_for_x:
+#     #     print(x, end=" ")
+#     # print()
+#     # for x in w_size:
+#     #     print(x, end=" ")
+#     # print()
+#     # for x in a_b_size:
+#     #     print(x, end=" ")
+#     # print()
+#     # for x in seperator_size:
+#     #     print(x, end=" ")
+#     # print()
+#     temp_array =[]
+#     # temp_array.append(return_avg(seperator_size))
+#     avg = return_avg(seperator_size)
+#     for i in range(0, 3):
+#         #x = [10, 20, 50, 100, 200]
+#         # if i == 4:
+#         #     continue
+#         x = arr[i]
+#         for x in range(len(arr[i])):
+#             temp_array.append(avg)
+#         layout = go.Layout(
+#             title='TEST for ' + names[i] + ' and '+names[3]+'<br>'+'#A&B is: ',
+#             yaxis=dict(
+#                 title=names[3]
+#             ),
+#             xaxis=dict(
+#                 title='' + names[i]
+#             )
+#         )
+#         tracel = go.Scatter(
+#             x=arr[i],
+#             y=arr[3],
+#             mode=' lines + markers',
+#             name=names[3] + '(#A&B)',
+#             line=dict(
+#                 shape='spline'
+#             )
+#         )
+#         trace2 = go.Scatter(
+#             x=arr[i],
+#             y=temp_array,
+#             mode='lines + markers',
+#             name='average',
+#             line = dict(
+#                 shape='spline'
+#             )
+#         )
+#         fig = go.Figure(data=[tracel, trace2], layout=layout)
+#         # plotly.offline.plot(fig, filename='testFiles\graphTestFiles\\'+a_b_runs + '__test_separator_and_' + names[i] + '.html')
+#         # fig2 = go.Figure(data=[trace2], layout=layout2)
+#         # # plotly.offline.plot(fig2,filename='2.html')
+
 
 def return_avg(arr):
     if len(arr) == 0:
@@ -274,18 +385,18 @@ def get_string_print_chart(s,a_b_runs):
     #     average_arr.append(return_sum(i) / len(i))
 
     names = ['W_for_x', 'w_size', 'a_b_size', 'seperator_size']
-    for x in W_for_x:
-        print(x, end=" ")
-    print()
-    for x in w_size:
-        print(x, end=" ")
-    print()
-    for x in a_b_size:
-        print(x, end=" ")
-    print()
-    for x in seperator_size:
-        print(x, end=" ")
-    print()
+    # for x in W_for_x:
+    #     print(x, end=" ")
+    # print()
+    # for x in w_size:
+    #     print(x, end=" ")
+    # print()
+    # for x in a_b_size:
+    #     print(x, end=" ")
+    # print()
+    # for x in seperator_size:
+    #     print(x, end=" ")
+    # print()
     temp_array =[]
     # temp_array.append(return_avg(seperator_size))
     avg = return_avg(seperator_size)
@@ -381,279 +492,8 @@ def print_table(mem_array, run_time, min_separator,a_b_runs):
     plotly.offline.plot(data, filename='testFiles\graphTestFiles\\table.html')
 
 
-def create_array():
+def create_array(output):
     # output = GetJavaOutput(pathToFile, filename)
-
-    output ='''
-Start
-16, 15, 0, 0, 16, 15, 1, 0, 16, 15, 2, 0, 16, 15, 3, 0, 16, 15, 4, 0, 32, 27, 1, 0, 32, 27, 2, 0, 32, 27, 3, 0, 32, 27, 4, 0, 
-End
-Total Run Time for w in mili seconds: 329 milisec
-Total Run Time for #AB in mili seconds: 5 milisec
-Total Run Time for create flow Network Graph in mili seconds: 0 milisec
-Total Run Time for ff in mili seconds: 6754 milisec
-Total Run Time for contains in mili seconds: 56 milisec
-7144
-size of #A_B: 5 pp
-
-Memory usage: 1.5208663940429688 MB
-Total Run Time in mili seconds: 7199 milli sec
-separator size: 14
-percentage of dismantle: 34.0 %
-Largest CC: 66
-connected component After dismentle: 
-66 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 18
-percentage of dismantle: 42.00000000000001 %
-Largest CC: 58
-connected component After dismentle: 
-58 3 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 18
-percentage of dismantle: 51.0 %
-Largest CC: 49
-connected component After dismentle: 
-49 13 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 19
-percentage of dismantle: 64.0 %
-Largest CC: 36
-connected component After dismentle: 
-36 8 3 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 21
-percentage of dismantle: 44.99999999999999 %
-Largest CC: 55
-connected component After dismentle: 
-55 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-Min seperator size: 14 EOF
-Start
-16, 16, 4, 0, 16, 16, 5, 0, 16, 16, 6, 0, 16, 16, 7, 0, 16, 16, 8, 0, 32, 31, 1, 0, 32, 31, 2, 0, 32, 31, 3, 0, 32, 31, 4, 0, 32, 31, 6, 0, 32, 31, 7, 0, 32, 31, 8, 0, 32, 31, 9, 0, 
-End
-Total Run Time for w in mili seconds: 247 milisec
-Total Run Time for #AB in mili seconds: 37 milisec
-Total Run Time for create flow Network Graph in mili seconds: 0 milisec
-Total Run Time for ff in mili seconds: 10932 milisec
-Total Run Time for contains in mili seconds: 37 milisec
-11253
-size of #A_B: 10 pp
-
-Memory usage: 1.744537353515625 MB
-Total Run Time in mili seconds: 11270 milli sec
-separator size: 13
-percentage of dismantle: 42.00000000000001 %
-Largest CC: 58
-connected component After dismentle: 
-58 9 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 18
-percentage of dismantle: 55.0 %
-Largest CC: 45
-connected component After dismentle: 
-45 5 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 20
-percentage of dismantle: 66.0 %
-Largest CC: 34
-connected component After dismentle: 
-34 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 20
-percentage of dismantle: 69.0 %
-Largest CC: 31
-connected component After dismentle: 
-31 14 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 21
-percentage of dismantle: 66.0 %
-Largest CC: 34
-connected component After dismentle: 
-34 7 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-Min seperator size: 13 EOF
-Start
-16, 15, 8, 0, 16, 15, 9, 0, 16, 15, 10, 0, 16, 15, 11, 0, 16, 15, 12, 0, 16, 15, 13, 0, 16, 15, 14, 0, 16, 15, 15, 0, 16, 15, 16, 0, 16, 15, 17, 0, 32, 24, 0, 0, 32, 24, 1, 0, 32, 24, 2, 0, 32, 24, 3, 0, 32, 24, 4, 0, 32, 24, 7, 0, 32, 24, 8, 0, 32, 24, 10, 0, 32, 24, 11, 0, 32, 24, 13, 0, 32, 24, 14, 0, 32, 24, 15, 0, 32, 24, 16, 0, 32, 24, 18, 0, 32, 24, 19, 0, 
-End
-Total Run Time for w in mili seconds: 244 milisec
-Total Run Time for #AB in mili seconds: 22 milisec
-Total Run Time for create flow Network Graph in mili seconds: 1 milisec
-Total Run Time for ff in mili seconds: 25163 milisec
-Total Run Time for contains in mili seconds: 55 milisec
-25485
-size of #A_B: 20 pp
-
-Memory usage: 2.349853515625 MB
-Total Run Time in mili seconds: 25528 milli sec
-separator size: 15
-percentage of dismantle: 57.0 %
-Largest CC: 43
-connected component After dismentle: 
-43 12 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 17
-percentage of dismantle: 64.0 %
-Largest CC: 36
-connected component After dismentle: 
-36 17 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 17
-percentage of dismantle: 47.0 %
-Largest CC: 53
-connected component After dismentle: 
-53 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 17
-percentage of dismantle: 62.0 %
-Largest CC: 38
-connected component After dismentle: 
-38 11 3 3 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 17
-percentage of dismantle: 38.0 %
-Largest CC: 62
-connected component After dismentle: 
-62 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-Min seperator size: 15 EOF
-Start
-16, 16, 1, 0, 16, 16, 2, 0, 16, 16, 5, 0, 16, 16, 6, 0, 16, 16, 7, 0, 16, 16, 12, 0, 16, 16, 13, 0, 16, 16, 14, 0, 16, 16, 18, 0, 16, 16, 19, 0, 16, 16, 20, 0, 16, 16, 21, 0, 16, 16, 22, 0, 16, 16, 23, 0, 16, 16, 24, 0, 16, 16, 25, 0, 16, 16, 26, 0, 16, 16, 28, 0, 16, 16, 29, 0, 16, 16, 30, 0, 16, 16, 31, 0, 16, 16, 32, 0, 16, 16, 34, 0, 16, 16, 35, 0, 16, 16, 38, 0, 16, 16, 40, 0, 16, 16, 43, 0, 16, 16, 44, 0, 16, 16, 45, 0, 16, 16, 46, 0, 32, 28, 0, 0, 32, 28, 1, 0, 32, 28, 2, 0, 32, 28, 3, 0, 32, 28, 4, 0, 32, 28, 5, 0, 32, 28, 6, 0, 32, 28, 7, 0, 32, 28, 8, 0, 32, 28, 10, 0, 32, 28, 11, 0, 32, 28, 12, 0, 32, 28, 13, 0, 32, 28, 14, 0, 32, 28, 16, 0, 32, 28, 18, 0, 32, 28, 20, 0, 32, 28, 21, 0, 32, 28, 22, 0, 32, 28, 23, 0, 32, 28, 26, 0, 32, 28, 27, 0, 32, 28, 28, 0, 32, 28, 33, 0, 32, 28, 34, 0, 32, 28, 35, 0, 32, 28, 37, 0, 32, 28, 38, 0, 32, 28, 39, 0, 32, 28, 41, 0, 32, 28, 43, 0, 32, 28, 44, 0, 32, 28, 45, 0, 32, 28, 46, 0, 32, 28, 47, 0, 32, 28, 49, 0, 
-End
-Total Run Time for w in mili seconds: 95 milisec
-Total Run Time for #AB in mili seconds: 108 milisec
-Total Run Time for create flow Network Graph in mili seconds: 0 milisec
-Total Run Time for ff in mili seconds: 49103 milisec
-Total Run Time for contains in mili seconds: 140 milisec
-49446
-size of #A_B: 50 pp
-
-Memory usage: 4.319000244140625 MB
-Total Run Time in mili seconds: 49612 milli sec
-separator size: 13
-percentage of dismantle: 31.0 %
-Largest CC: 69
-connected component After dismentle: 
-69 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 17
-percentage of dismantle: 53.0 %
-Largest CC: 47
-connected component After dismentle: 
-47 5 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 17
-percentage of dismantle: 41.0 %
-Largest CC: 59
-connected component After dismentle: 
-59 4 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 17
-percentage of dismantle: 42.00000000000001 %
-Largest CC: 58
-connected component After dismentle: 
-58 6 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 18
-percentage of dismantle: 43.00000000000001 %
-Largest CC: 57
-connected component After dismentle: 
-57 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-Min seperator size: 13 EOF
-Start
-16, 16, 3, 0, 16, 16, 4, 0, 16, 16, 5, 0, 16, 16, 6, 0, 16, 16, 7, 0, 16, 16, 8, 0, 16, 16, 10, 0, 16, 16, 11, 0, 16, 16, 13, 0, 16, 16, 14, 0, 16, 16, 15, 0, 16, 16, 19, 0, 16, 16, 20, 0, 16, 16, 21, 0, 16, 16, 22, 0, 16, 16, 23, 0, 16, 16, 24, 0, 16, 16, 30, 0, 16, 16, 34, 0, 16, 16, 36, 0, 16, 16, 39, 0, 16, 16, 41, 0, 16, 16, 42, 0, 16, 16, 43, 0, 16, 16, 44, 0, 16, 16, 45, 0, 16, 16, 47, 0, 16, 16, 48, 0, 16, 16, 49, 0, 16, 16, 50, 0, 16, 16, 51, 0, 16, 16, 55, 0, 16, 16, 58, 0, 16, 16, 61, 0, 16, 16, 62, 0, 16, 16, 63, 0, 16, 16, 64, 0, 16, 16, 66, 0, 16, 16, 67, 0, 16, 16, 68, 0, 16, 16, 71, 0, 16, 16, 72, 0, 16, 16, 73, 0, 16, 16, 74, 0, 16, 16, 75, 0, 16, 16, 77, 0, 16, 16, 79, 0, 16, 16, 80, 0, 16, 16, 81, 0, 16, 16, 82, 0, 16, 16, 85, 0, 16, 16, 87, 0, 16, 16, 89, 0, 16, 16, 90, 0, 16, 16, 93, 0, 16, 16, 94, 0, 16, 16, 96, 0, 16, 16, 97, 0, 16, 16, 99, 0, 32, 23, 0, 0, 32, 23, 1, 0, 32, 23, 2, 0, 32, 23, 3, 0, 32, 23, 5, 0, 32, 23, 6, 0, 32, 23, 7, 0, 32, 23, 8, 0, 32, 23, 9, 0, 32, 23, 10, 0, 32, 23, 11, 0, 32, 23, 12, 0, 32, 23, 13, 0, 32, 23, 14, 0, 32, 23, 16, 0, 32, 23, 17, 0, 32, 23, 19, 0, 32, 23, 20, 0, 32, 23, 21, 0, 32, 23, 22, 0, 32, 23, 23, 0, 32, 23, 25, 0, 32, 23, 26, 0, 32, 23, 28, 0, 32, 23, 35, 0, 32, 23, 36, 0, 32, 23, 39, 0, 32, 23, 40, 0, 32, 23, 41, 0, 32, 23, 42, 0, 32, 23, 43, 0, 32, 23, 45, 0, 32, 23, 46, 0, 32, 23, 47, 0, 32, 23, 48, 0, 32, 23, 49, 0, 32, 23, 50, 0, 32, 23, 53, 0, 32, 23, 54, 0, 32, 23, 55, 0, 32, 23, 57, 0, 32, 23, 59, 0, 32, 23, 60, 0, 32, 23, 61, 0, 32, 23, 62, 0, 32, 23, 65, 0, 32, 23, 66, 0, 32, 23, 67, 0, 32, 23, 68, 0, 32, 23, 70, 0, 32, 23, 72, 0, 32, 23, 73, 0, 32, 23, 74, 0, 32, 23, 76, 0, 32, 23, 77, 0, 32, 23, 79, 0, 32, 23, 80, 0, 32, 23, 82, 0, 32, 23, 83, 0, 32, 23, 84, 0, 32, 23, 85, 0, 32, 23, 86, 0, 32, 23, 87, 0, 32, 23, 90, 0, 32, 23, 93, 0, 32, 23, 94, 0, 32, 23, 95, 0, 32, 23, 99, 0, 
-End
-Total Run Time for w in mili seconds: 97 milisec
-Total Run Time for #AB in mili seconds: 203 milisec
-Total Run Time for create flow Network Graph in mili seconds: 0 milisec
-Total Run Time for ff in mili seconds: 106924 milisec
-Total Run Time for contains in mili seconds: 132 milisec
-107356
-size of #A_B: 100 pp
-
-Memory usage: 7.3653106689453125 MB
-Total Run Time in mili seconds: 107528 milli sec
-separator size: 10
-percentage of dismantle: 29.0 %
-Largest CC: 71
-connected component After dismentle: 
-71 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 11
-percentage of dismantle: 35.0 %
-Largest CC: 65
-connected component After dismentle: 
-65 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 12
-percentage of dismantle: 39.0 %
-Largest CC: 61
-connected component After dismentle: 
-61 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 13
-percentage of dismantle: 37.0 %
-Largest CC: 63
-connected component After dismentle: 
-63 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 14
-percentage of dismantle: 39.0 %
-Largest CC: 61
-connected component After dismentle: 
-61 7 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-Min seperator size: 10 EOF
-Start
-16, 14, 5, 0, 16, 14, 7, 0, 16, 14, 9, 0, 16, 14, 10, 0, 16, 14, 11, 0, 16, 14, 16, 0, 16, 14, 17, 0, 16, 14, 18, 0, 16, 14, 19, 0, 16, 14, 20, 0, 16, 14, 23, 0, 16, 14, 24, 0, 16, 14, 26, 0, 16, 14, 27, 0, 16, 14, 32, 0, 16, 14, 36, 0, 16, 14, 38, 0, 16, 14, 40, 0, 16, 14, 41, 0, 16, 14, 46, 0, 16, 14, 48, 0, 16, 14, 49, 0, 16, 14, 50, 0, 16, 14, 52, 0, 16, 14, 56, 0, 16, 14, 58, 0, 16, 14, 60, 0, 16, 14, 62, 0, 16, 14, 63, 0, 16, 14, 64, 0, 16, 14, 65, 0, 16, 14, 68, 0, 16, 14, 69, 0, 16, 14, 73, 0, 16, 14, 76, 0, 16, 14, 78, 0, 16, 14, 79, 0, 16, 14, 80, 0, 16, 14, 83, 0, 16, 14, 85, 0, 16, 14, 91, 0, 16, 14, 93, 0, 16, 14, 94, 0, 16, 14, 96, 0, 16, 14, 97, 0, 16, 14, 98, 0, 16, 14, 100, 0, 16, 14, 106, 0, 16, 14, 108, 0, 16, 14, 109, 0, 16, 14, 110, 0, 16, 14, 111, 0, 16, 14, 112, 0, 16, 14, 113, 0, 16, 14, 117, 0, 16, 14, 120, 0, 16, 14, 122, 0, 16, 14, 123, 0, 16, 14, 124, 0, 16, 14, 125, 0, 16, 14, 130, 0, 16, 14, 132, 0, 16, 14, 134, 0, 16, 14, 137, 0, 16, 14, 138, 0, 16, 14, 139, 0, 16, 14, 141, 0, 16, 14, 142, 0, 16, 14, 143, 0, 16, 14, 145, 0, 16, 14, 146, 0, 16, 14, 148, 0, 16, 14, 154, 0, 16, 14, 156, 0, 16, 14, 157, 0, 16, 14, 159, 0, 16, 14, 162, 0, 16, 14, 163, 0, 16, 14, 165, 0, 16, 14, 166, 0, 16, 14, 169, 0, 16, 14, 170, 0, 16, 14, 171, 0, 16, 14, 172, 0, 16, 14, 179, 0, 16, 14, 180, 0, 16, 14, 181, 0, 16, 14, 182, 0, 16, 14, 183, 0, 16, 14, 185, 0, 16, 14, 187, 0, 16, 14, 188, 0, 16, 14, 189, 0, 16, 14, 191, 0, 16, 14, 192, 0, 16, 14, 193, 0, 16, 14, 196, 0, 16, 14, 198, 0, 32, 30, 1, 0, 32, 30, 4, 0, 32, 30, 5, 0, 32, 30, 9, 0, 32, 30, 10, 0, 32, 30, 11, 0, 32, 30, 13, 0, 32, 30, 16, 0, 32, 30, 18, 0, 32, 30, 19, 0, 32, 30, 20, 0, 32, 30, 22, 0, 32, 30, 24, 0, 32, 30, 26, 0, 32, 30, 29, 0, 32, 30, 31, 0, 32, 30, 33, 0, 32, 30, 34, 0, 32, 30, 35, 0, 32, 30, 36, 0, 32, 30, 38, 0, 32, 30, 45, 0, 32, 30, 46, 0, 32, 30, 48, 0, 32, 30, 51, 0, 32, 30, 54, 0, 32, 30, 58, 0, 32, 30, 59, 0, 32, 30, 64, 0, 32, 30, 71, 0, 32, 30, 73, 0, 32, 30, 75, 0, 32, 30, 77, 0, 32, 30, 78, 0, 32, 30, 81, 0, 32, 30, 85, 0, 32, 30, 86, 0, 32, 30, 88, 0, 32, 30, 91, 0, 32, 30, 94, 0, 32, 30, 97, 0, 32, 30, 98, 0, 32, 30, 101, 0, 32, 30, 105, 0, 32, 30, 106, 0, 32, 30, 110, 0, 32, 30, 111, 0, 32, 30, 112, 0, 32, 30, 114, 0, 32, 30, 118, 0, 32, 30, 119, 0, 32, 30, 121, 0, 32, 30, 124, 0, 32, 30, 125, 0, 32, 30, 129, 0, 32, 30, 130, 0, 32, 30, 132, 0, 32, 30, 141, 0, 32, 30, 142, 0, 32, 30, 147, 0, 32, 30, 150, 0, 32, 30, 152, 0, 32, 30, 153, 0, 32, 30, 156, 0, 32, 30, 164, 0, 32, 30, 165, 0, 32, 30, 172, 0, 32, 30, 173, 0, 32, 30, 174, 0, 32, 30, 177, 0, 32, 30, 183, 0, 32, 30, 184, 0, 32, 30, 185, 0, 32, 30, 186, 0, 32, 30, 187, 0, 32, 30, 192, 0, 32, 30, 195, 0, 32, 30, 196, 0, 32, 30, 197, 0, 32, 30, 198, 0, 32, 30, 199, 0, 
-End
-Total Run Time for w in mili seconds: 92 milisec
-Total Run Time for #AB in mili seconds: 146 milisec
-Total Run Time for create flow Network Graph in mili seconds: 0 milisec
-Total Run Time for ff in mili seconds: 76408 milisec
-Total Run Time for contains in mili seconds: 156 milisec
-76802
-size of #A_B: 200 pp
-
-Memory usage: 9.894073486328125 MB
-Total Run Time in mili seconds: 77333 milli sec
-separator size: 9
-percentage of dismantle: 27.0 %
-Largest CC: 73
-connected component After dismentle: 
-73 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 12
-percentage of dismantle: 35.0 %
-Largest CC: 65
-connected component After dismentle: 
-65 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 13
-percentage of dismantle: 38.0 %
-Largest CC: 62
-connected component After dismentle: 
-62 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 13
-percentage of dismantle: 36.0 %
-Largest CC: 64
-connected component After dismentle: 
-64 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-separator size: 13
-percentage of dismantle: 32.0 %
-Largest CC: 68
-connected component After dismentle: 
-68 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 fin
-
-Min seperator size: 9 EOF
-'''
-
-
-
-
     # print(output)
     # print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
     # print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
@@ -666,7 +506,7 @@ Min seperator size: 9 EOF
     for idx, val in enumerate(a_b_runs_array):
         if idx == 0:
             continue
-        print(val)
+        # print(val)
         a_b_runs.append(val.split(' pp')[0])
     test = output.split('Start')
     s2 = []
@@ -818,8 +658,242 @@ def printChart():
         fig = go.Figure(data=[tracel], layout=layout)
         plotly.offline.plot(fig, filename='testFiles\graphTestFiles\\' + dic2[idx] + '.html')
 
+def create_multiple_charts1(output):
+    # output = GetJavaOutput(pathToFile, filename)
+    s_array = output.split('Start\n')
+    max_cc_array = output.split('Max CC: ')
+    max_cc = []
+    for idx, val in enumerate(max_cc_array):
+        if idx == 0:
+            continue
+        max_cc.append(val.split('\nMin seperator size:')[0])
 
+    s2 = []
+    cc_array = []
+    get_cc_array = output.split('Largest CC: ')
+    for idx, val in enumerate(get_cc_array):
+        if idx == 0:
+            continue
+        cc_array.append(val.split('\nconnected component After dismentle: ')[0])
+    for i, val in enumerate(s_array):
+        # print(i)
+        # if i != 0:
+        #     s3.append(val.split(' pp'))
+        s2.append(val.split('End')[0])
+    # for i in cc_array:
+    #     print(i)
+    for idx, val in enumerate(s2):
+
+        if idx == 0:
+            continue
+        a = val.split(', ')
+    seperator_and_cc_array =[]
+    W_for_x = []
+    w_size = []
+    a_b_size = []
+    seperator_and_CC_and_w_array = []
+    seperator_size = []
+
+    for idx, val in enumerate(a):
+        if idx == (len(a) - 1):
+            break
+        if idx % 4 == 0:
+            W_for_x.append(val)
+        elif idx % 4 == 1:
+            w_size.append(val)
+        elif idx % 4 == 2:
+            a_b_size.append(val)
+        else:
+            seperator_size.append(val)
+    for val1,val2,val3,val4 in zip(W_for_x, w_size ,seperator_size,cc_array):
+        seperator_and_CC_and_w_array.append([int(val1), int(val2),int(val3), int(val4)] )
+    seperator_and_w_array = sorted(seperator_and_CC_and_w_array, key=itemgetter(2))
+    seperator_and_cc_array = sorted(seperator_and_CC_and_w_array, key=itemgetter(3))
+    # for val in seperator_and_CC_and_w_array:
+        # print(val)
+    x_1 = []
+    y_1 = []
+    x_2 = []
+    y_2 = []
+    for val in seperator_and_w_array:
+        print(val)
+        if val[1] not in x_1:
+            y_1.append(val[2])
+            x_1.append(val[1])
+    seperator_and_cc_array.reverse()
+    for val in seperator_and_cc_array:
+        if val[1] not in x_2:
+            y_2.append(val[3])
+            x_2.append(val[1])
+    for x, y in zip(x_2,y_2):
+        print(str(x)+' ' + str(y))
+    arr_x = [x_1, x_2]
+    arr_y = [y_1, y_2]
+    names_x = ['W size when #AB=200','W size when #AB=200']
+    names_y = ['separator_size', ' connected component size']
+
+    # for i in arr_x:
+    #     print(i)
+    # for x in W_for_x:
+    #     print(x, end=" ")
+    # print()
+    # for x in w_size:
+    #     print(x, end=" ")
+    # print()
+    # for x in a_b_size:
+    #     print(x, end=" ")
+    # print()
+    # for x in seperator_size:
+    #     print(x, end=" ")
+    # print()
+    temp_array =[]
+    # temp_array.append(return_avg(seperator_size))
+    avg = return_avg(seperator_size)
+    for i in range(0, 2):
+        #x = [10, 20, 50, 100, 200]
+        # if i == 4:
+        #     continue
+        # x = arr_x[i]
+        # for x in range(len(arr[i])):
+        #     temp_array.append(avg)
+        layout = go.Layout(
+            title='TEST for ' + names_x[i] + ' and '+names_y[i]+'<br>',
+            yaxis=dict(
+                title=names_y[i]
+            ),
+            xaxis=dict(
+                title='' + names_x[i]
+            )
+        )
+        tracel = go.Scatter(
+            x=arr_x[i],
+            y=arr_y[i],
+            mode='lines + markers',
+            name=names_x[i] + '()',
+            line=dict(
+                shape='spline'
+            )
+        )
+        # trace2 = go.Scatter(
+        #     x=arr[i],
+        #     y=temp_array,
+        #     mode='lines + markers',
+        #     name='average',
+        #     line = dict(
+        #         shape='spline'
+        #     )
+        # )
+        fig = go.Figure(data=[tracel], layout=layout)
+        plotly.offline.plot(fig, filename='testFiles\graphTestFiles\\test3.1_'+names_x[i]+'_and_' + names_y[i] + '.html')
+        # fig2 = go.Figure(data=[trace2], layout=layout2)
+        # # plotly.offline.plot(fig2,filename='2.html')
+
+
+def create_multiple_charts2(output):
+
+    # output = GetJavaOutput(pathToFile, filename)
+    # s_array = output.split('Start\n')
+    a_b_size_array = output.split('size of #A_B: ')
+    seperator_array = output.split('Min seperator size: ')
+    max_cc_array = output.split('Max CC: ')
+    max_cc = []
+    for idx, val in enumerate(max_cc_array):
+        if idx == 0:
+            continue
+        max_cc.append(val.split('\nMin seperator size:')[0])
+    separator_s =[]
+    for idx, val in enumerate(seperator_array):
+        if idx == 0:
+            continue
+        separator_s.append(val.split(' EOF')[0])
+    a_b_runs =[]
+    for idx, val in enumerate(a_b_size_array):
+        if idx == 0:
+            continue
+        a_b_runs.append(val.split(' pp')[0])
+    cc_array = []
+    get_cc_array = output.split('Largest CC: ')
+    for idx, val in enumerate(get_cc_array):
+        if idx == 0:
+            continue
+        cc_array.append(val.split('\nconnected component After dismentle: ')[0])
+    arr_x = [a_b_runs,a_b_runs]
+    arr_y = [separator_s,max_cc]
+    names_x = ['# on AB when w=16', '# on AB when w=16',]
+    names_y = ['separator_size', ' connected component size']
+    # for i in a_b_runs:
+    #     print(i)
+    for i in range(0, 2):
+        layout = go.Layout(
+            title='TEST for ' + names_x[i] + ' and '+names_y[i]+'<br>' ,
+            yaxis=dict(
+                title=names_y[i]
+            ),
+            xaxis=dict(
+                title='' + names_x[i]
+            )
+        )
+        tracel = go.Scatter(
+            x=arr_x[i],
+            y=arr_y[i],
+            mode='lines + markers',
+            name=names_x[i] + '()',
+            line=dict(
+                shape='spline'
+            )
+        )
+        # trace2 = go.Scatter(
+        #     x=arr[i],
+        #     y=temp_array,
+        #     mode='lines + markers',
+        #     name='average',
+        #     line = dict(
+        #         shape='spline'
+        #     )
+        # )
+        fig = go.Figure(data=[tracel], layout=layout)
+        plotly.offline.plot(fig, filename='testFiles\graphTestFiles\\test3.2_'+names_x[i]+'_and_' + names_y[i] + '.html')
+        # fig2 = go.Figure(data=[trace2], layout=layout2)
+        # # plotly.offline.plot(fig2,filename='2.html')
+
+# def Avg_1_arg(_name):#form is" number,number"
+#     K=3
+#     L=600
+#     avg=[]
+#     AxisX=[]
+#     for ratio in frange(2,10,0.2):
+#        # print("ratio " , ratio)
+#         data=[]
+#         AxisX.append(ratio)
+#         M = int(L/ratio)
+#         for i in range(0,100):
+#            # print("i ",i)
+#             RandomPositiveCNF(L, M, K)
+#             filename="cnf_"+str(L)+"_"+str(M)
+#             data=GetJavaOutput(path, filename)
+#             os.remove(os.path.join(path,filename))
+#         avg.append(FindAVG(data))
+#     trace=go.Scatter(
+#         x=AxisX,
+#         y=avg,
+#         name=_name,
+#         line=dict(
+#             color=('rgb(0,0,0)'),
+#             width=4,
+#            # dash='dash'
+#             )
+#         )
+#     data=[trace]
+#     layout = dict(title = 'run time '+str(L)+" rules",
+#             xaxis = dict(title = 'Rules and variables ratio'),
+#             yaxis = dict(title = 'Average run time '),
+#             )
+#     fig = dict(data=data, layout=layout)
+#     py.plot(fig, filename='Run time test')
 
 if __name__ == '__main__':
-    printChart()
-    # print_table()
+    output = GetJavaOutput(pathToFile, filename)
+    create_array(output)
+    # printChart(output)
+    # create_multiple_charts1(output)
+    # create_multiple_charts2(output)
