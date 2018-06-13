@@ -303,7 +303,7 @@ public class Graph<T>{
 		//		while(f) {
 		//			flag= true;
 		int[] arrOfA_B = new int[]{5,10,20,50,100,200};
-//		int [] arrOfA_B = new int[] {200};
+//		int [] arrOfA_B = new int[] {20};
 		long startTime=0,endTime=0,totalTime=0;//in mili sec
 		long startTime_w =0, startTime_a_b =0, startTime_create_flowNetGraph=0,startTime_ff=0,startTime_contains=0;
 		long endTime_w =0, endTime_a_b =0, endTime_create_flowNetGraph=0,endTime_ff=0,endTime_contains=0;
@@ -316,7 +316,7 @@ public class Graph<T>{
 			/***run time checking*/
 			total_w =0; total_a_b =0; total_create_flowNetGraph=0;total_ff=0;total_contains=0;
 			startTime = System.currentTimeMillis();
-			for(int w=4 ; w<= 32; w=w*2) 
+			for(int w=2 ; w<= 32; w=w*2) 
 			{
 
 				//			System.out.println("W max size is: "+ w_max);			
@@ -434,7 +434,7 @@ public class Graph<T>{
 
 						continue;
 					}
-					endTime_ff = System.currentTimeMillis();
+					endTime_ff = System.currentTimeMillis(); 
 					total_ff += (endTime_ff - startTime_ff);
 					flag=true;
 					//					System.out.println("Point D");

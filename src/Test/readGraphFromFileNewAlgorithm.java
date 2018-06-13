@@ -88,17 +88,20 @@ public class readGraphFromFileNewAlgorithm {
 
 		StronglyConnectedComponent scc = new StronglyConnectedComponent();
 		List<Set<Vertex<Integer>>> result = scc.scc(g);
-		if(result.get(0).size()!=g.getAllVertex().size()) {
-			System.out.println("not cc");
-			return ;
-		}
+//		if(result.get(0).size()!=g.getAllVertex().size()) {
+//			System.out.println("not cc");
+//			return ;
+//		}
 
 		//print the result
 		result.forEach(set -> {
 			set.forEach(v -> System.out.print(v.getId() + " "));
 			System.out.println();
 		});
-
+		if(result.get(0).size()!=g.getAllVertex().size()) {
+			System.out.println("not cc");
+			return ;
+		}
 
 		ArrayList<Vertex<Integer>> vertexToremove = Graph.vertexSeparator(g);
 		System.out.println("point 1");

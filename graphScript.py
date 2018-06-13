@@ -501,7 +501,7 @@ def create_array(output):
     runtime_table(output)
 
     a_b_runs_array = output.split('size of #A_B: ')
-    a_b_runs =[]
+    a_b_runs = []
 
     for idx, val in enumerate(a_b_runs_array):
         if idx == 0:
@@ -540,8 +540,8 @@ def create_array(output):
             continue
         # dismentle_efficiency(output, val)
         a = val.split(', ')
-        # if(idx<=len(a_b_runs)):
-        get_string_print_chart(a, a_b_runs[idx-1])
+        if(idx<=len(a_b_runs)):
+            get_string_print_chart(a, a_b_runs[idx-1])
         # for x in a:
         #     print(x, end=" ")
         a.clear()
@@ -578,61 +578,61 @@ def create_array(output):
     return mem_array, run_time, min_separator, a_b_runs
 
 #
-# def printChart():
-#     # W_for_x_array, w_size_array, a_b_array, seperator_array = create_array()
-#
-#     mem_array_usage, run_time_array = create_array()
-#     # x = np.linspace(2, 32)
-#     # x= w_size_array
-#     x = [10 , 20 , 50, 100, 200]
-#     layout = go.Layout(
-#         title = 'TEST mem_array_usage',
-#         yaxis= dict(
-#             title = 'mem usage in MB'
-#         ),
-#         xaxis= dict(
-#             title = '# of A&B'
-#         )
-#     )
-#     tracel = go.Scatter(
-#         x = x,
-#         y = mem_array_usage,
-#         mode = ' lines + markers',
-#         name= 'memoryUsage(#A&B)',
-#         line = dict(
-#             shape = 'spline'
-#         )
-#     )
-#     layout2 = go.Layout(
-#         title = 'TEST run_time_array',
-#         yaxis= dict(
-#             title = 'runtime in mili'
-#         ),
-#         xaxis= dict(
-#             title = ' # of A&B'
-#         )
-#     )
-#     trace2 = go.Scatter(
-#         x =x,
-#         y = run_time_array,
-#         mode = ' lines + markers',
-#            name = 'runTime(#A&B)',
-#                   line = dict(
-#         shape='spline'
-#     )
-#     )
-#     fig = go.Figure(data=[tracel], layout=layout)
-#     plotly.offline.plot(fig,filename='testFiles\graphTestFiles\\memUsage.html')
-#     fig2 = go.Figure(data=[trace2], layout=layout2)
-#     plotly.offline.plot(fig2,filename='testFiles\graphTestFiles\\runtime.html')
-
-
-def printChart():
+def printChart2(output):
     # W_for_x_array, w_size_array, a_b_array, seperator_array = create_array()
-    mem_array_usage, run_time_array,min_separator,a_b_runs = create_array()
+
+    mem_array_usage, run_time_array,min_separator, a_b_runs = create_array(output)
     # x = np.linspace(2, 32)
     # x= w_size_array
-    x = [5,10 , 20 , 50, 100, 200]
+    x = [10 , 20 , 50, 100, 200]
+    layout = go.Layout(
+        title = 'TEST mem_array_usage',
+        yaxis= dict(
+            title = 'mem usage in MB'
+        ),
+        xaxis= dict(
+            title = '# of A&B'
+        )
+    )
+    tracel = go.Scatter(
+        x = x,
+        y = mem_array_usage,
+        mode = ' lines + markers',
+        name= 'memoryUsage(#A&B)',
+        line = dict(
+            shape = 'spline'
+        )
+    )
+    layout2 = go.Layout(
+        title = 'TEST run_time_array',
+        yaxis= dict(
+            title = 'runtime in mili'
+        ),
+        xaxis= dict(
+            title = ' # of A&B'
+        )
+    )
+    trace2 = go.Scatter(
+        x =x,
+        y = run_time_array,
+        mode = ' lines + markers',
+           name = 'runTime(#A&B)',
+                  line = dict(
+        shape='spline'
+    )
+    )
+    fig = go.Figure(data=[tracel], layout=layout)
+    plotly.offline.plot(fig,filename='testFiles\graphTestFiles\\memUsage.html')
+    fig2 = go.Figure(data=[trace2], layout=layout2)
+    plotly.offline.plot(fig2,filename='testFiles\graphTestFiles\\runtime.html')
+
+
+def printChart(output):
+    # W_for_x_array, w_size_array, a_b_array, seperator_array = create_array()
+    mem_array_usage, run_time_array,min_separator,a_b_runs = create_array(output)
+    # x = np.linspace(2, 32)
+    # x= w_size_array
+    x = [5, 10, 20, 50, 100, 200]
     res =[mem_array_usage, run_time_array,min_separator]
     dic = ['mem usage in MB', 'runtime in mili', 'min size of separator' ]
     dic2=['memory Usage', 'run Time', 'separator Size']
@@ -856,44 +856,220 @@ def create_multiple_charts2(output):
         # fig2 = go.Figure(data=[trace2], layout=layout2)
         # # plotly.offline.plot(fig2,filename='2.html')
 
-# def Avg_1_arg(_name):#form is" number,number"
-#     K=3
-#     L=600
-#     avg=[]
-#     AxisX=[]
-#     for ratio in frange(2,10,0.2):
-#        # print("ratio " , ratio)
-#         data=[]
-#         AxisX.append(ratio)
-#         M = int(L/ratio)
-#         for i in range(0,100):
-#            # print("i ",i)
-#             RandomPositiveCNF(L, M, K)
-#             filename="cnf_"+str(L)+"_"+str(M)
-#             data=GetJavaOutput(path, filename)
-#             os.remove(os.path.join(path,filename))
-#         avg.append(FindAVG(data))
-#     trace=go.Scatter(
-#         x=AxisX,
-#         y=avg,
-#         name=_name,
-#         line=dict(
-#             color=('rgb(0,0,0)'),
-#             width=4,
-#            # dash='dash'
-#             )
+def frange(start, stop, step):
+    i = start
+    while i < stop:
+        yield i
+        i += step
+#
+# def RandomPositiveCNF(L , M , K):
+#     filename="cnf_"+str(L)+"_"+str(M)
+#     filepath=os.path.join(path,filename)
+#     myFile=io.FileIO(filepath, "w")
+#     myFile.write(str(L)+" "+str(M)+"\n")
+#     for i in range(0,L):
+#         line=""
+#         allNegative=True
+#         for j in range(0, K):
+#             var=random.randint(1,M)
+#             if(j!=K-1 or not allNegative):
+#                 if(random.getrandbits(1)):
+#                     var=var*-1
+#             if(var>0):
+#                 allNegative=False
+#             line += str(var)+" "
+#         line+="0"
+#         myFile.write(line+"\n")
+#     return myFile
+
+
+# def RandomPositiveCNF(L , M , K):
+#     filename="cnf_"+str(L)+"_"+str(M)
+#     filepath=os.path.join(path,filename)
+#     myFile=io.FileIO(filepath, "w")
+#     myFile.write(str(L)+" "+str(M)+"\n")
+#     for i in range(0,L):
+#        line=""
+#        allNegative=True
+#        for j in range(0, K):
+#          var=random.randint(1,M)
+#          if j!=K-1 or not allNegative:
+#              if random.getrandbits(1):
+#               var=var*-1
+#          if var>0:
+#           allNegative = False
+#         line += str(var)+" "
+#        line+="0"
+#        myFile.write(line+"\n")
+#     return myFile
+#
+# def FindAVG(arr):
+#     s=0.0
+#     size=len(arr)
+#     if size == 0:
+#        return
+#     for i in arr:
+#       fi=float(i)
+#       s=s+fi
+#     avg = s/size
+#     return avg
+
+ #
+ # def Avg_1_arg(_name):#form is" number,number"
+ #     K=3
+ #     L=600
+ #     avg=[]
+ #     AxisX=[]
+ #     for ratio in frange(2,10,0.2):
+ #        # print("ratio " , ratio)
+ #         data=[]
+ #         AxisX.append(ratio)
+ #         M = int(L/ratio)
+ #         for i in range(0,100):
+ #            # print("i ",i)
+ #             RandomPositiveCNF(L, M, K)
+ #             filename="cnf_"+str(L)+"_"+str(M)
+ #             data=GetJavaOutput(path, filename)
+ #             os.remove(os.path.join(path,filename))
+ #         avg.append(FindAVG(data))
+ #     trace=go.Scatter(
+ #         x=AxisX,
+ #         y=avg,
+ #         name=_name,
+ #         line=dict(
+ #             color=('rgb(0,0,0)'),
+ #             width=4,
+ #            # dash='dash'
+ #            )
+ #         )
+ #     data=[trace]
+ #     layout = dict(title = 'run time '+str(L)+" rules",
+ #             xaxis = dict(title = 'Rules and variables ratio'),
+ #             yaxis = dict(title = 'Average run time '),
+ #             )
+ #     fig = dict(data=data, layout=layout)
+ #     py.plot(fig, filename='Run time test')
+
+
+# def runtime_table22(s,runtime_for_lottery_w1, runtime_for_lottery_a_b1,runtime_to_create_flow_chart1, runtime_for_ff1,
+#                     runtime_for_contains1):
+#     runtime_for_lottery_w_array = s.split('Total Run Time for w in mili seconds: ')
+#     runtime_for_lottery_a_b_array = s.split('Total Run Time for #AB in mili seconds: ')
+#     runtime_to_create_flow_chart_array = s.split('Total Run Time for create flow Network Graph in mili seconds: ')
+#     runtime_for_ff_array = s.split('Total Run Time for ff in mili seconds: ')
+#     runtime_for_contains_array = s.split('Total Run Time for contains in mili seconds: ')
+#     runtime_for_lottery_w = []
+#     runtime_for_lottery_a_b = []
+#     runtime_to_create_flow_chart = []
+#     runtime_for_ff = []
+#     runtime_for_contains = []
+#     a_b_runs_array = s.split('size of #A_B: ')
+#     a_b_runs = []
+#     for idx, val in enumerate(a_b_runs_array):
+#         if idx == 0:
+#             continue
+#         a_b_runs.append(val.split(' pp')[0])
+#     for idx, val in enumerate(runtime_for_lottery_w_array):
+#         if idx == 0:
+#             continue
+#         runtime_for_lottery_w.append(int(val.split(' milisec')[0]))
+#     for idx,val in enumerate(runtime_for_lottery_a_b_array):
+#         if idx == 0:
+#             continue
+#         runtime_for_lottery_a_b.append(int(val.split(' milisec')[0]))
+#     for idx, val in enumerate(runtime_to_create_flow_chart_array):
+#         if idx == 0:
+#             continue
+#         runtime_to_create_flow_chart.append(int(val.split(' milisec')[0]))
+#     for idx, val in enumerate(runtime_for_ff_array):
+#         if idx == 0:
+#             continue
+#         runtime_for_ff.append(int(val.split(' milisec')[0]))
+#     for idx, val in enumerate(runtime_for_contains_array):
+#         if idx == 0:
+#             continue
+#         runtime_for_contains.append(int(val.split(' milisec')[0]))
+#     # for i in run_time:
+#     #     temp_run.append(str(i + " millisec"))
+#     # for i in mem_array:
+#     #     temp_mem.append(str(i + " MB"))
+#     total = []
+#     for i in range(0, len(a_b_runs)):
+#         runtime_for_lottery_w1[i+1] += int(runtime_for_lottery_w[i+1])
+#         runtime_for_lottery_a_b1[i] += int(runtime_for_lottery_a_b[i])
+#         runtime_to_create_flow_chart1[i] += int(runtime_to_create_flow_chart[i])
+#         runtime_for_ff1[i] += int(runtime_for_ff[i])
+#         runtime_for_contains1[i] += int(runtime_for_contains[i])
+#         total.append(str(int(runtime_for_lottery_w[i])+int(runtime_for_lottery_a_b[i])+int(runtime_to_create_flow_chart[i])+
+#                      int(runtime_for_ff[i]) + int(runtime_for_contains[i])) + " millisec")
+#
+#
+#     return runtime_for_lottery_w1, runtime_for_lottery_a_b1,runtime_to_create_flow_chart1, runtime_for_ff1,runtime_for_contains1
+#
+#
+#
+#
+# def avg_run_time():
+#     M=3
+#     runtime_for_lottery_w=[]
+#     runtime_for_lottery_a_b =[]
+#     runtime_to_create_flow_chart =[]
+#     runtime_for_ff = []
+#     runtime_for_contains = []
+#     for i in range(0,M):
+#         output = GetJavaOutput(pathToFile, filename)
+#         runtime_for_lottery_w, runtime_for_lottery_a_b,runtime_to_create_flow_chart, runtime_for_ff,\
+#         runtime_for_contains = runtime_table22(output,runtime_for_lottery_w, runtime_for_lottery_a_b,runtime_to_create_flow_chart,
+#                               runtime_for_ff,runtime_for_contains)
+#         output = ''
+#     for i in range(0, len(a_b_runs)):
+#         runtime_for_lottery_w[i] = str(runtime_for_lottery_w[i]) + " millisec"
+#         runtime_for_lottery_a_b[i] = str(runtime_for_lottery_a_b[i]) + " millisec"
+#         runtime_to_create_flow_chart[i] = str(runtime_to_create_flow_chart[i]) + " millisec"
+#         runtime_for_ff[i] = str(runtime_for_ff[i]) + " millisec"
+#         runtime_for_contains[i] = str(runtime_for_contains[i]) + " millisec"
+#     runs =[1, 2, 3, 4, 5,6]
+#     trace = go.Table(
+#         # values=[['<b>#(A B)</b><br>'],
+#         #         ['<b>W size</b><br>']],
+#         # title = 'Test for Run Time',
+#         header=dict(
+#             values=[['<b>#</b><br>'],
+#                     # ['<b>#AB run</b><br>'],
+#                     ['<b>Runtime </b><br><b>for lottery w</b>'],
+#                     ['<b>Runtime for</b><br><b>lottery A an B</b>'],
+#                     ['<b>Run Time</b><br><b>to create flow chart</b>'],
+#                     ['<b>Runtime for</b><br><b>Ford Fulkerson </b>'],
+#                     ['<b>Runtime for</b><br><b>contains </b>'],
+#                     ['<b>Total runtime </b><br>']],
+#             #  ['<b>2</b>'],
+#             #  ['<b>4</b>'],
+#             # ['<b>8</b>'],
+#             #  ['<b>16</b>'],
+#             #  ['<b>32</b>']] #['W_for_x_array', '# A & B', 'separator_array']
+#             line=dict(color='rgb(50, 50, 50)'),
+#             align=['left'] * 5,
+#             font=dict(color=['rgb(45, 45, 45)'] * 5, size=14),
+#             fill=dict(color='#d562be'),
+#         ),
+#         cells=dict(
+#             # prefix=[None] * 1 + ['<b>MB'] + ['sec '] + [None] * 3,
+#             values=[runs, runtime_for_lottery_w, runtime_for_lottery_a_b, runtime_to_create_flow_chart,
+#                     runtime_for_ff, runtime_for_contains, total],
+#
 #         )
-#     data=[trace]
-#     layout = dict(title = 'run time '+str(L)+" rules",
-#             xaxis = dict(title = 'Rules and variables ratio'),
-#             yaxis = dict(title = 'Average run time '),
-#             )
+#     )
+#     layout = dict(
+#         title='Table test for Run Time for every #AB',
+#     )
+#     data = [trace]
 #     fig = dict(data=data, layout=layout)
-#     py.plot(fig, filename='Run time test')
+#     plotly.offline.plot(fig, filename='testFiles\graphTestFiles\\avg_table_test_run_time.html')
 
 if __name__ == '__main__':
     output = GetJavaOutput(pathToFile, filename)
-    create_array(output)
-    # printChart(output)
+    # avg_run_time()
+    # create_array(output)
+    printChart(output)
     # create_multiple_charts1(output)
     # create_multiple_charts2(output)

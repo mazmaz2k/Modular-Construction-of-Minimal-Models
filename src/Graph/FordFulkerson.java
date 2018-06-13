@@ -3,9 +3,9 @@ package Graph;
 import java.util.*;
 
 /**
- * Date 04/14/2014
+ * 
  * @author Tushar Roy
- *
+ * @Changed  by Omri Mizrahi
  * Ford fulkerson method Edmonds Karp algorithm for finding max flow
  *
  * Capacity - Capacity of an edge to carry units from source to destination vertex

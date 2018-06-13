@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Date 10/01/2014
- * @author Tushar Roy
+ * * @author Tushar Roy
+ *@Changed  by Omri Mizrahi
  *
  * Given a directed graph, find all strongly connected components in this graph.
  * We are going to use Kosaraju's algorithm to find strongly connected component.
