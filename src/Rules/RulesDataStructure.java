@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedMap;
 
+import org.omg.PortableServer.LIFESPAN_POLICY_ID;
+
 import Graph.Vertex;
 
 //import Graph.LinkedList1;
@@ -216,14 +218,14 @@ public class RulesDataStructure extends DavisPutnamHelper
 					   else//head size is 1 and body size is 0
 					   {
 						   literalMap.put(RulesArray[i].head.head.var, true);
-						 // System.out.println( RulesArray[i].head.head.var);
+						  //System.out.println( RulesArray[i].head.head.var);
 					   }
-					   updateRuleDS();
+					  updateRuleDS();
 				   }
 			   }
 		   }
 	   }while(flag);
-    	System.out.println("after unit check");
+    	//System.out.println("after unit check");
 
     }
     public void printValueOfVariables()
@@ -246,7 +248,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	System.out.println("------------------------------");
     }
     
-    public LinkedList Ts (LinkedList s)
+    public LinkedList Ts(LinkedList s)
     {
     	LinkedList Ts = new LinkedList();
     	
@@ -256,7 +258,7 @@ public class RulesDataStructure extends DavisPutnamHelper
     	boolean addToTs;
     	for (int i = 0; i < s.getSize() ; i++)
     	{
-    		literalMap.put(Snode.var, false);//init all vars of s to false
+    		literalMap.put(Snode.var, false);//init all vars of s to falses
     		LinkedList l = varHT.get(Snode.var);
     		//System.out.println("listtttttt");
     		//l.printList();
@@ -290,6 +292,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 //    	}
     	return Ts;
     }
+   
     private boolean allExistInList(int ruleNum , LinkedList l)//all vars in rule exist in List
     {
     	Rule r =RulesArray[ruleNum];
@@ -346,7 +349,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 		
  	  }
  	// printClauses(clauses);
- 	  if(DLL(clauses))
+ 	  if(DLL(clauses)==true)
  	  {
  		  return true;
  	  }
@@ -365,6 +368,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 		while(true)
 		{	
 			String literalToRemove =searchSingleLiteral(Clauses, literalMap);
+			//System.out.println(literalToRemove);
 			if(!literalToRemove.equals("NotFoundYet"))
 			{
 				//printClauses(Clauses);
@@ -418,6 +422,7 @@ public class RulesDataStructure extends DavisPutnamHelper
 		Clause clause1 = new Clause();
 		Clause clause2 = new Clause();
 		String l1 = pickLiteral(Clauses);//most of time pick a negative literal because the order of a clause (first body then head)
+		//System.out.println("PICK LITERAL " + l1);
 		String l2 = "";
 		
 		if(l1.startsWith("-"))
@@ -440,13 +445,14 @@ public class RulesDataStructure extends DavisPutnamHelper
 		
 		//Moment of the truth
 		//System.out.println("Adding clause: ["+l1+"]");
+		//printClauses(Clauses);
 		if(DLL(copy1) == true)
 		{
 			return true;
 		}
 		else
 		{
-		//	System.out.println("Trying opposite clause: ["+l2+"]");
+			//System.out.println("Trying opposite clause: ["+l2+"]");
 			return DLL(copy2);
 		}
 	}
@@ -747,115 +753,95 @@ public class RulesDataStructure extends DavisPutnamHelper
     also checks if the values we put in the variables return SAT if so we change rules ds 
     by the values we found and if not we try different values for the variables
      ***/
-    public void splitConnectedComponent(ArrayList<Vertex<Integer>> v)
+    public void SplitConnectedComponent(ArrayList<Vertex<Integer>> v, LinkedList Ts)
     {
-    	//System.out.println("enter split");
-
     	ArrayList<Clause> clauses = new ArrayList<>();
-    	for (int i = 0; i < RulesArray.length; i++) 
+    	Node n = Ts.head;
+    	while(n!=null) 
     	{
-    		if(RulesArray[i]!=null)
-    		{
-    			Node nBody =RulesArray[i].body.head;
-    			Node nHead = RulesArray[i].head.head;
-    			Clause clause = new Clause();
-    			String literal;
-    			while(nBody!=null)//first put the negative literals in order to calculate a minimal model (because of the way that DLL works)
-    			{
-    				literal = "-";
-    				literal+= String.valueOf(nBody.var);
-    				clause.addLiteral(literal);
-    				nBody=nBody.next;
-    			}
-    			while(nHead!=null)
-    			{
-    				literal = String.valueOf(nHead.var); 
-    				clause.addLiteral(literal);
-    				nHead=nHead.next;
-    			}
-
-    			clauses.add(clause);
-    		}
-    	}
-    	//System.out.println("print clauses");
-    	//printClauses(clauses);
- //   	System.out.println("copy to array list");
-    	int size = v.size();
-    //	System.out.println("size of array is: " + size);
-    	int N = (int)Math.pow(2,size); 
-    	boolean[] binaryArray ;
-		String literal;
-		Clause clause;
-		ArrayList<Clause> copy;
-    	for (int i = 0; i < N; i++)//from 0 to 2^n -1
-    	{
-    		copy = new ArrayList<Clause>();//
-    		for(Clause c: clauses)
-    		{
-    			Clause c2 = new Clause();
-    			for(String s: c.literals)
-    			{
-    				c2.addLiteral(s);
-    			}
-    			copy.add(c2);
-    		}// copy original to not make any changes
-    		binaryArray = toBinary(i,size);//returns array
-    		for (int j = 0; j < size; j++) 
-    		{
-    			
-    			clause= new Clause();
-    			if(binaryArray[j])
-    			{
-    				literal = String.valueOf(v.get(j).getId());
-    			}
-    			else
-    			{
-    				literal = "-"+String.valueOf(v.get(j).getId());
-    			}
-    			clause.addLiteral(literal);
-    			copy.add(clause);
-    			//System.out.println( "Adding clause: "+clause.printClause());	
+    		Node nBody =RulesArray[n.var].body.head;
+			Node nHead = RulesArray[n.var].head.head;
+			Clause clause = new Clause();
+			String literal;
+			while(nBody!=null)//first put the negative literals in order to calculate a minimal model (because of the way that DLL works)
+			{
+				literal = "-";
+				literal+= String.valueOf(nBody.var);
+				clause.addLiteral(literal);
+				nBody=nBody.next;
 			}
-    		//check if sat
-    		//System.out.println("check sat");
-    		//printRulesArray();
-    		if(DLL(copy))
-    		{
-        		literalMap.clear();
-    			//System.out.println("found and update . we found in index: "+ i);
-    			for (int j = 0; j < size; j++) 
-    			{
-    				System.out.println("index: "+ i + " var: " + v.get(j).getId() +" val: " + binaryArray[j]);
-    				literalMap.put((int)v.get(j).getId(), binaryArray[j]);
-    				//ChangeDataStrucureByPlacingValueInVar((int)v.get(j).getId(), binaryArray[j]);
-    				
-				}
-    			updateRuleDS();
-    			return;
-    			/*if(isTheoryPositive())
-    			{
-    				for (int j = 0; j < size; j++) 
-        			{
-        				if(binaryArray[j])
-        				{
-        					minModel.addAtTail((int)v.get(j).getId());
-        				}        				
-    				}
-    				return ;
-    			}*/
-    		}
-    		//System.out.println(i);
-    		literalMap.clear();
-    		
+			while(nHead!=null)
+			{
+				literal = String.valueOf(nHead.var); 
+				clause.addLiteral(literal);
+				nHead=nHead.next;
+			}
+
+			clauses.add(clause);
+			n=n.next;
 		}
     	
+    	
+    	
+    	int size = v.size();
+       // System.out.println("size of array to remove is: " + size);
+        int N = (int)Math.pow(2,size); 
+       // System.out.println(N);
+        boolean[] binaryArray ;
+    	String literal;
+    	Clause clause;
+    	ArrayList<Clause> copy;
+        for (int i = 0; i < N; i++)//from 0 to 2^n -1
+        {
+        	//System.out.println(i);
+        	copy = new ArrayList<Clause>();//
+        	for(Clause c: clauses)
+        	{
+        		Clause c2 = new Clause();
+        		for(String s: c.literals)
+        		{
+        			c2.addLiteral(s);
+        		}
+        		copy.add(c2);
+        	}// copy original to not make any changes
+        	binaryArray = toBinary(i,size);//returns array
+        	for (int j = 0; j < size; j++) 
+        	{		
+        		clause= new Clause();
+        		if(binaryArray[j])
+        		{
+        			literal = String.valueOf(v.get(j).getId());
+        		}
+        		else
+        		{
+        				literal = "-"+String.valueOf(v.get(j).getId());
+        		}
+        		clause.addLiteral(literal);
+        		copy.add(clause);
+        		//System.out.println( "Adding clause: "+clause.printClause());	
+    		}
+        	//check if sat
+        	//System.out.println("check sat");
+        	//printRulesArray();
+        	//System.out.println(i +"  "+ N);
+        	if(DLL(copy))
+        	{
+        		//System.out.println("found");
+        		updateRuleDS();
+        		return;
+        
+       		}   
+        	literalMap.clear();
+       	}
+    	//System.out.println("not found");
+     	
     }
     
    
     
     /**return a binary value of the number 
      * ,the (base) last bits */
-     private boolean[] toBinary(int number, int base)
+     public boolean[] toBinary(int number, int base)
      {
         final boolean[] ret = new boolean[base];
         for (int i = 0; i < base; i++) {
@@ -1347,8 +1333,7 @@ public class RulesDataStructure extends DavisPutnamHelper
      
      
      
-     
-     
+    
      
      
      
