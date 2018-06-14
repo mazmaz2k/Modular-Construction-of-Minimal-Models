@@ -302,7 +302,7 @@ public class Graph<T>{
 		//		int idx = 0;
 		//		while(f) {
 		//			flag= true;
-		int[] arrOfA_B = new int[]{5,10,20,50,100,200};
+		int[] arrOfA_B = new int[]{200};
 //		int [] arrOfA_B = new int[] {20};
 		long startTime=0,endTime=0,totalTime=0;//in mili sec
 		long startTime_w =0, startTime_a_b =0, startTime_create_flowNetGraph=0,startTime_ff=0,startTime_contains=0;
@@ -337,6 +337,18 @@ public class Graph<T>{
 				}while((W_vertexList.isEmpty() || W_vertexList.size() > w) && count <=2000  );	//we have W set
 				endTime_w = System.currentTimeMillis();
 //				System.out.println(endTime_w - startTime);
+		        // shuffle
+		        int a [] = new int[graph.getAllVertex().size()];
+		        // insert integers 0..n-1
+		        for (int i = 0; i < a.length; i++)
+		            a[i] = i; 
+				for (int i = 0; i < a.length; i++) {
+		            int r = (int) (Math.random() * (i+1));     // int between 0 and i
+		            int swap = a[r];
+		            a[r] = a[i];
+		            a[i] = swap;
+		        }
+				
 				total_w += (endTime_w - startTime_w);
 				if(count > 2000) {
 					continue;
@@ -349,12 +361,21 @@ public class Graph<T>{
 					returnVertexes.clear();
 					A_vertexList.clear();
 					B_vertexList.clear();
+					double rand_prob ;
+					do {
+						rand_prob = Math.random();
+//						System.out.println("Rand: "+rand_prob );
+
+					}
+					while(!(rand_prob>0.25) || !(rand_prob < 0.75));
 					do {
 						A_vertexList.clear();
 						B_vertexList.clear();
 						double x = Math.random();
+						
 						for(Vertex<Integer> vertex :W_vertexList) {
-							if(x > 0.5) {
+//							graph.getVertex(a[i]) //TODO
+							if(x > rand_prob) {
 								A_vertexList.add(vertex);
 							}else {
 								B_vertexList.add(vertex);
