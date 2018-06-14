@@ -1,17 +1,37 @@
 package Graph;
 
 
+//import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+//import java.util.concurrent.TimeUnit;
 
 import Rules.RulesDataStructure;
 import Rules.LinkedList;
 import Rules.LinkedList.Node;
+
+/**
+ * Date 10/10/2017
+ * @author Omri Mizrahi
+ *
+ * Graph data structure 
+ * Find and minimum balanced node separator 
+ *
+ *
+ *
+ *
+ * References:
+ *
+ * 
+ */
+
+/* Graph data structure class*/
 public class Graph<T>{
 
 	private List<Edge<T>> allEdges;
@@ -183,7 +203,12 @@ public class Graph<T>{
 		return buffer.toString();
 	}
 
-
+	/**
+	 * return graph from source .
+	 * 
+	 * @param list of id's to create graph from
+	 * @param old graph 
+	 */
 	public static Graph<Integer>  createGraphFromSource(LinkedList s, Graph<Integer> graph){
 		Graph<Integer> graphToReturn = new Graph<Integer>(graph.isDirected);
 		for(Vertex<Integer> v: graph.getAllVertex()) {
@@ -203,6 +228,10 @@ public class Graph<T>{
 
 	/**
 	 * find all vertex of the parent up to the source and insert them to array.
+	 * 
+	 * @param super Graph
+	 * @param verex to find all hit parents
+	 * @param returnVertex to return all the vertex up to the source
 	 * */
 	public static void findAllVertexes(SuperGraph superGraph,Vertex<Integer> vertex, LinkedList returnVertex){
 		if(superGraph.getParent(vertex).isEmpty())
@@ -274,7 +303,12 @@ public class Graph<T>{
 
 
 
-	/**Vertex separator !!!!
+	/**Vertex separator 
+	 * 
+	 * find minimum vertex array.
+	 * when we remove those vertexes we will receive balanced separation of the graph  
+	 * 
+	 * @param graph which most be a connected component
 	 * */
 	public static ArrayList<Vertex<Integer>> vertexSeparator( Graph<Integer> graph){
 		ArrayList<ArrayList<Vertex<Integer>>> arr = new ArrayList<>();
@@ -291,30 +325,22 @@ public class Graph<T>{
 		}
 		FordFulkerson ff =null;
 		Graph<Integer> flowNetGraph =null; 
-		boolean flag= true, f=true;
 		double w_max = Math.ceil( 0.1 * graph.getAllVertex().size() ) ;
 		if (w_max <2) {
 			w_max=2;
 		}
-		//		int idx = 0;
-		//		while(f) {
-		//			flag= true;
-//		int[] arrOfA_B = new int[]{5,10,20,50,100,200};
-		int a_b = 20;
-//		for(int a_b : arrOfA_B) {
-//			System.out.println("Start");
-//			arr.clear();
-//			returnVertexes.clear();
-			/***run time checking*/
-//			long startTime=0,endTime=0,totalTime=0;//in mili sec
 
-//			startTime = System.currentTimeMillis();
+		int[] arrOfA_B = new int[]{100}; //
 
-			for(int w=4 ; w<=32; w=w*2) {
-				//			System.out.println("W max size is: "+ w_max);			
+		for(int a_b : arrOfA_B) {
+			arr.clear();
+			returnVertexes.clear();
+			for(int w=4 ; w<= 32; w=w*2) 
+			{
+
 				int count = 0;
 				W_vertexList.clear();
-
+				//lottery vertex from V to W
 				do {
 					W_vertexList.clear();
 					for(int i=0 ; i<3 ; i++) { //Lottery W 3 times !
@@ -324,103 +350,89 @@ public class Graph<T>{
 							}
 						}
 					}
-					//										System.out.println("in first while");
-
-					//					System.out.println("in first while");
-
 					count++;
-				}while((W_vertexList.isEmpty() || W_vertexList.size() >= w) && count <=2000  );	//we have W set
+				}while((W_vertexList.isEmpty() || W_vertexList.size() > w) && count <=2000  );	//we have W set
+
+				// shuffle
+				int a [] = new int[graph.getAllVertex().size()];
+				// insert integers 0..n-1
+				for (int i = 0; i < a.length; i++)
+					a[i] = i; 
+				for (int i = 0; i < a.length; i++) {
+					int r = (int) (Math.random() * (i+1));     // int between 0 and i
+					int swap = a[r];
+					a[r] = a[i];
+					a[i] = swap;
+				}
+
 				if(count > 2000) {
 					continue;
 				}
-				for(int count_a_b=0; count_a_b < Math.min(a_b, Math.pow(2, w)) /*&& flag*/ ;count_a_b++) {	//for every w find 20 A and B sets
+				
+				
+				for(int count_a_b=0; count_a_b < Math.min(a_b, Math.pow(2, w)) /*&& flag*/ ;count_a_b++) {	//for every w find several A and B sets
 					int counter=0;
 					returnVertexes.clear();
 					A_vertexList.clear();
 					B_vertexList.clear();
+					double rand_prob ;
+					//lottery A B vertex set from W
+					do {
+						rand_prob = Math.random();
+					}
+					while(!(rand_prob>0.25) || !(rand_prob < 0.75));
 					do {
 						A_vertexList.clear();
 						B_vertexList.clear();
 						double x = Math.random();
+
 						for(Vertex<Integer> vertex :W_vertexList) {
-							if(x > 0.5) {
+							//							graph.getVertex(a[i]) 
+							if(x > rand_prob) {
 								A_vertexList.add(vertex);
 							}else {
 								B_vertexList.add(vertex);
 							}
 							x = Math.random();
 						}
-						//												System.out.println("In second while");
 						counter++;
 					}while((checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty())&& counter<2000 );
 
 					if(  checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty() || counter>2000 ) {
-						//						flag=false;
-						//						System.out.println("error to find W");
 						continue;
-					}		
-					//					System.out.println("Point B");
+					}	
 					flowNetGraph =null;
-					flowNetGraph = createFlowNetwork(graph, A_vertexList,B_vertexList);
+					flowNetGraph = createFlowNetwork(graph, A_vertexList,B_vertexList); //create flow net graph
 					if(flowNetGraph ==null) {
 						System.out.println("error in flow nework some of the variables are NULL");
 						continue;
 					}
-					//TODO: continue working!! create flow net graph!!!
-					// create edge to S T from A and B with weight |v|         V
-					// Separate a to a1 and a2 to all vertex beside S A T B    V
-					//weight between a1 and a2 is 1                            V
-					//all other weights are |V|                                V
-					//System.out.println("Flow Graph----------");
-					//System.out.println(flowNetGraph);
 					ff =null;
 					ff = new FordFulkerson(flowNetGraph);
 					int x1=0;
 					Collection<Integer> collection_S = null,collection_T =null ;
+					// run flow algorithm and fin S and T vertex sets before and after the cut 
 					try {
-						//						System.out.println("v1: "+ flowNetGraph.getVertex(Long.MAX_VALUE) +" v2: "+flowNetGraph.getVertex(Long.MIN_VALUE));
-						//						System.out.println("v1: "+flowNetGraph.getVertex(S));
-						//						System.out.println("v2: "+flowNetGraph.getVertex(T));
-						//						System.out.println("V1 index:" +ff.findVertexIndex(flowNetGraph.getVertex(S))+ " V2 index: " + ff.findVertexIndex(flowNetGraph.getVertex(T)));
 						x1=ff.maxFlow( ff.findVertexIndex(flowNetGraph.getVertex(S)),  ff.findVertexIndex(flowNetGraph.getVertex(T)));//find max flow & min cut between S and T
 						collection_S= ff.getS();
 						collection_T = ff.getT();
 					}catch (Exception e) {
-						//						System.out.println("v1: "+ flowNetGraph.getVertex(Long.MAX_VALUE) +" v2: "+flowNetGraph.getVertex(Long.MIN_VALUE));
-						//						System.out.println("v1: "+flowNetGraph.getVertex(S));
-						//						System.out.println("v2: "+flowNetGraph.getVertex(T));
-						//						System.out.println("V1 index:" +ff.findVertexIndex(flowNetGraph.getVertex(S))+ " V2 index: " + ff.findVertexIndex(flowNetGraph.getVertex(T)));
 						e.printStackTrace();
 					}
+
 					if(x1<=0 || collection_S ==null || collection_T ==null) {
 						ff=null;
 						flowNetGraph = null;
 						continue;
 					}
-					//					System.out.println("Point C");
 					double s_balance =((double)collection_S.size() /((double) flowNetGraph.getAllVertex().size()*2));
-					//			System.out.println("s "+collection_S.size()+ " all "+flowNetGraph.getAllVertex().size());
 					double t_balance = (double) collection_T.size() / ((double)flowNetGraph.getAllVertex().size()*2);
-					//			System.out.println("s "+collection_T.size()+ " all "+flowNetGraph.getAllVertex().size());
 					if(s_balance< 0.1 || t_balance< 0.1) {
 						ff=null;
 						flowNetGraph = null;
 						continue;
 					}
-					//					System.out.println("Point D");
-					//					System.out.println("i is:" + count_a_b);
-					//					System.out.println("max flow is: "+ x1);
-					//										System.out.println("w is " + w);
-					//										System.out.println("W is:" + W_vertexList+" W size: " + W_vertexList.size());
-					//										System.out.println("A is:" + A_vertexList);
-					//										System.out.println("B is:"+ B_vertexList);
-					//					System.out.println("S (of vertexes) is" + collection_S + " Balance " +s_balance);
-					//					System.out.println("T (of vertexes) is" + collection_T + " Balance " +t_balance);
-					//					System.out.println();
-
 					edgeList.clear(); //array list to hold all the edges of the CUT !
-					//		ArrayList<Vertex<Integer>> vertexsListToRemove= new ArrayList<>();
-
 					for(Vertex<Integer> v: flowNetGraph.getAllVertex()) {
 						if(collection_S.contains((int)v.getId())) {
 							for(Edge<Integer> e : v.getEdges()) {
@@ -432,12 +444,10 @@ public class Graph<T>{
 						}
 
 					}
-					ArrayList<Vertex<Integer>> temp = new ArrayList<>();
 
-					//		System.out.println(edgeList);
+					ArrayList<Vertex<Integer>> temp = new ArrayList<>();
 					for(Edge<Integer> e: edgeList) {
-						//	if(returnVertexes.size() <= w_max)
-						//{
+
 						if(!returnVertexes.contains(e.getVertex1()) && e.getVertex1().getId()!=S ) {
 							returnVertexes.add(flowNetGraph.getVertex(Math.abs(e.getVertex1().getId())));
 							temp.add(flowNetGraph.getVertex(Math.abs(e.getVertex1().getId())));
@@ -448,72 +458,84 @@ public class Graph<T>{
 							temp.add(flowNetGraph.getVertex(Math.abs(e.getVertex2().getId())));
 
 						}
-						//}
+
 					}
-					//returnVertexes.add(graph.getVertex(Integer.MAX_VALUE));
-					//returnVertexes.add(graph.getVertex(Integer.MIN_VALUE));
-					//System.out.print(w+", " +W_vertexList.size()+", "+ count_a_b +", "+returnVertexes.size()+", ");
-					//					System.out.println("Return vertex to remove"+ returnVertexes + " return size " + returnVertexes.size());
-					//					System.out.println("-----------------------------------------------------------------------");	
 					ff=null;
 					flowNetGraph= null;
-					// System.out.println("return in for: "+returnVertexes);
 					arr.add(temp);
 
 				}
-//			}
-//			System.out.println("\nEnd");
-//			System.out.println("size of #A_B: " + a_b +" pp");
-
-			
-			/**memory usage checking**/
-//			Runtime runtime = Runtime.getRuntime();
-//			// Run the garbage collector
-//			runtime.gc();
-			// Calculate the used memory
-//			double memory = runtime.totalMemory() - runtime.freeMemory();
-//			//	        System.out.println();
-//			System.out.println("Memory usage: "+ memory/(1024*1024)+" MB");
-//			endTime   = System.currentTimeMillis();
-//			totalTime = endTime - startTime;
-//			System.out.print("Total Run Time in mili seconds: " + totalTime + " sec");
-//			System.out.println();
-//			int min =S,id=0,i=0;
-//			//finds the min size of separator and return it ! 
-//			for(ArrayList<Vertex<Integer>> array : arr) {
-//				//					System.out.println("array: "+array + " size: "+ array.size());
-//				if(array.size() < min) {
-//					min =array.size();
-//					id=i;
-//				}
-//				i++;
-//			}
-//			System.out.println("Min seperator size: "+ arr.get(id).size() + " EOF");
-		}
-		//	    for(ArrayList<Vertex<Integer>> array: arr) {
-		//				System.out.println("array: "+array + " size: "+ array.size());
-		//
-		//		}
-		//			if(/*returnVertexes.size() <= w_max &&*/ returnVertexes.size()>0) {
-		//				f =false;
-		//			} 
-		//		}
-		int min =S,id=0,i=0;
-		//finds the min size of separator and return it ! 
-		for(ArrayList<Vertex<Integer>> array : arr) {
-			//			System.out.println("array: "+array + " size: "+ array.size());
-			if(array.size() < min) {
-				min =array.size();
-				id=i;
 			}
-			i++;
+
+			if(arr.isEmpty()) {
+				return null;
+			}
+			// sort all the return separators maybe it is not necessary(just return the smallest one)  
+			arr.sort(new Comparator<ArrayList<Vertex<Integer>>>() {
+
+				@Override
+				public int compare(ArrayList<Vertex<Integer>> arr1, ArrayList<Vertex<Integer>> arr2) {
+					if(arr1.size()<arr2.size()) {
+						return -1;
+					}else if(arr1.size()>arr2.size()) {
+						return 1;
+					}
+					return 0;
+				}
+
+			});
 		}
-		//		System.out.println("Min seperator: "+ arr.get(id));
-		//		System.out.println("Min array: "+arr.get(id) + " size: "+ arr.get(id).size());
-		//		System.out.println("\n return arr size: "+ arr.get(id).size());
-		return arr.get(id);
+		return arr.get(0);
 	}
 
+
+	/**get sorted array of arrays of vertexes and print 
+	 * */
+//	private static void printsForTests(Graph<Integer> graph ,ArrayList<ArrayList<Vertex<Integer>>> arr) {
+//		int maxCC =0;
+//		for(int i =0; i<Math.min(5, arr.size());i++) {
+//			System.out.println("separator size: "+ arr.get(i).size());
+//			Graph<Integer> tempGraph=graph.removeVertex(arr.get(i));
+//			StronglyConnectedComponent scc = new StronglyConnectedComponent();
+//			List<Set<Vertex<Integer>>> result = scc.scc(tempGraph);
+//			result = scc.scc(tempGraph);
+//
+//			//print the sorted result
+//			result.sort(new Comparator<Set<Vertex<Integer>>>() {
+//				@Override
+//				public int compare(Set<Vertex<Integer>> s1, Set<Vertex<Integer>> s2) {
+//					if(s1.size()==s2.size()) {
+//						return 0;
+//					}else if(s1.size()>=s2.size()) {
+//						return -1;
+//					}else {
+//						return 1;
+//					}
+//				}
+//			});
+//			double x= 100-((double)result.get(0).size() / (double) graph.getAllVertex().size())*100;
+//			System.out.println("percentage of dismantle: "+ x+" %" );
+//			System.out.println("Largest CC: "+ result.get(0).size());
+//			System.out.print("connected component After dismentle: ");
+//			if(result.get(0).size()>maxCC) {
+//				maxCC=result.get(0).size();
+//			}
+//			result.forEach(set -> {
+//				System.out.print(set.size()+" ");
+//			});
+//			System.out.println("fin\n");			
+//		}
+//		System.out.println("Max CC: "+ maxCC);
+//	}
+
+	
+	/**create Flow Network to execute flow algorithm and get vertex cut instead edge cut 
+	 * 
+	 * @param old graph
+	 * @param A vertex list 
+	 * @param B vertex list
+	 * */
+	
 	private static Graph<Integer> createFlowNetwork(Graph<Integer> graph ,
 			ArrayList<Vertex<Integer>> a_vertexList, ArrayList<Vertex<Integer>> b_vertexList) {
 		if(graph==null || a_vertexList==null||b_vertexList==null) {
@@ -534,19 +556,17 @@ public class Graph<T>{
 		}
 		a_vertexList.add(g2.getVertex(S));	// add node S to A
 		b_vertexList.add(g2.getVertex(T));	// add vertex T to B
-		//		System.out.println("A: " + a_vertexList );
-		//		System.out.println("B: " + b_vertexList);
 		Set<Vertex<Integer>> vertexToDuplicate = new HashSet<>();
 		for(Vertex<Integer> v : g2.getAllVertex()) {
 			if(!a_vertexList.contains(v) && !b_vertexList.contains(v)) { // enter to array all node that not in A and B and not vertex T and vertex S
 				vertexToDuplicate.add(v);
 			}
 		}
-		//		System.out.println("duplicate " + vertexToDuplicate);
 		Graph<Integer> g=duplicateGraph(g2, vertexToDuplicate); // duplicate all vertex that not in A and B and not vertex T and vertex S
 		return g;
 	}
-	/*Duplicate a graph
+	/**
+	 * Duplicate a graph
 	 * when given set of vertex to duplicate them 
 	 * return a graph with duplicate JUST the necessary nodes 
 	 * **/
@@ -637,7 +657,8 @@ public class Graph<T>{
 	/**
 	 * convert clauses data structure in to graph body-->head
 	 * body  has edge to head
-	 * this is a directed**/
+	 * this is a directed
+	 * **/
 	public static Graph<Integer> initGraph(RulesDataStructure DS ,int numOfRules) 
 	{
 
@@ -710,6 +731,9 @@ public class Graph<T>{
 		return newGraph;
 	} 
 
+	
+	
+	
 	/**FIND ALL K-edge connected component Algorithm !!
 	input graph(of strongest connected component/original graph) ,s vertex of connected component , N list of all vertexs in connected component
 	return auxiliary graph*/
@@ -799,7 +823,8 @@ public class Graph<T>{
 
 
 
-	/** Dismantle strongest connected component
+	/** 
+	 * Dismantle strongest connected component 
 	 * return array of vertex which will be put in rules array**/
 	public static ArrayList<Vertex<Integer>> dismantlingStrongestCC(Graph<Integer> graph,Graph<Integer> auxiliaryGraph) {
 		//int[] vertexArray=new int[auxiliaryGraph.allVertex.size()]; //array of vertex id's so return to Rules Data structure 
@@ -874,12 +899,12 @@ public class Graph<T>{
 		if(oldGraph==null)
 			return null;
 		for(Vertex<Integer> v: oldGraph.getAllVertex()) {
-//			if(v.getId()!= T  && v.getId()!=S ) {
-				newGraph.addSingleVertex(v.getId());
-//			}
-//			System.out.println("ffff"+ v.getEdges());
+			//			if(v.getId()!= T  && v.getId()!=S ) {
+			newGraph.addSingleVertex(v.getId());
+			//			}
+			//			System.out.println("ffff"+ v.getEdges());
 			for(Edge<Integer> e : v.getEdges()) {
-//				System.out.println("ffff "+ e);
+				//				System.out.println("ffff "+ e);
 
 				newGraph.addEdge(e.getVertex1().getId(), e.getVertex2().getId(),e.getWeight());
 			}

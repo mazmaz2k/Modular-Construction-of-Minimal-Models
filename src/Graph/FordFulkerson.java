@@ -5,6 +5,7 @@ import java.util.*;
 /**
  * Date 04/14/2014
  * @author Tushar Roy
+ * @author Omri Mizrahi -remove matrix and and added linked list instead
  *
  * Ford fulkerson method Edmonds Karp algorithm for finding max flow
  *
@@ -166,21 +167,12 @@ public class FordFulkerson {
 			return -1;
 		}
 		for(int i=0;i<vertexArray.length;i++) {
-//			try {
-//				v.getId();
-//			}catch (Exception e) {
-//				// TODO: handle exception
-//				System.out.println(v);
-//				
-//			}
+
 			try {
 				if(vertexArray[i]==v.getId()) {
 					return i;
 				}
 			}catch (Exception e) {
-				// TODO: handle exception
-				System.out.println("v is: "+ v +" vertex Array" + vertexArray[i]+ " i is :" + i);
-
 				e.printStackTrace();
 
 			}		
@@ -289,14 +281,14 @@ public class FordFulkerson {
 	/**
 	 * Prints all the augmented path which contribute to max flow
 	 */
-	private void printAugmentedPaths(List<List<Integer>> augmentedPaths,int maxFlow) {
-		System.out.println("Augmented paths");
-		augmentedPaths.forEach(path -> {
-			path.forEach(i -> System.out.print(vertexArray[i] + " "));
-			//            System.out.println(" flow is: "+maxFlow);
-			System.out.println();
-		});
-	}
+//	private void printAugmentedPaths(List<List<Integer>> augmentedPaths,int maxFlow) {
+//		System.out.println("Augmented paths");
+//		augmentedPaths.forEach(path -> {
+//			path.forEach(i -> System.out.print(vertexArray[i] + " "));
+//			//            System.out.println(" flow is: "+maxFlow);
+//			System.out.println();
+//		});
+//	}
 
 	/**
 	 * Breadth first search to find augmented path
@@ -321,7 +313,7 @@ public class FordFulkerson {
 				//greater than 0	
 				for(Node n: list.getList()) {
 
-					if(!visited.contains(n.indexJ) && getWightFromList(resList, u, n.indexJ) > 0 ) {//TODO: fix return in this part!!
+					if(!visited.contains(n.indexJ) && getWightFromList(resList, u, n.indexJ) > 0 ) {
 						//add in parent map saying v got explored by u
 						parent.put(n.indexJ, u);
 						//add v to visited
@@ -329,7 +321,7 @@ public class FordFulkerson {
 						//add v to queue for BFS
 						queue.add(n.indexJ);
 						//if sink is found then augmented path is found
-						if ( n.indexJ == sink) { //TODO this is the problem
+						if ( n.indexJ == sink) { 
 							foundAugmentedPath = true;
 //							System.out.println("IN J !!!!!!!!!!!!");
 							break;
@@ -338,7 +330,7 @@ public class FordFulkerson {
 					}	
 
 				}
-				if(!visited.contains(list.getindexI()) && getWightFromList(resList, u, list.indexI) > 0 ) {//TODO: fix return in this part!!
+				if(!visited.contains(list.getindexI()) && getWightFromList(resList, u, list.indexI) > 0 ) {
 					//add in parent map saying v got explored by u
 					parent.put(list.getindexI(), u);
 					//add v to visited
@@ -346,7 +338,7 @@ public class FordFulkerson {
 					//add v to queue for BFS
 					queue.add(list.getindexI());
 					//if sink is found then augmented path is found
-					if ( list.getindexI() == sink) { //TODO this is the problem
+					if ( list.getindexI() == sink) { 
 						foundAugmentedPath = true;
 					//	System.out.println("IN I @!!!!!!!!!!!!");
 

@@ -47,7 +47,7 @@ def RandomPositiveCNF(L , M , K):
     filename="cnf_"+str(L)+"_"+str(M)
     filepath=os.path.join(path,filename)
     myFile=io.FileIO(filepath, "w") 
-    myFile.write(str(L)+"\n")
+    myFile.write(str(L)+" "+str(M)+"\n")
     for i in range(0,L):  
         line=""
         allNegative=True
@@ -62,7 +62,41 @@ def RandomPositiveCNF(L , M , K):
         line+="0" 
         myFile.write(line+"\n")
     return myFile
-    
+
+def RandomPositiveCNF2(L , M , K):
+    filename="cnf_"+str(L)+"_"+str(M)
+    filepath=os.path.join(path,filename)
+    myFile=io.FileIO(filepath, "w") 
+    myFile.write(str(L)+" "+str(M)+"\n")
+    for i in range(0,L):  
+        line=""
+        allNegative=True
+        for j in range(0, K):
+            var=random.randint(1,M)     
+            line += str(var)+" "
+        line+="0" 
+        myFile.write(line+"\n")
+    return myFile
+def RandomPositiveCNF3(L , M , K, percentNegated):
+    filename="cnf_"+str(L)+"_"+str(M)
+    filepath=os.path.join(path,filename)
+    myFile=io.FileIO(filepath, "w") 
+    myFile.write(str(L)+" "+str(M)+"\n")
+    for i in range(0,L):  
+        line=""
+        allNegative=True
+        for j in range(0, K):
+            var=random.randint(1,M)
+            if(j!=K-1 or not allNegative):
+                r=random.randrange(1,100)
+                if(percentNegated>=r):
+                     var=var*-1   
+            if(var>0):
+                allNegative=False            
+            line += str(var)+" "
+        line+="0" 
+        myFile.write(line+"\n")
+    return myFile    
 def frange(start, stop, step):
     i = start
     while i < stop:
@@ -138,33 +172,32 @@ def testEverage():
     
     
    
-def testDPcalls():
+def Avg_2_args(first_name,second_name):#form is" number,number"
     K=3
-    M=100
-    avgDP=[]
-    avgModuMin=[]
+    L= 100
+    avg1=[]
+    avg2=[]
     AxisX=[]
-    for ratio in frange(2,10,0.2):
+    for ratio in frange(4,6,0.2):
        # print("ratio " , ratio)
-        dpcalls_DP=[]
-        dpcalls_ModuMin=[]
+        data1=[]
+        data2=[]
         AxisX.append(ratio)
-        L = int(M*ratio)
-        for i in range(0,300): 
+        M = int(L/ratio)
+        for i in range(0,10): 
            # print("i ",i)
             RandomPositiveCNF(L, M, K)
             filename="cnf_"+str(L)+"_"+str(M)
             output=GetJavaOutput(path, filename).split(",")
-           # print(output)
-            dpcalls_DP.append(output[1])
-            dpcalls_ModuMin.append(output[0])
+            data1.append(output[0])
+            data2.append(output[1])
             os.remove(os.path.join(path,filename))
-        avgDP.append(FindAVG(dpcalls_DP)) 
-        avgModuMin.append(FindAVG(dpcalls_ModuMin))
+        avg1.append(FindAVG(data1)) 
+        avg2.append(FindAVG(data2))
     trace1=go.Scatter(
         x=AxisX,
-        y=avgDP,
-        name="only DP",
+        y=avg1,
+        name=first_name,
         line=dict(
             color=('rgb(0,0,0)'),
             width=4,
@@ -173,8 +206,8 @@ def testDPcalls():
         )
     trace2=go.Scatter(
         x=AxisX,
-        y=avgModuMin,
-        name="modumin using DP",
+        y=avg2,
+        name = second_name,
         line=dict(
             color=('rgb(0,0,0)'),
             width=4,
@@ -182,15 +215,50 @@ def testDPcalls():
             )
         )
     data=[trace1,trace2]
-    layout = dict(title = 'run time '+str(M)+" variables",
+    layout = dict(title = 'run time '+str(L)+" rules",
             xaxis = dict(title = 'Rules and variables ratio'),
             yaxis = dict(title = 'Average run time '),
             )
     fig = dict(data=data, layout=layout)  
     py.plot(fig, filename='Run time test') 
     
+ 
+ 
+def Avg_1_arg(_name):#form is" number,number"
+    K=3
+    L=300
+    avg=[]
+    AxisX=[]
+    for ratio in frange(2,9,0.2):
+       # print("ratio " , ratio)
+        data=[]
+        AxisX.append(ratio)
+        M = (int(L/ratio))
+        for i in range(0,200): 
+           # print("i ",i)
+            RandomPositiveCNF2(L, M, K )
+            filename="cnf_"+str(L)+"_"+str(M)
+            data.append(GetJavaOutput(path, filename))
+            os.remove(os.path.join(path,filename))
+        avg.append(FindAVG(data)) 
+    trace=go.Scatter(
+        x=AxisX,
+        y=avg,
+        name=_name,
+        line=dict(
+            color=('rgb(0,0,0)'),
+            width=4,
+           # dash='dash'
+            )
+        )
+    data=[trace]
+    layout = dict(title = 'run time  '+str(L)+" rules" + str(M)+ " vars",
+            xaxis = dict(title = 'Rules variables ratio'),
+            yaxis = dict(title = 'Average runtime  '),
+            )
+    fig = dict(data=data, layout=layout)  
+    py.plot(fig, filename='RatioMaxsourceSize')  
    
-#testDPcalls()   
    
 def testMemUsage():
     K=3
@@ -340,25 +408,63 @@ def avgSource2():
 
 def printSources():
     K=3
-    M=50
-    L=100
+    M=280
+    L=600
     RandomPositiveCNF(L, M, K)
     filename="cnf_"+str(L)+"_"+str(M)
     output=GetJavaOutput(path, filename)
-    print(output)       
+    print(output)
     
-for i in range(0,10):      
-    printSources()    
     
 def checkModuMin():
     K=3
-    M=100
-    for ratio in frange(2,10,0.2):
-        L = int(ratio*M)
-        myFile=RandomPositiveCNF(L, M, K)   
-        filename="cnf_"+str(L)+"_"+str(M)
-        output=GetJavaOutput(path, filename)
-        print(output)
+    L=100
+    for ratio in frange(4,6,0.2):
+        M = int(L/ratio)
+        for i in range(5): 
+            myFile=RandomPositiveCNF(L, M, K)   
+            filename="cnf_"+str(L)+"_"+str(M)
+            output=GetJavaOutput(path, filename)
+            print(output)
+        
+def doChart():
+    trace1 = go.Scatter(
+     x=[2, 2.2, 2.4, 2.6, 2.8, 3.0, 3.2, 3.4, 3.6, 3.8, 4.0, 4.2, 4.4, 4.6, 4.8, 5.0, 5.2, 5.4, 5.6, 5.8, 6.0, 6.2, 6.4, 6.6, 6.8, 7.0, 7.2, 7.4, 7.6, 7.8, 8.0, 8.2, 8.4, 8.6, 8.8], 
+     y= [74.117183915, 62.498461955, 61.582453755, 59.981584095, 60.022266415, 58.829127105, 58.51602863, 58.190380475, 58.129226935, 57.5149512, 57.49328256, 56.884887755, 57.048288025, 57.48448717, 55.9553929, 55.791308655, 55.688780505, 55.563295365, 55.100272385, 55.043753885, 54.4075368, 54.77236914, 53.73625775, 53.73727822, 54.411623435, 53.419758975, 53.181346975, 53.36205153, 53.120946365, 53.15292205, 53.076367965, 53.01573312, 52.597877855, 52.563858355, 52.40401561], 
+        name="DP",
+        line=dict(
+            color=('rgb(0,0,0)'),
+            width=4,
+           # dash='dash'
+            )
+        )
+    trace2 = go.Scatter(
+     x=   [2, 2.2, 2.4, 2.6, 2.8, 3.0, 3.2, 3.4, 3.6, 3.8, 4.0, 4.2, 4.4, 4.6, 4.8, 5.0, 5.2, 5.4, 5.6, 5.8, 6.0, 6.2, 6.4, 6.6, 6.8, 7.0, 7.2, 7.4, 7.6, 7.8, 8.0, 8.2, 8.4, 8.6, 8.8], 
+     y=[65.12934675, 63.459217985, 59.94361905, 59.443142165, 57.65448288, 55.581093245, 54.05232221, 52.920719215, 53.547176265, 53.1088279, 52.00473471, 50.42837971, 50.498201375, 50.002758365, 48.91225308, 48.48771212, 48.12938122, 47.80164537, 47.31772599, 47.19398231, 47.307130925, 47.6645041, 46.37947809, 46.200340005, 45.91929904, 45.98676114, 45.29718316, 45.11968752, 45.174940475, 44.627244165, 45.125017935, 44.728667415, 44.341634885, 44.077321605, 44.53311118], 
+        name="ModuMin DP",
+        line=dict(
+            color=('rgb(0,0,0)'),
+            width=4,
+            dash='dot'
+            )
+        )
+    data=[trace1,trace2]
+    layout = dict(title = 'run time '+"300"+" rules",
+            xaxis = dict(title = 'Rules and variables ratio'),
+            yaxis = dict(title = 'AverageRunTime '),
+            )
+    fig = dict(data=data, layout=layout)  
+    py.plot(fig, filename='Run time test')  
+
+if __name__ =="__main__":
+   # Avg_2_args("ModuMin DP", "ratio source size / vars num")
+  # Avg_1_arg("moduDP")
+   #printSources()
+  # checkModuMin()
+   doChart()
+  # RandomPositiveCNF3(500, 120, 3,1)
+
+            
         
 #checkModuMin()   
 #RandomPositiveCNF(150, 50, 3)        
@@ -366,7 +472,6 @@ def checkModuMin():
 # RandomPositiveCNF(150, 50, 3)
 # s=GetMemoryFromJava("/home/rachel/Desktop/Modular-Construction-of-Minimal-Models/testFiles/50variables", "cnf_150_50")
 # print(s)
-
 
 
 
