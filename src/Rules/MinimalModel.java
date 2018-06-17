@@ -17,7 +17,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 import Graph.Graph;
-import Graph.GraphScc;
+//import Graph.GraphScc;
 import Graph.StronglyConnectedComponent;
 import Graph.Vertex;
 import Rules.LinkedList.Node;
@@ -50,21 +50,24 @@ public class MinimalModel extends Graph<Integer>{
 	public static void main(String[] args) 
 	{
 		MinimalModel m = new MinimalModel();
+		MinimalModel m2 = new MinimalModel();
+
 		//String path=args[0];
 		String path=".//CnfFile.txt";
 
 
 		m.readfile(path);
+		m2.readfile(path);
 
 		
-		m.ModuMinUsingDP();
-		System.out.println(m.DS.StringMinimalModel());
-		
-
+		m2.ModuMinUsingDP();
+		System.out.println(m2.DS.StringMinimalModel());
+//		
+		System.out.println("--------------------------------------");
 		//		//System.out.println(m.DS.isConflict());
 		//m.DS.checkFormat().printList();
-//		if(m.ModuMinUsingDP_AndSeperator())
-//			System.out.println(m.DS.StringMinimalModel());
+		if(m.ModuMinUsingDP_AndSeperator())
+			System.out.println(m.DS.StringMinimalModel());
 
 //		m.graphTest();
 

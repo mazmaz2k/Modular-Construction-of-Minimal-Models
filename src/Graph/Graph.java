@@ -313,7 +313,7 @@ public class Graph<T>{
 	public static ArrayList<Vertex<Integer>> vertexSeparator( Graph<Integer> graph){
 		ArrayList<ArrayList<Vertex<Integer>>> arr = new ArrayList<>();
 		ArrayList<Vertex<Integer>> returnVertexes = new ArrayList<>();
-		ArrayList<Vertex<Integer>> W_vertexList = new ArrayList<>();
+//		ArrayList<Vertex<Integer>> W_vertexList = new ArrayList<>();
 		ArrayList<Vertex<Integer>> A_vertexList = new ArrayList<>();
 		ArrayList<Vertex<Integer>> B_vertexList = new ArrayList<>();
 		ArrayList<Edge<Integer>> edgeList = new ArrayList<>(); //array list to hold all the edges of the CUT !
@@ -331,33 +331,33 @@ public class Graph<T>{
 		}
 
 		int[] arrOfA_B = new int[]{100}; //
-
+		// shuffle
+		int a [] = new int[graph.getAllVertex().size()];
+		// insert integers 0..n-1 
 		for(int a_b : arrOfA_B) {
 			arr.clear();
 			returnVertexes.clear();
 			for(int w=4 ; w<= 32; w=w*2) 
 			{
-
-				int count = 0;
-				W_vertexList.clear();
-				//lottery vertex from V to W
-				do {
-					W_vertexList.clear();
-					for(int i=0 ; i<3 ; i++) { //Lottery W 3 times !
-						for(Vertex<Integer> vertex : graph.getAllVertex()) {
-							if(Math.random() <= 0.1) {
-								W_vertexList.add(vertex);
-							}
-						}
-					}
-					count++;
-				}while((W_vertexList.isEmpty() || W_vertexList.size() > w) && count <=2000  );	//we have W set
-
-				// shuffle
-				int a [] = new int[graph.getAllVertex().size()];
-				// insert integers 0..n-1
+//
+//				int count = 0;
+//				W_vertexList.clear();
+//				//lottery vertex from V to W
+//				do {
+//					W_vertexList.clear();
+//					for(int i=0 ; i<3 ; i++) { //Lottery W 3 times !
+//						for(Vertex<Integer> vertex : graph.getAllVertex()) {
+//							if(Math.random() <= 0.1) {
+//								W_vertexList.add(vertex);
+//							}
+//						}
+//					}
+//					count++;
+//				}while((W_vertexList.isEmpty() || W_vertexList.size() > w) && count <=2000  );	//we have W set
+//
+				
 				for (int i = 0; i < a.length; i++)
-					a[i] = i; 
+				a[i] = i;
 				for (int i = 0; i < a.length; i++) {
 					int r = (int) (Math.random() * (i+1));     // int between 0 and i
 					int swap = a[r];
@@ -365,9 +365,9 @@ public class Graph<T>{
 					a[i] = swap;
 				}
 
-				if(count > 2000) {
-					continue;
-				}
+//				if(count > 2000) {
+//					continue;
+//				}
 				
 				
 				for(int count_a_b=0; count_a_b < Math.min(a_b, Math.pow(2, w)) /*&& flag*/ ;count_a_b++) {	//for every w find several A and B sets
@@ -386,15 +386,25 @@ public class Graph<T>{
 						B_vertexList.clear();
 						double x = Math.random();
 
-						for(Vertex<Integer> vertex :W_vertexList) {
-							//							graph.getVertex(a[i]) 
+//						for(Vertex<Integer> vertex :W_vertexList) {
+						for(int i =0;i<w;i++) {
+							if(graph.getVertex(a[i])==null) {
+								A_vertexList.clear();
+								B_vertexList.clear();
+								break;
+							}
+//							System.out.println(graph.getVertex(a[i]));
 							if(x > rand_prob) {
-								A_vertexList.add(vertex);
+								A_vertexList.add(graph.getVertex(a[i]));
+//								A_vertexList.add(vertex);
+
 							}else {
-								B_vertexList.add(vertex);
+								B_vertexList.add(graph.getVertex(a[i]));
+//								B_vertexList.add(vertex);
 							}
 							x = Math.random();
 						}
+//						}
 						counter++;
 					}while((checkIfHasEdges(A_vertexList,B_vertexList) || A_vertexList.isEmpty() || B_vertexList.isEmpty())&& counter<2000 );
 
@@ -612,9 +622,12 @@ public class Graph<T>{
 	 * */
 	public static boolean checkIfHasEdges(ArrayList<Vertex<Integer>> A ,ArrayList<Vertex<Integer>> B) {
 		for(Vertex<Integer> v1: A) {
-
 			for(Vertex<Integer> v2: B)
 			{
+				if(v1==null || v2 ==null)
+				{
+					return false;
+				}
 				if(v1.getAdjacentVertexes().contains(v2)) {
 					return true;
 				}
