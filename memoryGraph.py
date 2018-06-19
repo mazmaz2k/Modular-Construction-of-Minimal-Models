@@ -457,11 +457,11 @@ def doChart():
     py.plot(fig, filename='Run time test')  
 
 if __name__ =="__main__":
-   # Avg_2_args("ModuMin DP", "ratio source size / vars num")
+    #Avg_2_args("ModuMin DP", "ratio source size / vars num")
   # Avg_1_arg("moduDP")
    #printSources()
-  # checkModuMin()
-   doChart()
+   checkModuMin()
+   #doChart()
   # RandomPositiveCNF3(500, 120, 3,1)
 
             

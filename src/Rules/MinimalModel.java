@@ -50,12 +50,11 @@ public class MinimalModel extends Graph<Integer>{
 	public static void main(String[] args) 
 	{
 		MinimalModel m = new MinimalModel();
-		//String path=args[0];
-		String path=".//CnfFile.txt";
+		String path=args[0];
+		//String path=".//CnfFile.txt";
 
 
 		m.readfile(path);
-<<<<<<< HEAD
 		m.ModuMinUsingDP();
 		System.out.println(m.DS.StringMinimalModel());
 		
@@ -65,14 +64,12 @@ public class MinimalModel extends Graph<Integer>{
 		//
 
 		//m.graphTest();
-=======
 		//		//System.out.println(m.DS.isConflict());
 		//m.DS.checkFormat().printList();
-		if(m.ModuMinUsingDP_AndSeperator())
-			System.out.println(m.DS.StringMinimalModel());
+//		if(m.DP())
+//			System.out.println(m.DS.StringMinimalModel());
 
 //		m.graphTest();
->>>>>>> ad4d33dbd56049b357f98642cd16aed2f2020873
 
 
 
@@ -101,12 +98,12 @@ public class MinimalModel extends Graph<Integer>{
 //		startTime = System.nanoTime();
 //		
 //		m.readfile(path);
-//		m.ModuMinUsingDP();
+//		m.ModuMinUsingDP_AndSeperator();
 //	    endTime   = System.nanoTime();
 //		totalTime = endTime - startTime - m.runtimeOfseperator;
 //		System.out.print((double)totalTime/1000000);
 		
-//		System.out.print(",");
+		//System.out.print(",");
 //		
 //		System.out.print(5);
 //		
@@ -670,7 +667,7 @@ public class MinimalModel extends Graph<Integer>{
 
 				if(arrayToRemove==null)
 				{
-					//System.out.println("nulllll");
+					System.out.print("0,");
 					LinkedList Ts=DS.Ts(s);
 					//	System.out.println("TS");
 					//Ts.printList();
@@ -687,7 +684,7 @@ public class MinimalModel extends Graph<Integer>{
 				}
 				else
 				{
-				    //System.out.println(arrayToRemove);
+				    System.out.print(arrayToRemove.size()+",");
 					LinkedList Ts=DS.Ts(s);
 				//Ts.printList();
 					DS.SplitConnectedComponent(arrayToRemove, Ts);
