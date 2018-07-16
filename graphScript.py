@@ -6,6 +6,9 @@ import os
 import io
 import random
 from operator import itemgetter
+import networkx as nx
+import matplotlib.pyplot as plt
+
 
 import plotly.plotly as py
 
@@ -1066,10 +1069,52 @@ def frange(start, stop, step):
 #     fig = dict(data=data, layout=layout)
 #     plotly.offline.plot(fig, filename='testFiles\graphTestFiles\\avg_table_test_run_time.html')
 
+
+def print_graph_gui(output):
+    graph_array = output.split('ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo')
+    g_before_edge = graph_array[1]
+    g_before_node = graph_array[2]
+    # print(g_before_edge)
+    print_graph_gui_from_string(g_before_edge, g_before_node)
+    g_after_edge = graph_array[3]
+    g_after_node = graph_array[4]
+    print_graph_gui_from_string(g_after_edge, g_after_node)
+
+
+def print_graph_gui_from_string(edges_string,node_string):
+    G = nx.DiGraph()
+    nodes_array = node_string.split(', ')
+    edges_array = edges_string.split('w: 1 s size:0\n')
+    for i,var in enumerate(nodes_array):
+        if i == 0:
+            G.add_node(int(var.split('[')[1]))
+        elif i == len(nodes_array)-1:
+            G.add_node(int(var.split(']')[0]))
+        else:
+            # print(var)
+            G.add_node(int(var))
+    for i, var in enumerate(edges_array):
+        if '\n' is var:
+            continue
+        edges = var.split(' -> ')
+        # print('var: ', var)
+        # print(edges[0], edges[1])
+        G.add_edge(int(edges[0]), int(edges[1]))
+    # options = {
+    # 'node_color': 'black',
+    # 'node_size': 100,
+    # 'width': 3,
+    # }
+    nx.draw_networkx(G, with_labels=True)
+    nx.draw_shell(G, with_labels=True)
+    plt.show()
+
+
 if __name__ == '__main__':
     output = GetJavaOutput(pathToFile, filename)
     # avg_run_time()
     # create_array(output)
-    printChart(output)
+    # printChart(output)
     # create_multiple_charts1(output)
     # create_multiple_charts2(output)
+    print_graph_gui(output)

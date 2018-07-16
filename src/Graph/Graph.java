@@ -575,7 +575,7 @@ public class Graph<T>{
 				
 			});
 
-			printsForTests(graph,arr);
+//			printsForTests(graph,arr); //print memory do NOT delete
 			
 			
 //			Graph<Integer> tempGraph = copyGraph(graph);

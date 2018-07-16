@@ -50,10 +50,10 @@ public class MinimalModel extends Graph<Integer>{
 		m.readfile(path);
 		//		//System.out.println(m.DS.isConflict());
 		//m.DS.checkFormat().printList();
-		if(m.ModuMinUsingDP_AndSeperator())
-		 	System.out.println(m.DS.StringMinimalModel());
+//		if(m.ModuMinUsingDP_AndSeperator())
+//		 	System.out.println(m.DS.StringMinimalModel());
 
-//		m.graphTest();
+		m.graphTest();
 
 
 
@@ -601,28 +601,43 @@ public class MinimalModel extends Graph<Integer>{
 //		Graph<Integer> copyGraph = copyGraph(g);
 
 
-		//		for(ArrayList<Vertex<Integer>> vertexToremove : arr) {
-		//			System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
-		////			System.out.println("Vertex to remove: " + vertexToremove + " Size of the Seperator: "+ vertexToremove.size());			
-		//			g = initGraph(DS, size);
-		////			copyGraph = copyGraph(g);
-		//			g=g.removeVertex(vertexToremove);
-		//
-		//			//		System.out.println(g);
-		//			//		 StronglyConnectedComponent scc = new StronglyConnectedComponent();
-		//			System.out.println(i+") "+vertexToremove + ", Size of the Seperator: "+ vertexToremove.size());
-		//			System.out.println("connected component After dismentle: ");
-		//			result = scc.scc(g);
-		//
-		//			//print the result
-		//			result.forEach(set -> {
-		//				set.forEach(v -> System.out.print(v.getId() + " "));
-		//				System.out.println();
-		//			});
-		//			//copyGraph = copyGraph(g);
-		//			i++;
-		//		}
+//				for(ArrayList<Vertex<Integer>> vertexToremove : arr) {
+					System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+		//			System.out.println("Vertex to remove: " + vertexToremove + " Size of the Seperator: "+ vertexToremove.size());			
+//					g = initGraph(DS, size);
+//					System.out.println("Graph before dismentle: ");
+					
+					System.out.println(g);
+					System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+					System.out.println(g.getAllVertex());
+					System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+
+		//			copyGraph = copyGraph(g);
+					g=g.removeVertex(min_array);
 		
+					//		System.out.println(g);
+					//		 StronglyConnectedComponent scc = new StronglyConnectedComponent();
+//					System.out.println(i+") "+min_array + ", Size of the Seperator: "+ min_array.size());
+
+					
+					
+//					System.out.println("Graph after dismentle: ");
+					System.out.println(g);
+					System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+					System.out.println(g.getAllVertex());
+					System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+					//copyGraph = copyGraph(g);
+//					i++;
+//				}
+					
+					System.out.println("connected component After dismentle: ");
+					result = scc.scc(g);
+		
+					//print the result
+					result.forEach(set -> {
+						set.forEach(v -> System.out.print(v.getId() + " "));
+						System.out.println();
+					});
 		
 		
 		
