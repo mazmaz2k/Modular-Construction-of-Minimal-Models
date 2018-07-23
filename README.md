@@ -13,7 +13,7 @@ if you have any questions please contact us by e-mail, which is available at our
 
 
 
-### **How To Use Modular-Construction-of-Minimal-Models:**
+### ***How To Use Modular-Construction-of-Minimal-Models:***
 * You will need txt file within set of clauses, each variable is a number("0" cant be a variable) , separate each rule with "0" number.In the beginning you will need to write(in the txt file) how many rules(clauses) there is.  
 
 * Run the application .
@@ -28,7 +28,7 @@ if you have any questions please contact us by e-mail, which is available at our
 
 * The result is that you will see if there is minimal module it will find it, if not it will write that can find.
 
-### **How To Use Minimal balanced node separator:**
+### ***How To Use Minimal balanced node separator:***
 
 * If you would like to run **ONLY** to graph separator algorithm you have to do the following:
   
